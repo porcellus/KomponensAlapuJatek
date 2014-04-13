@@ -1,16 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
+using ClientGUI.View;
+using ClientGUI.ViewModel;
 
-namespace Client.ClientGUI
+namespace ClientGUI
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        private MainViewModel _mainVm;
+        private MainWindow _mainWindow;
+
+        public App()
+        {
+            _mainVm = new MainViewModel();
+            _mainWindow = new MainWindow();
+            _mainWindow.Show();
+            _mainWindow.DataContext = _mainVm;
+            _mainWindow.Closed += OnMainWindowClosed;
+        }
+
+        void OnMainWindowClosed(object sender, System.EventArgs e)
+        {
+            Shutdown(0);
+        }
     }
 }
