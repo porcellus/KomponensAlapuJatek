@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using ClientGUI.Annotations;
 
 namespace ClientGUI.ViewModel
 {
