@@ -66,5 +66,15 @@ namespace Client.AlfaBeta
             }
             return value;
         }
+
+        public string GetAIAlgorithmInfo()
+        {
+            return string.Empty;
+        }
+
+        public void AddToGame(object game, object aiPosition)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

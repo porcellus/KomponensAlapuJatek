@@ -1,22 +1,21 @@
 ﻿using System;
 using MinMax;
+using QuickGraph;
 
 namespace Client.MinMax
 {
     public class MinimaxSearch<TState, TAction, TPlayer> : IAIAlgorithm<TState, TAction>
     {
         private IGame<TState, TAction, TPlayer> _Game;
-        private int _ExpandedNodes;
+        private AdjacencyGraph<int, TaggedEdge<int, string>> _Graph;
 
-        /** Creates a new search object for a given game. */
         public MinimaxSearch(IGame<TState, TAction, TPlayer> game)
         {
-            this._Game = game;
+            _Game = game;
         }
 
         public TAction MakeDecision(TState state)
         {
-            _ExpandedNodes = 0;
             TAction result = default(TAction);
             double resultValue = Double.NegativeInfinity;
             TPlayer player = _Game.GetPlayer(state);
@@ -35,7 +34,6 @@ namespace Client.MinMax
 
         private double MaxValue(TState state, TPlayer player)
         {
-            _ExpandedNodes++;
             if (_Game.IsTerminal(state))
             {
                 return _Game.GetUtility(state, player);
@@ -51,7 +49,6 @@ namespace Client.MinMax
 
         private double MinValue(TState state, TPlayer player)
         {
-            _ExpandedNodes++;
             if (_Game.IsTerminal(state))
             {
                 return _Game.GetUtility(state, player);
@@ -63,6 +60,19 @@ namespace Client.MinMax
                 value = Math.Min(value, MaxValue(_Game.GetResult(state, action), player));
             }
             return value;
+        }
+
+        public string GetAIAlgorithmInfo()
+        {
+            return
+                "Minimax is a decision rule used in decision theory, game theory, " +
+                "statistics and philosophy for minimizing the possible loss for a worst " +
+                "case (maximum loss) scenario.";
+        }
+
+        public void AddToGame(object game, object aiPosition)
+        {
+            throw new NotImplementedException();
         }
     }
 }

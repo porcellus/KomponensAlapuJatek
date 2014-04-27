@@ -7,7 +7,7 @@
      */
     public interface IAIAlgorithm<TState, TAction>
     {
-        /** Returns the action which appears to be the best at the given state. */
-        TAction MakeDecision(TState state);
+        string GetAIAlgorithmInfo();
+        void AddToGame(object game, object aiPosition);
     }
 }
