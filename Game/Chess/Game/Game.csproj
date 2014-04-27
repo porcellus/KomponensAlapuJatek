@@ -39,8 +39,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Board.cs" />
+    <Compile Include="Chess.cs" />
+    <Compile Include="ChessHeuristic.cs" />
+    <Compile Include="Figure.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Client\AlfaBeta\AlfaBeta.csproj">
+      <Project>{24267a3b-c589-43a2-ae3f-4476f0a02373}</Project>
+      <Name>AlfaBeta</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Client\MinMax\MinMax.csproj">
+      <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>
+      <Name>MinMax</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GameBase\GameBase.csproj">
+      <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
+      <Name>GameBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameGUI\GameGUI.csproj">
+      <Project>{e2795faa-e49c-45d1-b19b-ac5625a0bf1d}</Project>
+      <Name>GameGUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Heuristic\Heuristic.csproj">
+      <Project>{18058aee-4a6d-4e41-8813-7c6ff1809ef7}</Project>
+      <Name>Heuristic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
