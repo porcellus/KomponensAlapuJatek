@@ -1,4 +1,4 @@
-﻿namespace Connector
+﻿namespace Server
 {
     partial class Connector
     {

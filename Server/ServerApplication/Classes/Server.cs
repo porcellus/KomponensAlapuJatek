@@ -13,7 +13,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 
 
-namespace ServerApplication
+namespace Server
 {
     public class Server
     {

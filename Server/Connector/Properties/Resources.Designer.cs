@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Connector.Properties
+namespace Server.Properties
 {
 
 

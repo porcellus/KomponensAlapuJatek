@@ -1,4 +1,4 @@
-﻿namespace ServerApplication
+﻿namespace Server
 {
     partial class MainServerForm
     {

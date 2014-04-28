@@ -37,9 +37,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameGUI", "Game\Quatro\Game
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heuristic", "Game\Quatro\Heuristic\Heuristic.csproj", "{A1129D61-B791-40A4-865E-9A028EBA2EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApplication", "D:\Iratok\ELTE\2_felev\Komponens_alapu\ServerApplication\ServerApplication\ServerApplication.csproj", "{3C4BDA50-3EA0-4EDB-B145-9F995721F50A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\ServerApplication\Server.csproj", "{3C4BDA50-3EA0-4EDB-B145-9F995721F50A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connector", "D:\Iratok\ELTE\2_felev\Komponens_alapu\ServerApplication\Connector\Connector.csproj", "{BED5D87B-8CAC-41BC-9B44-5788B839EC6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connector", "Server\Connector\Connector.csproj", "{BED5D87B-8CAC-41BC-9B44-5788B839EC6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
