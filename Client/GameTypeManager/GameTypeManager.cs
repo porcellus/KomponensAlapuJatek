@@ -7,7 +7,7 @@ namespace GameTypeManager
 {
     public class GameTypeManager
     {
-        IEnumerable<AbstractGame> GetGameTypes()
+        public IEnumerable<AbstractGame> GetGameTypes()
         {
             var instances = from assembly in AppDomain.CurrentDomain.GetAssemblies()
                 from t in assembly.GetTypes()
