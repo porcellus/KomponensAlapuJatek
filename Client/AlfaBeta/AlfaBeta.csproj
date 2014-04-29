@@ -43,9 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MinMax\MinMax.csproj">
-      <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>
-      <Name>MinMax</Name>
+    <ProjectReference Include="..\AIAlgorithmBase\AIAlgorithmBase.csproj">
+      <Project>{27a307cf-d22f-4097-91f2-ee541604000f}</Project>
+      <Name>AIAlgorithmBase</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

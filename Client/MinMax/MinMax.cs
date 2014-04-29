@@ -1,15 +1,15 @@
 ﻿using System;
-using MinMax;
+using Client.AIAlgorithmBase;
 using QuickGraph;
 
 namespace Client.MinMax
 {
     public class MinimaxSearch<TState, TAction, TPlayer> : IAIAlgorithm<TState, TAction>
     {
-        private IGame<TState, TAction, TPlayer> _Game;
+        private IGameExperimental<TState, TAction, TPlayer> _Game;
         private AdjacencyGraph<int, TaggedEdge<int, string>> _Graph;
 
-        public MinimaxSearch(IGame<TState, TAction, TPlayer> game)
+        public MinimaxSearch(IGameExperimental<TState, TAction, TPlayer> game)
         {
             _Game = game;
         }

@@ -1,15 +1,15 @@
 ﻿using System;
-using MinMax;
+using Client.AIAlgorithmBase;
 
 namespace Client.AlfaBeta
 {
     public class AlphaBetaSearch<TState, TAction, TPlayer> : IAIAlgorithm<TState, TAction>
     {
-        private readonly IGame<TState, TAction, TPlayer> _game;
+        private readonly IGameExperimental<TState, TAction, TPlayer> _game;
         private int _expandedNodes;
 
 
-        public AlphaBetaSearch(IGame<TState, TAction, TPlayer> game)
+        public AlphaBetaSearch(IGameExperimental<TState, TAction, TPlayer> game)
         {
             this._game = game;
         }

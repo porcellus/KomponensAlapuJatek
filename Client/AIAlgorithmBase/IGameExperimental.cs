@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MinMax
+namespace Client.AIAlgorithmBase
 {
     /**
      * @param <TState>
@@ -10,7 +10,7 @@ namespace MinMax
      * @param <TPlayer>
      *            Type which is used for players in the game.
      */
-    public interface IGame<TState, TAction, TPlayer>
+    public interface IGameExperimental<TState, TAction, TPlayer>
     {
         TState GetInitialState();
 
