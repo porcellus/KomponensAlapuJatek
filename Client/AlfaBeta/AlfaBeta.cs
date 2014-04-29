@@ -1,9 +1,10 @@
 ﻿using System;
 using Client.AIAlgorithmBase;
+using Game.GameBase;
 
 namespace Client.AlfaBeta
 {
-    public class AlphaBetaSearch<TState, TAction, TPlayer> : IAIAlgorithm<TState, TAction>
+    public class AlphaBetaSearch<TState, TAction, TPlayer> : IAIAlgorithm
     {
         private readonly IGameExperimental<TState, TAction, TPlayer> _game;
         private int _expandedNodes;
@@ -72,7 +73,7 @@ namespace Client.AlfaBeta
             return string.Empty;
         }
 
-        public void AddToGame(object game, object aiPosition)
+        public void AddToGame(AbstractGame game, PlayerType playerType)
         {
             throw new NotImplementedException();
         }

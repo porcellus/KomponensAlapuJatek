@@ -43,6 +43,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Game\GameBase\GameBase.csproj">
+      <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
+      <Name>GameBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AIAlgorithmBase\AIAlgorithmBase.csproj">
       <Project>{27a307cf-d22f-4097-91f2-ee541604000f}</Project>
       <Name>AIAlgorithmBase</Name>

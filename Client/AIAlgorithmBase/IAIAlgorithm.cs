@@ -1,8 +1,10 @@
-﻿namespace Client.AIAlgorithmBase
+﻿using Game.GameBase;
+
+namespace Client.AIAlgorithmBase
 {
-    public interface IAIAlgorithm<TState, TAction>
+    public interface IAIAlgorithm
     {
         string GetAIAlgorithmInfo();
-        void AddToGame(object game, object aiPosition);
+        void AddToGame(AbstractGame game, PlayerType playerType);
     }
 }

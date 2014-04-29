@@ -1,10 +1,11 @@
 ﻿using System;
 using Client.AIAlgorithmBase;
+using Game.GameBase;
 using QuickGraph;
 
 namespace Client.MinMax
 {
-    public class MinimaxSearch<TState, TAction, TPlayer> : IAIAlgorithm<TState, TAction>
+    public class MinimaxSearch<TState, TAction, TPlayer> : IAIAlgorithm
     {
         private IGameExperimental<TState, TAction, TPlayer> _Game;
         private AdjacencyGraph<int, TaggedEdge<int, string>> _Graph;
@@ -70,7 +71,7 @@ namespace Client.MinMax
                 "case (maximum loss) scenario.";
         }
 
-        public void AddToGame(object game, object aiPosition)
+        public void AddToGame(AbstractGame game, PlayerType playerType)
         {
             throw new NotImplementedException();
         }
