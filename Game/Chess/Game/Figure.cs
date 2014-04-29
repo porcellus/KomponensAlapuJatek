@@ -7,61 +7,80 @@ namespace Game
 {
     class Figure
     {
-        public static const int CAPTURE         = 0;	// Ütéshelyzet
-        public static const int CAPTURE_KING    = 1;	// Sakk helyzet
-        public static const int FAILURE         = 2;	// Hibás lépés
+        public enum StepType
+        {
+            Capture         = 0,
+            CaptureKing     = 1,
+            Failure         = 2,
+            Success         = 3
+        };
+
+        public enum FigureType
+        {
+            Nothing = 0,
+            King    = 1,
+            Queen   = 2,
+            Rook    = 3,  
+            Knight  = 4,
+            Bishop  = 5,
+            Pawn    = 6
+        };
+
+        /*public static const int (int)StepType.Capture         = 0;	// Ütéshelyzet
+        public static const int     = 1;	// Sakk helyzet
+        public static const int (int)StepType.Failure         = 2;	// Hibás lépés
         public static const int SUCCESS         = 3;	// Helyes lépés
 
 	    // A lehetséges figura típusok
-	    public static const int	TYPE_KING		= 1;	// Király
-        public static const int TYPE_QUEEN      = 2;	// Királynő
-        public static const int TYPE_ROOK       = 3;	// Bástya
-        public static const int TYPE_KNIGHT     = 4;	// Ló
-        public static const int TYPE_BISHOP     = 5;	// Futó
-        public static const int TYPE_PAWN       = 6;	// Gyalog
+	    public static const int	FigureType.King		= 1;	// Király
+        public static const int FigureType.Queen      = 2;	// Királynő
+        public static const int FigureType.Rook       = 3;	// Bástya
+        public static const int FigureType.Knight     = 4;	// Ló
+        public static const int FigureType.Bishop     = 5;	// Futó
+        public static const int FigureType.Pawn       = 6;	// Gyalog*/
 
 	    // Megnézi, hogy adott figurával legális lépés-e
-	    public static int isLegalStep(Board board, int fromRow, int fromCol, int toRow, int toCol)
+	    public static StepType isLegalStep(Board board, int fromRow, int fromCol, int toRow, int toCol)
         {
             if (toRow < 1 || toRow > board.getDimension()[1] || toCol < 1 || toCol > board.getDimension()[0] || board.getItemByRC(toRow,toCol) == 'x')
-		        return FAILURE;
+		        return StepType.Failure;
 
 	        if (fromRow == toRow && fromCol == toCol)
-		        return FAILURE;
+		        return StepType.Failure;
 
 	        char sym = board.getRealTypeByRC(toRow,toCol);
 
 	        if (sym == '0')
-		        return SUCCESS;
+		        return StepType.Success;
 
 	        if (Figure.isEnemy(board, fromRow, fromCol, toRow, toCol))
 	        {
-		        if (int(sym) - 48 == Figure.TYPE_KING)
-			        return CAPTURE_KING;
-		        return CAPTURE;
+		        if (int(sym) - 48 == Figure.FigureType.King)
+			        return StepType.CaptureKing;
+		        return StepType.Capture;
 	        }
 
-	        return FAILURE;	
+	        return StepType.Failure;	
         }
 
 	    // Megadja a legális lépéseket
 	    public static LinkedList< int[] > getLegalSteps(Board board, int fromRow, int fromCol, bool fromCheckTest)
         {
-            LinkedList<int[]>       LegalSteps = new LinkedList<int[]>(); 
-	        int			            FigureType	    = board.getRealTypeByRC(fromRow, fromCol) - 48;
+            LinkedList<int[]>       LegalSteps      = new LinkedList<int[]>(); 
+	        FigureType			    figureType	    = (FigureType)(board.getRealTypeByRC(fromRow, fromCol) - 48);
 
-	        if (FigureType == '0')
+	        if (figureType == FigureType.Nothing)
 		        return LegalSteps;
 
 	        bool					white		= (board.getContentColor(fromRow,fromCol) == '1') ? true : false;
             int                     j           = -1;
             LinkedList<int[]>       steps       = new LinkedList<int[]>();
 
-	        switch (FigureType)
+	        switch (figureType)
 	        {
-	        case TYPE_KING:
+	        case FigureType.King:
 
-                int ans = -1;
+                StepType ans = -1;
 
                 steps.AddLast(new int[] { fromRow - 1, fromCol - 1, 0 });
                 steps.AddLast(new int[] { fromRow - 1, fromCol, 0 });
@@ -75,15 +94,15 @@ namespace Game
                 foreach (int[] step in steps)
                 {
                     ans = Figure.isLegalStep(board, fromRow, fromCol, step[0], (step[1]);
-			        if (ans == Figure.SUCCESS)
+			        if (ans == StepType.Success)
 			        {
 				        step[2] = 1;
                         LegalSteps.AddLast(step);
-			        } else if (ans == Figure.CAPTURE)
+			        } else if (ans == StepType.Capture)
 			        {
 				        step[2] = 2;
                         LegalSteps.AddLast(step);
-			        } else if (ans == Figure.CAPTURE_KING)
+			        } else if (ans == StepType.CaptureKing)
 			        {
 				        step[2] = 3;
                         LegalSteps.AddLast(step);
@@ -92,7 +111,7 @@ namespace Game
 
 		        break;
 			
-	        case TYPE_QUEEN:
+	        case FigureType.Queen:
 
                 steps.AddLast( new int[] {1,	0,	0 } );
                 steps.AddLast( new int[] {-1,	0,	0 } );
@@ -109,16 +128,16 @@ namespace Game
                     while (++j >= 0)
                     {
                         ans = Figure.isLegalStep(board, fromRow, fromCol, fromRow + step[0] * j, fromCol + step[1] * j);
-				        if (ans == SUCCESS)				LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 1} );
-				        else if (ans == CAPTURE){		LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 2} ); j = -1; }
-				        else if (ans == CAPTURE_KING){	LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 3} ); j = -1; }
-				        else if (ans == FAILURE)		j = -1;
+				        if (ans == StepType.Success)				LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 1} );
+				        else if (ans == StepType.Capture){		    LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 2} ); j = -1; }
+				        else if (ans == StepType.CaptureKing){	    LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 3} ); j = -1; }
+				        else if (ans == StepType.Failure)		    j = -1;
                     }
                 }
 
 		        break;
 				
-	        case TYPE_ROOK:		
+	        case FigureType.Rook:		
                 steps.AddLast( new int[] {1,	0,	0 } );
                 steps.AddLast( new int[] {-1,	0,	0 } );
                 steps.AddLast( new int[] {0,	1,	0 } );
@@ -130,15 +149,15 @@ namespace Game
                     while (++j >= 0)
                     {
                         ans = Figure.isLegalStep(board, fromRow, fromCol, fromRow + step[0] * j, fromCol + step[1] * j);
-				        if (ans == SUCCESS)				LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 1} );
-				        else if (ans == CAPTURE){		LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 2} ); j = -1; }
-				        else if (ans == CAPTURE_KING){	LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 3} ); j = -1; }
-				        else if (ans == FAILURE)		j = -1;
+				        if (ans == StepType.Success)				LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 1} );
+				        else if (ans == StepType.Capture){		    LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 2} ); j = -1; }
+				        else if (ans == StepType.CaptureKing){	    LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 3} ); j = -1; }
+				        else if (ans == StepType.Failure)		    j = -1;
                     }
                 }
 		        break;
 				
-	        case TYPE_BISHOP:
+	        case FigureType.Bishop:
                 steps.AddLast( new int[] {1,	1,	0 } );
                 steps.AddLast( new int[] {1,	-1,	0 } );
                 steps.AddLast( new int[] {-1,	1,	0 } );
@@ -150,15 +169,15 @@ namespace Game
                     while (++j >= 0)
                     {
                         ans = Figure.isLegalStep(board, fromRow, fromCol, fromRow + step[0] * j, fromCol + step[1] * j);
-				        if (ans == SUCCESS)				LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 1} );
-				        else if (ans == CAPTURE){		LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 2} ); j = -1; }
-				        else if (ans == CAPTURE_KING){	LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 3} ); j = -1; }
-				        else if (ans == FAILURE)		j = -1;
+				        if (ans == StepType.Success)				LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 1} );
+				        else if (ans == StepType.Capture){		    LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 2} ); j = -1; }
+				        else if (ans == StepType.CaptureKing){	    LegalSteps.AddLast( new int[] {fromRow + step[0] * j, fromCol + step[1] * j, 3} ); j = -1; }
+				        else if (ans == StepType.Failure)		    j = -1;
                     }
                 }
 		        break;
 				
-	        case TYPE_KNIGHT:
+	        case FigureType.Knight:
                 steps.AddLast( new int[] { fromRow - 2, fromCol - 1, 0 } );
                 steps.AddLast( new int[] { fromRow - 2, fromCol + 1, 0 } );
                 steps.AddLast( new int[] { fromRow + 2, fromCol - 1, 0 } );
@@ -171,15 +190,15 @@ namespace Game
                 foreach (int[] step in steps)
                 {
                     ans = Figure.isLegalStep(board, fromRow, fromCol, step[0], step[1]);
-			        if (ans == Figure.SUCCESS)
+			        if (ans == StepType.Success)
 			        {
 				        step[2] = 1;
 				        LegalSteps.AddLast(step);
-			        } else if (ans == Figure.CAPTURE)
+			        } else if (ans == StepType.Capture)
 			        {
 				        step[2] = 2;
 				        LegalSteps.AddLast(step);
-			        } if (ans == Figure.CAPTURE_KING)
+			        } if (ans == StepType.CaptureKing)
 			        {
 				        step[2] = 3;
 				        LegalSteps.AddLast(step);
@@ -187,21 +206,21 @@ namespace Game
                 }
 		        break;
 			
-	        case TYPE_PAWN:
+	        case FigureType.Pawn:
 		        int modifier = white ? -1 : 1;
-		        if (Figure.isLegalStep(board, fromRow, fromCol, fromRow + modifier, fromCol) == Figure.SUCCESS)
+		        if (Figure.isLegalStep(board, fromRow, fromCol, fromRow + modifier, fromCol) == StepType.Success)
 			        LegalSteps.AddLast(new int[] { fromRow + modifier, fromCol, 1 });
 
 		        ans = Figure.isLegalStep(board, fromRow, fromCol, fromRow + modifier, fromCol - 1);
-		        if (ans == Figure.CAPTURE)
+		        if (ans == StepType.Capture)
 			        LegalSteps.AddLast(new int[] { fromRow + modifier, fromCol - 1, 2 });
-		        if (ans == Figure.CAPTURE_KING)
+		        if (ans == StepType.CaptureKing)
 			        LegalSteps.AddLast(new int[] { fromRow + modifier, fromCol - 1, 3 });
 
 		        ans = Figure.isLegalStep(board, fromRow, fromCol, fromRow + modifier, fromCol + 1);
-		        if (ans == Figure.CAPTURE)
+		        if (ans == StepType.Capture)
 			        LegalSteps.AddLast(new int[] { fromRow + modifier, fromCol + 1, 2 });
-		        if (ans == Figure.CAPTURE_KING)
+		        if (ans == StepType.CaptureKing)
 			        LegalSteps.AddLast(new int[] { fromRow + modifier, fromCol + 1, 3 });
 		        break;
 	        }
@@ -233,7 +252,7 @@ namespace Game
         }
 
 	    // A figura típusa
-	    protected int			            _figureType;
+	    protected FigureType	            _figureType;
 	    // A figura táblabeli pizíciója
 	    protected int			            _row, _col;
 	    // A figura színe
@@ -245,7 +264,7 @@ namespace Game
 
         public Figure(int type, int r, int c, Board b)
         {
-            _figureType = type;
+            _figureType = (FigureType)type;
             _row        = r;
             _col        = c;
             _board      = b;
@@ -257,24 +276,24 @@ namespace Game
         }
 
 	    // Megnézi, hogy adott figurával legális lépés-e
-	    public int isLegalStep(int r, int c)
+	    public StepType isLegalStep(int r, int c)
         {
             LinkedListNode<int[]> node = _legalSteps.Find(new int[] { r, c, 1 });
 
             if (node != null)
-		        return Figure.SUCCESS;
+		        return StepType.Success;
 
             node = _legalSteps.Find(new int[] { r, c, 2 });
             
             if (node != null)
-		        return Figure.CAPTURE;
+		        return StepType.Capture;
 
             node = _legalSteps.Find(new int[] { r, c, 3 });
             
             if (node != null)
-		        return Figure.CAPTURE_KING;
+		        return StepType.CaptureKing;
 
-	        return Figure.FAILURE;
+	        return StepType.Failure;
         }
 	
 	    // Megadja a legális lépéseket
@@ -287,7 +306,7 @@ namespace Game
 	    // Megadja az aktuális figura típusát
 	    public int getFigureType()							
         { 
-            return _figureType; 
+            return (int)_figureType; 
         }
 
 	    public void calculateLegalSteps()

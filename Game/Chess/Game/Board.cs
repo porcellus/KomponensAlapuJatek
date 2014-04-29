@@ -155,7 +155,7 @@ namespace Game
 
 				        if (enemy)
 					        foreach (int[] step in Figure.getLegalSteps(this, i, j, true))
-						        if (step.z == 3.0f)
+						        if (step[2] == 3.0f)
 							        return true;
 			        }
 		        }

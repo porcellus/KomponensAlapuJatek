@@ -7,5 +7,6 @@ namespace Game.GameBase
 {
     public interface IGameBase
     {
+        public void StartGame();
     }
 }

@@ -55,15 +55,31 @@ namespace Game.Chess.Game
         }
 
         /* GUI által használt függvények */
-
-
-        public void GUI_Action_()
+        public LinkedList< int[] > GetFigures()
         {
+            LinkedList<int[]> result = new LinkedList<int[]>();
 
+            // int[0] - Figura típusa
+            // int[1] - Figura színe
+            // int[2,3] - X,Y koordinátája
+            for (int r = 1; r < board.getDimension()[0]; ++r)
+                for (int c = 1; c < board.getDimension()[1]; ++c)
+                    if (board.getItemByRC(r, c) != Board.BOARD_PIECE_EMPTY && board.getItemByRC(r, c) != Board.BOARD_PIECE_NULL)
+                    {
+                        int[] figure = new int[] { 0, 0, r, c };
+                        result.AddLast(figure);
+                    }
+
+            return result;
+        }
+
+        public int GUI_Action_Step(int fromRow, int fromCol, int toRow, int toCol)
+        {
+            return 0;   
         }
 
         /* Belső függvények */
-        protected void NewGame(Player.PlayerType ptype1, Player.PlayerType ptype2, ChessHeuristic heur)
+        protected void StartGame(Player.PlayerType ptype1, Player.PlayerType ptype2, ChessHeuristic heur)
         {
             alive               = true;
             int[] dimension     = {8,8};
