@@ -119,6 +119,12 @@
     <Folder Include="Model\" />
     <Folder Include="Resources\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Game\Chess\Game\Game.csproj">
+      <Project>{b1621383-4b85-4fe0-b737-a4d295916748}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

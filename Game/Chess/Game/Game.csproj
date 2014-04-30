@@ -39,6 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Board.cs" />
+    <Compile Include="Chess.cs" />
+    <Compile Include="ChessHeuristic.cs" />
+    <Compile Include="ChessStep.cs" />
+    <Compile Include="Figure.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

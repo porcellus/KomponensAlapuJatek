@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Game.Chess;
+
 namespace Game.Chess.Heuristic
 {
-    public class Class1
+    public interface IHeuristic<TBoard>
     {
+        int GetValue(TBoard board);
     }
 }
