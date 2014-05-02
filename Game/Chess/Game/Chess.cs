@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Game.Chess.GameGUI;
 using Game.GameBase;
 using Client.AIAlgorithmBase;
 
