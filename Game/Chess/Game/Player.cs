@@ -3,28 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Game.Chess.Heuristic;
+using Game.GameBase;
+using Client.AIAlgorithmBase;
 
 namespace Game
 {
-    class Player
-    {
-        public enum PlayerType
-        {
-            Human,
-            Computer
-        };
-        
-        protected PlayerType        type;
+    public class Player
+    {        
+        protected EntityType        type;
         protected bool              white;
         protected bool              inCheck;
         protected Board             board;
+        protected IAIAlgorithm      algorithm;
 
-        public Player(Board b, bool w, PlayerType ptype)
+        public Player(Board b, bool w, EntityType ptype, IAIAlgorithm alg)
         {
             type            = ptype;
             white           = w;
             board           = b;
+            algorithm       = alg;
         }
 
         ~Player()
@@ -64,12 +61,12 @@ namespace Game
 
         public bool IsAI()
         {
-            return type == PlayerType.Computer;
+            return type == EntityType.ComputerPlayer;
         }
 
         public bool IsHuman()
         {
-            return type == PlayerType.Human;
+            return type == EntityType.HumanPlayer;
         }
     }
 }

@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Client\AIAlgorithmBase\AIAlgorithmBase.csproj">
+      <Project>{27a307cf-d22f-4097-91f2-ee541604000f}</Project>
+      <Name>AIAlgorithmBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Client\AlfaBeta\AlfaBeta.csproj">
       <Project>{24267a3b-c589-43a2-ae3f-4476f0a02373}</Project>
       <Name>AlfaBeta</Name>
@@ -63,10 +67,6 @@
     <ProjectReference Include="..\GameGUI\GameGUI.csproj">
       <Project>{e2795faa-e49c-45d1-b19b-ac5625a0bf1d}</Project>
       <Name>GameGUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Heuristic\Heuristic.csproj">
-      <Project>{18058aee-4a6d-4e41-8813-7c6ff1809ef7}</Project>
-      <Name>Heuristic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

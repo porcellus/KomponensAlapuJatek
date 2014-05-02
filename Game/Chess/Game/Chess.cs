@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Game.Chess.Heuristic;
 using Game.Chess.GameGUI;
 using Game.GameBase;
+using Client.AIAlgorithmBase;
 
 namespace Game.Chess.Game
 {
-    class Chess : AbstractGame
+    public class Chess : AbstractGame
     {
         // Pályaelemek
-        protected Dictionary<char, Figure>          figures;
-        protected Board                             board;
+        private Dictionary<char, Figure>          figures;
+        private Board                             board;
 
 	    // Játékosok
-        protected LinkedList<Player>                players;			// A játékosokat tartalmazó vektor
-        protected int                               cPlayer;			// Az aktuális játékos indexe
+        private Player[]                          players;			// A játékosokat tartalmazó tömb
+        private int                               cPlayer;			// Az aktuális játékos indexe
 
         // Egérkezelés
-        protected float                             prevX, prevY;		// Előző egérkattintás pozíciója
+        private float                             prevX, prevY;		// Előző egérkattintás pozíciója
 
         // A FrameUpdate függvény tevékenységének típusa
-        protected bool                              waiting;
-        protected bool                              clicked;
-        protected bool                              figureSelected;
-        protected int[]                             figurePos;
-        protected int[]                             lastPos;
-        protected int                               changeTime;
-        protected bool                              alive;
-        protected ChessHeuristic                    heuristic;
+        private bool                              waiting;
+        private bool                              clicked;
+        private bool                              figureSelected;
+        private int[]                             figurePos;
+        private int[]                             lastPos;
+        private int                               changeTime;
+        private bool                              alive;
+        private ChessHeuristic                    heuristic;
 
 
         public Chess()
@@ -73,24 +73,24 @@ namespace Game.Chess.Game
         }
 
         /* Belső függvények */
-        public void StartGame(Player.PlayerType ptype1, Player.PlayerType ptype2, ChessHeuristic heur)
+        public override void StartGame()
         {
+            if (heuristic == null)
+                throw new Exception("Heuristic hasn't set yet.");
+
+            if (players == null || players[0] == null || players[1] == null)
+                throw new Exception("Players hasn't initialized proper yet.");
+
             alive               = true;
             int[] dimension     = {8,8};
-            
-            heuristic           = heur;
 
             board               = new Board();
-            board.setHeuristic(heur);
+            board.setHeuristic(heuristic);
             board.setDimension(dimension);
             board.setContent("5432134566666666000000000000000000000000000000006666666654312345");
             board.setContentColor("2222222222222222000000000000000000000000000000001111111111111111");
-
-            players             = new LinkedList<Player>();
-            players.AddLast(new Player(board, true, ptype1));
-            players.AddLast(new Player(board, false, ptype2));
-
-            waiting             = players.ElementAt(0).IsHuman();
+            
+            waiting             = players[0].IsHuman();
             figures             = new Dictionary<char,Figure>();
 
             for (int i = 0; i<board.getDimension()[1]; ++i)
@@ -128,7 +128,7 @@ namespace Game.Chess.Game
         }
 
         /* Fő update függvény */ 
-        protected void FrameUpdate()
+        private void FrameUpdate()
         {
 			// Annak vizsgálata, hogy MI-s játékos következik-e
 			if (waiting) // Ha emberi játékos, akkor egérkattintás eseményre várunk
@@ -146,18 +146,10 @@ namespace Game.Chess.Game
 	        cPlayer			= 0;
             board           = null;
 
-            players.Clear();
 	        figures.Clear();
-        }
 
-        public void SetLight() 					// Fények állítása
-        {
-
-        }
-
-        public bool OnMouse()					// Egérkattintás kezelése
-        {
-            return false;
+            players         = null;
+            figures         = null;
         }
 
         public void changePlayer()			    // Játékos váltása
@@ -176,20 +168,35 @@ namespace Game.Chess.Game
         }
 
         /* Interface methods */
+        public override void SetHeuristic<Board>(IHeuristic<Board> heuristic)
+        {
+            if (!(heuristic is ChessHeuristic))
+                throw new ArgumentException("Not valid heuristic type for this game!");
+
+            this.heuristic = (ChessHeuristic)heuristic;
+        }
+
         public override string GetGameTypeInfo()
         {
             return "";
         }
 
-        public override void RegisterAsPlayer(ref StepHandler onStep, GameBase.PlayerType playerType)
+        public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, GameBase.PlayerType playerType, GameBase.EntityType controller, TAlgorithm algorithm)
         {
-            if (players.Count >= 2)
-                return;
-            
+            if (!(algorithm is IAIAlgorithm))
+                throw new Exception("Not valid algorithm type!");
 
+            if (players == null)
+                players = new Player[2];
+
+            // Index in the players list 
+            int index       = playerType == PlayerType.PlayerOne ? 0 : 1;
+            Player player   = new Player(board, index == 0, controller, (IAIAlgorithm)algorithm);
+
+            players[index]  = player;
         }
 
-        public override void DoStep(AbstractStep step, GameBase.PlayerType playerType)
+        public override AbstractStep.Result DoStep(AbstractStep step, GameBase.PlayerType playerType)
         {
             if (!(step is ChessStep))
                 throw new Exception("Not proper step type!");
@@ -199,9 +206,11 @@ namespace Game.Chess.Game
             int[] to        = cStep.GetToPosition();
 
             board.Step(from[0], from[1], to[0], to[1]);
+
+            return AbstractStep.Result.Success;
         }
 
-        public override AbstractGame SimulateStep(AbstractStep step)
+        public override int SimulateStep(AbstractStep step)
         {
             if (!(step is ChessStep))
                 throw new Exception("Not proper step type!");
@@ -213,9 +222,7 @@ namespace Game.Chess.Game
             int[] to            = cStep.GetToPosition();
 
             clone.Step(from[0], from[1], to[0], to[1]);
-
-
-            return this;
+            return clone.getValue();
         }
     }
 }

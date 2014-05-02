@@ -6,7 +6,7 @@ using Game.GameBase;
 
 namespace Game
 {
-    class ChessStep : AbstractStep
+    public class ChessStep : AbstractStep
     {
         protected int               fromRow, fromCol;
         protected int               toRow, toCol;
@@ -21,7 +21,7 @@ namespace Game
             type        = t;
         }
 
-        public Figure.StepType GetType()
+        public Figure.StepType GetStepType()
         {
             return type;
         }

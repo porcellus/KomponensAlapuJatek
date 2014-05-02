@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Game
 {
-    class Figure
+    public class Figure
     {
         public enum StepType
         {

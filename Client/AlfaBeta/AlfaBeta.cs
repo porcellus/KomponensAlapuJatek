@@ -90,7 +90,7 @@ namespace Client.AlfaBeta
             this.game = game;
             this.playerType = playerType;
             AbstractGame.StepHandler stepHandler = AlfaBetaStepHandler;
-            game.RegisterAsPlayer(ref stepHandler, playerType);
+            game.RegisterAsPlayer<AlphaBetaSearch>(ref stepHandler, playerType, EntityType.ComputerPlayer, this);
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Game.Chess.Heuristic;
+using Game.GameBase;
 
 namespace Game
 {
-    class ChessHeuristic : IHeuristic<Board>
+    public class ChessHeuristic : IHeuristic<Board>
     {
         // Megadja, hogy mekkora az adott tábla értéke
         public int GetValue(Board board)

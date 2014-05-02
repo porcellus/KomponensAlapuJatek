@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Game.Chess.Heuristic;
+using Game.GameBase;
 
 namespace Game
 {
-    class Board
+    public class Board
     {
 	    static bool Equals(Board b1, Board b2)
         {
