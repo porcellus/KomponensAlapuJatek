@@ -2,9 +2,32 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:view="clr-namespace:ClientGUI.View"
+    xmlns:viewModel="clr-namespace:ClientGUI.ViewModel"
     Title="Client GUI" 
     Height="400" 
     Width="600">
+    <controls:MetroWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <viewModel:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+        <viewModel:BooleanToConnectionStateConverter x:Key="BooleanToConnectionStateConverter"/>
+        <Style x:Key="FloatingWindowStyle" TargetType="UserControl">
+            <Style.Setters>
+                <Setter Property="Grid.Row" Value="0"/>
+                <Setter Property="Grid.Column" Value="0"/>
+                <Setter Property="Grid.RowSpan" Value="2"/>
+                <Setter Property="Grid.ColumnSpan" Value="2"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="MetroFloatingWindowStyle" TargetType="controls:MetroContentControl">
+            <Style.Setters>
+                <Setter Property="Grid.Row" Value="0"/>
+                <Setter Property="Grid.Column" Value="0"/>
+                <Setter Property="Grid.RowSpan" Value="2"/>
+                <Setter Property="Grid.ColumnSpan" Value="2"/>
+            </Style.Setters>
+        </Style>
+    </controls:MetroWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -14,17 +37,30 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
-        <Label HorizontalAlignment="Center">Select game</Label>
-        
-        <ComboBox Grid.Column="1" Grid.Row="0" Height="40"
-                  ItemsSource="{Binding GamesList}" 
-                  SelectedItem="{Binding SelectedGame}"  />
-        
+        <Button Content="Játék indítása" 
+                Grid.Row="0" Grid.Column="1" 
+                Width="100" HorizontalAlignment="Right" Margin="0 5 20 5"
+                Command="{Binding StartNewGameCommand}"/>
+
+        <Label FontSize="15" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+               Content="{Binding IsConnected, Converter={StaticResource BooleanToConnectionStateConverter}}" 
+               Foreground="{Binding IsConnected, Converter={StaticResource BooleanToColorConverter}}"/>
+
         <UserControl Content="{Binding SelectedGameControl}"  
                      VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
                      Margin="15"
-                     Grid.Row="1" Grid.Column="1"/>
+                     Grid.Row="1" 
+                     Grid.Column="0" Grid.ColumnSpan="2"/>
+        <view:ServerConnectorWindow 
+                          Style="{StaticResource MetroFloatingWindowStyle}" 
+                          DataContext="{Binding ServerConnectorViewModel}"
+                          Visibility="{Binding IsConnectionWindowVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <view:ErrorWindow Style="{StaticResource FloatingWindowStyle}"
+                          Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <view:GameSelector Style="{StaticResource FloatingWindowStyle}"
+                           DataContext="{Binding SelectorViewModel}"  
+                           Visibility="{Binding IsSelectorVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </controls:MetroWindow>
 

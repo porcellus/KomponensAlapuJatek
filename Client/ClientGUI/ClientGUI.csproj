@@ -37,6 +37,9 @@
     <Reference Include="MahApps.Metro">
       <HintPath>..\..\packages\MahApps.Metro.0.13.1.0\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -59,14 +62,36 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\ClientFactory.cs" />
     <Compile Include="ViewModel\Annotations.cs" />
+    <Compile Include="ViewModel\BooleanToColorConverter.cs" />
+    <Compile Include="ViewModel\BooleanToConnectionStateConverter.cs" />
+    <Compile Include="ViewModel\SelectorViewModel.cs" />
+    <Compile Include="ViewModel\ServerConnectorViewModel.cs" />
     <Compile Include="View\ChessGame.xaml.cs">
       <DependentUpon>ChessGame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GameSelector.xaml.cs">
+      <DependentUpon>GameSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\QuatroGame.xaml.cs">
       <DependentUpon>QuatroGame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ServerConnectorWindow.xaml.cs">
+      <DependentUpon>ServerConnectorWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\ChessGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ErrorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GameSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -86,6 +111,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\QuatroGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ServerConnectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -115,10 +144,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\Game\Chess\Game\Game.csproj">
       <Project>{b1621383-4b85-4fe0-b737-a4d295916748}</Project>
@@ -127,6 +153,10 @@
     <ProjectReference Include="..\..\Game\GameBase\GameBase.csproj">
       <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
       <Name>GameBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Client\Client.csproj">
+      <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
+      <Name>Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
