@@ -39,6 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connector", "Server\Connect
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIAlgorithmBase", "Client\AIAlgorithmBase\AIAlgorithmBase.csproj", "{27A307CF-D22F-4097-91F2-EE541604000F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF552766-7EF1-47A2-92A1-89B03B0BB67B}"
+	ProjectSection(SolutionItems) = preProject
+		Bitmap1.bmp = Bitmap1.bmp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
