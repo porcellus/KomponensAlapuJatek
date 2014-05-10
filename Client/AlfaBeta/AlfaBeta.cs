@@ -32,7 +32,7 @@ namespace Client.AlfaBeta
             game.DoStep(aStep, playerType);
         }
 
-        private AbstractStep MakeDecision(IState state)
+        public AbstractStep MakeDecision(IState state)
         {
             int level = 0;
             AbstractStep result = default(AbstractStep);
@@ -54,7 +54,7 @@ namespace Client.AlfaBeta
         {
             level++;
             if (game.IsTerminal(state) || level == depth)
-                return game.GetHeuristicValue(state);
+                return -game.GetHeuristicValue(state);
             double value = Double.PositiveInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
