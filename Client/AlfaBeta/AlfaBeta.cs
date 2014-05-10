@@ -9,6 +9,16 @@ namespace Client.AlfaBeta
     {
         private AbstractGame game;
         private PlayerType playerType;
+        private int depth;
+        private static
+        AlphaBetaSearch(int depth)
+        {
+            this.depth = depth;
+        }
+
+        AlphaBetaSearch(): this(2)
+        {
+        }
 //        private readonly IGameExperimental<TState, TAction, TPlayer> _game;
 //        private int _expandedNodes;
 //
@@ -79,11 +89,17 @@ namespace Client.AlfaBeta
         public void AlfaBetaStepHandler(AbstractStep step, IState state)
         {
             Console.WriteLine("AlfaBeta Stephandler has been called.");
+
+            AbstractStep aStep = MakeDecision(state);
             // 1. Get the current gamestate.(current node on the gametree)
             // 2. execute alfabeta search in a given depth
             // 3. select the next step.
-            AbstractStep aStep = null;
             game.DoStep(aStep, playerType);
+        }
+
+        private AbstractStep MakeDecision(IState state)
+        {
+            return null;
         }
 
         public void AddToGame(AbstractGame game, PlayerType playerType)
