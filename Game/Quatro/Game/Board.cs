@@ -2,13 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GameBase;
+using Game.GameBase;
+
+
 
 namespace Game
 {
-    class Board
+    class Board : IState
     {
         private const int bWidth = 4;
+
+        public int BWidth
+        {
+            get { return bWidth; }
+        }
+
         private const int bHeight = 4;
+
+        public int BHeight
+        {
+            get { return bHeight; }
+        } 
+
 
         bool winstate = false;
 
@@ -19,6 +35,12 @@ namespace Game
         }
 
         Piece[,] bBoard = new Piece[bWidth, bHeight]; //4*4 tábla létrehozása
+
+        internal Piece[,] BBoard
+        {
+            get { return bBoard; }
+           
+        }
 
         //bábú lerakása
         public void insertPiece(int x, int y, Piece iPiece)
@@ -178,5 +200,71 @@ namespace Game
             }
 
         }
+        public IState GetNextState(IState current, AbstractStep step)
+        {
+            Board returnBoard = ((Board)current);
+            returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+
+            return (IState)returnBoard;
+        }
+       
+        public override IEnumerable<AbstractStep> GetAvailableSteps()
+        {
+           
+          List<QuartoStep> lista = new List<QuartoStep>();
+
+          QuartoStep step;
+         
+          if (Game.Quatro.Game.Quarto.SelectedPiece == null && bBoard == Game.Quatro.Game.Quarto.ActiveBoard.BBoard)
+          {
+              for (int i = 0; i < Game.Quatro.Game.Quarto.ActivePieces.Length; i++)
+              {
+                  for (int j = 0; j < 4; j++)
+                  {
+                      for (int k = 0; k < 4; k++)
+                      {
+                          if (bBoard[j, k] == null)
+                          {
+
+
+                              step = new QuartoStep(j, k, Game.Quatro.Game.Quarto.SelectedPiece);
+                              lista.Add(step);
+                          }
+
+                      }
+
+                  }
+
+              }
+          
+          
+          }
+          else
+              {
+                  for (int i = 0; i < Game.Quatro.Game.Quarto.ActivePieces.Length; i++)
+                  {
+                      for (int j = 0; j < 4; j++)
+                      {
+                          for (int k = 0; k < 4; k++)
+                          {
+                              if (bBoard[j, k] == null)
+                              {
+
+
+                                  step = new QuartoStep(j, k, Game.Quatro.Game.Quarto.ActivePieces[i]);
+                                  lista.Add(step);
+                              }
+
+                          }
+
+                      }
+
+                  }
+              }
+
+
+
+          return lista;
+      }
     }
 }
