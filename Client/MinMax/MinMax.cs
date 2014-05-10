@@ -32,13 +32,13 @@ namespace Client.MinMax
             _Game.RegisterAsPlayer(ref stepHandler, playerType, EntityType.ComputerPlayer, this);
         }
 
-        public void StepHandler(AbstractStep step, IState state)
+        public void StepHandler(IState state)
         {
             AbstractStep optimalStep = null; // call MakeDecision
             IEnumerable<AbstractStep> availableSteps = state.GetAvailableSteps();
-            BuildGraph(availableSteps); 
-
-            _Game.DoStep(step, _PlayerType);
+            BuildGraph(availableSteps);
+            AbstractStep selectedStep = null;
+            _Game.DoStep(selectedStep, _PlayerType);
         }
 
         /*      private AbstractStep MakeDecision(TState state)

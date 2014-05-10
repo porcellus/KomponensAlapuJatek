@@ -26,7 +26,7 @@ namespace Client.AlfaBeta
             return "AlfaBeta AI Algorithm implementation.";
         }
 
-        public void AlfaBetaStepHandler(AbstractStep step, IState state)
+        public void AlfaBetaStepHandler(IState state)
         {
             Console.WriteLine("AlfaBeta Stephandler has been called.");
             AbstractStep aStep = MakeDecision(state);
