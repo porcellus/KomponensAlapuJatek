@@ -135,6 +135,11 @@ namespace Game.Chess.Game
             throw new NotImplementedException();
         }
 
+        public override IState GetNextState(IState current, AbstractStep step)
+        {
+            throw new NotImplementedException();
+        }
+
         /* Fő update függvény */ 
         private void FrameUpdate()
         {

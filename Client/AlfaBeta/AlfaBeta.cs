@@ -40,9 +40,8 @@ namespace Client.AlfaBeta
             double resultValue = Double.NegativeInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
-                Double value = 0;
-                //Double value = MinValue(game.GetResult(state, step), playerType,
-                //                Double.NegativeInfinity, Double.PositiveInfinity);
+                Double value = MinValue(game.GetNextState(state, step),
+                                Double.NegativeInfinity, Double.PositiveInfinity);
                 if (value > resultValue)
                 {
                     result = step;
@@ -52,16 +51,16 @@ namespace Client.AlfaBeta
             return result;
         }
 
-        public double MinValue(IState state, PlayerType player, double alpha, double beta)
+        public double MinValue(IState state, double alpha, double beta)
         {
             expandedNodes++;
-            if (game.IsTerminal(state))
+            if (game.IsTerminal(state) || expandedNodes == depth)
                 return game.GetHeuristicValue(state);
             double value = Double.PositiveInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
-                //value = Math.Min(value, MaxValue(
-                //game.GetResult(state, step), player, alpha, beta));
+                value = Math.Min(value, MaxValue(
+                game.GetNextState(state, step), alpha, beta));
                 if (value <= alpha)
                     return value;
                 beta = Math.Min(beta, value);
@@ -69,16 +68,16 @@ namespace Client.AlfaBeta
             return value;
         }
 
-        public double MaxValue(IState state, PlayerType player, double alpha, double beta)
+        public double MaxValue(IState state, double alpha, double beta)
         {
             expandedNodes++;
-            if (game.IsTerminal(state))
+            if (game.IsTerminal(state) || expandedNodes == depth)
                 return game.GetHeuristicValue(state);
             double value = Double.NegativeInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
-                // value = Math.Max(value, MinValue(
-                //      _game.GetResult(state, action), player, alpha, beta));
+                value = Math.Max(value, MinValue(
+                      game.GetNextState(state, step), alpha, beta));
                 if (value >= beta)
                     return value;
                 alpha = Math.Max(alpha, value);

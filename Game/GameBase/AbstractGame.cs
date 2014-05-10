@@ -15,5 +15,6 @@ namespace Game.GameBase
         public abstract void StartGame();
         public abstract bool IsTerminal(IState state);
         public abstract double GetHeuristicValue(IState state);
+        public abstract IState GetNextState(IState current, AbstractStep step);
     }
-}
+} 
