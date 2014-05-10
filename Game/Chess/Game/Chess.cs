@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.GameBase;
 using Client.AIAlgorithmBase;
+using GameBase;
 
 namespace Game.Chess.Game
 {
@@ -178,11 +179,6 @@ namespace Game.Chess.Game
             return "";
         }
 
-        public override IEnumerable<AbstractStep> GetAvailableSteps()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, GameBase.PlayerType playerType, GameBase.EntityType controller, TAlgorithm algorithm)
         {
             if (!(algorithm is IAIAlgorithm))
@@ -212,7 +208,12 @@ namespace Game.Chess.Game
             return AbstractStep.Result.Success;
         }
 
-        public override int SimulateStep(AbstractStep step)
+        public override IState SimulateStep(AbstractStep step)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int SimulateStep(AbstractStep step, int dummyInt)
         {
             if (!(step is ChessStep))
                 throw new Exception("Not proper step type!");

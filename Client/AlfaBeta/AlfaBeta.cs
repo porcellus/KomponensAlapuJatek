@@ -1,6 +1,7 @@
 ﻿using System;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
+using GameBase;
 
 namespace Client.AlfaBeta
 {
@@ -75,7 +76,7 @@ namespace Client.AlfaBeta
             return "AlfaBeta AI Algorithm implementation.";
         }
 
-        public void AlfaBetaStepHandler()
+        public void AlfaBetaStepHandler(AbstractStep step, IState state)
         {
             Console.WriteLine("AlfaBeta Stephandler has been called.");
             // 1. Get the current gamestate.(current node on the gametree)
