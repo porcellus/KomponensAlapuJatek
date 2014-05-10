@@ -14,5 +14,6 @@ namespace Game.GameBase
         public abstract int SimulateStep(AbstractStep step, int dummyInt);
         public abstract void StartGame();
         public abstract bool IsTerminal(IState state);
+        public abstract double GetHeuristicValue(IState state);
     }
 }

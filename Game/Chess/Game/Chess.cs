@@ -130,6 +130,11 @@ namespace Game.Chess.Game
             throw new NotImplementedException();
         }
 
+        public override double GetHeuristicValue(IState state)
+        {
+            throw new NotImplementedException();
+        }
+
         /* Fő update függvény */ 
         private void FrameUpdate()
         {

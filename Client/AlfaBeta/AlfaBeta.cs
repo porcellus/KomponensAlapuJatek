@@ -38,7 +38,6 @@ namespace Client.AlfaBeta
             expandedNodes = 0;
             AbstractStep result = default(AbstractStep);
             double resultValue = Double.NegativeInfinity;
-            //            TPlayer player = _game.GetPlayer(state);
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
                 Double value = 0;
@@ -56,8 +55,8 @@ namespace Client.AlfaBeta
         public double MinValue(IState state, PlayerType player, double alpha, double beta)
         {
             expandedNodes++;
-//            if (_game.IsTerminal(state))
-//                return _game.GetUtility(state, player);
+            if (game.IsTerminal(state))
+                return game.GetHeuristicValue(state);
             double value = Double.PositiveInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
@@ -73,8 +72,8 @@ namespace Client.AlfaBeta
         public double MaxValue(IState state, PlayerType player, double alpha, double beta)
         {
             expandedNodes++;
-            //     if (_game.IsTerminal(state))
-            //         return _game.GetUtility(state, player);
+            if (game.IsTerminal(state))
+                return game.GetHeuristicValue(state);
             double value = Double.NegativeInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
