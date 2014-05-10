@@ -178,6 +178,11 @@ namespace Game.Chess.Game
             return "";
         }
 
+        public override IEnumerable<AbstractStep> GetAvailableSteps()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, GameBase.PlayerType playerType, GameBase.EntityType controller, TAlgorithm algorithm)
         {
             if (!(algorithm is IAIAlgorithm))

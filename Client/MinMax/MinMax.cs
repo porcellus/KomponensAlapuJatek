@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
 using QuickGraph;
@@ -33,6 +34,7 @@ namespace Client.MinMax
         public void StepHandler()
         {
             AbstractStep step = null; // call MakeDecision
+            IEnumerable<AbstractStep> availableSteps = _Game.GetAvailableSteps();
             _Game.DoStep(step, _PlayerType);
         }
 
