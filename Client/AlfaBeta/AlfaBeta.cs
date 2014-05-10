@@ -10,7 +10,6 @@ namespace Client.AlfaBeta
         private AbstractGame game;
         private PlayerType playerType;
         private int depth;
-        private int expandedNodes;
 
         public AlphaBetaSearch(int depth)
         {
@@ -35,12 +34,12 @@ namespace Client.AlfaBeta
 
         private AbstractStep MakeDecision(IState state)
         {
-            expandedNodes = 0;
+            int level = 0;
             AbstractStep result = default(AbstractStep);
             double resultValue = Double.NegativeInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
-                Double value = MinValue(game.GetNextState(state, step),
+                Double value = MinValue(level, game.GetNextState(state, step),
                                 Double.NegativeInfinity, Double.PositiveInfinity);
                 if (value > resultValue)
                 {
@@ -51,15 +50,15 @@ namespace Client.AlfaBeta
             return result;
         }
 
-        public double MinValue(IState state, double alpha, double beta)
+        public double MinValue(int level, IState state, double alpha, double beta)
         {
-            expandedNodes++;
-            if (game.IsTerminal(state) || expandedNodes == depth)
+            level++;
+            if (game.IsTerminal(state) || level == depth)
                 return game.GetHeuristicValue(state);
             double value = Double.PositiveInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
-                value = Math.Min(value, MaxValue(
+                value = Math.Min(value, MaxValue(level,
                 game.GetNextState(state, step), alpha, beta));
                 if (value <= alpha)
                     return value;
@@ -68,15 +67,15 @@ namespace Client.AlfaBeta
             return value;
         }
 
-        public double MaxValue(IState state, double alpha, double beta)
+        public double MaxValue(int level, IState state, double alpha, double beta)
         {
-            expandedNodes++;
-            if (game.IsTerminal(state) || expandedNodes == depth)
+            level++;
+            if (game.IsTerminal(state) || level == depth)
                 return game.GetHeuristicValue(state);
             double value = Double.NegativeInfinity;
             foreach (AbstractStep step in state.GetAvailableSteps())
             {
-                value = Math.Max(value, MinValue(
+                value = Math.Max(value, MinValue(level,
                       game.GetNextState(state, step), alpha, beta));
                 if (value >= beta)
                     return value;
@@ -92,5 +91,7 @@ namespace Client.AlfaBeta
             AbstractGame.StepHandler stepHandler = AlfaBetaStepHandler;
             game.RegisterAsPlayer<AlphaBetaSearch>(ref stepHandler, playerType, EntityType.ComputerPlayer, this);
         }
+
     }
+  
 }
