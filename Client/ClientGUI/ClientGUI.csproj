@@ -144,7 +144,6 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\Game\Chess\Game\Game.csproj">
       <Project>{b1621383-4b85-4fe0-b737-a4d295916748}</Project>
@@ -158,6 +157,26 @@
       <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
       <Name>Client</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\empty.png" />
+    <Resource Include="View\Images\piece-0.png" />
+    <Resource Include="View\Images\piece-1.png" />
+    <Resource Include="View\Images\piece-10.png" />
+    <Resource Include="View\Images\piece-11.png" />
+    <Resource Include="View\Images\piece-12.png" />
+    <Resource Include="View\Images\piece-13.png" />
+    <Resource Include="View\Images\piece-14.png" />
+    <Resource Include="View\Images\piece-15.png" />
+    <Resource Include="View\Images\piece-2.png" />
+    <Resource Include="View\Images\piece-3.png" />
+    <Resource Include="View\Images\piece-4.png" />
+    <Resource Include="View\Images\piece-5.png" />
+    <Resource Include="View\Images\piece-6.png" />
+    <Resource Include="View\Images\piece-7.png" />
+    <Resource Include="View\Images\piece-8.png" />
+    <Resource Include="View\Images\piece-9.png" />
+    <Resource Include="View\Images\unknown.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
