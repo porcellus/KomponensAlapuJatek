@@ -125,6 +125,11 @@ namespace Game.Chess.Game
             }
         }
 
+        public override bool IsTerminal(IState state)
+        {
+            throw new NotImplementedException();
+        }
+
         /* Fő update függvény */ 
         private void FrameUpdate()
         {

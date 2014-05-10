@@ -13,5 +13,6 @@ namespace Game.GameBase
         public abstract IState SimulateStep(AbstractStep step);
         public abstract int SimulateStep(AbstractStep step, int dummyInt);
         public abstract void StartGame();
+        public abstract bool IsTerminal(IState state);
     }
 }
