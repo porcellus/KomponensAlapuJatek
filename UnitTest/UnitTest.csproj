@@ -62,6 +62,10 @@
       <Project>{24267A3B-C589-43A2-AE3F-4476F0A02373}</Project>
       <Name>AlfaBeta</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Client\MinMax\MinMax.csproj">
+      <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>
+      <Name>MinMax</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Game\GameBase\GameBase.csproj">
       <Project>{FAEF5AD0-CADB-4419-A733-7DC39ED40D2A}</Project>
       <Name>GameBase</Name>

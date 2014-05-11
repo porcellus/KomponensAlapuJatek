@@ -14,9 +14,17 @@ namespace Client.MinMax
         private PlayerType _PlayerType;
         private AdjacencyGraph<int, TaggedEdge<int, string>> _Graph;
         private int _ExpandedNodes;
+        private int _Depth;
+
+        public MinimaxSearch(int depth)
+        {
+            _Depth = depth;
+        }
 
         public MinimaxSearch()
-        { /**/ }
+        {
+            _Depth = 2;
+        }
 
         public string GetAIAlgorithmInfo()
         {
@@ -64,7 +72,7 @@ namespace Client.MinMax
         public double MaxValue(IState state)
         {
             _ExpandedNodes++;
-            if (_Game.IsTerminal(state))
+            if (_Game.IsTerminal(state) || _Depth == _ExpandedNodes)
             {
                 return _Game.GetHeuristicValue(state);
             }
@@ -76,7 +84,7 @@ namespace Client.MinMax
         public double MinValue(IState state)
         {
             _ExpandedNodes++;
-            if (_Game.IsTerminal(state))
+            if (_Game.IsTerminal(state) || _Depth == _ExpandedNodes)
             {
                 return -_Game.GetHeuristicValue(state);
             }

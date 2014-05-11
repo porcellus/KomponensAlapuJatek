@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Client.AIAlgorithmBase;
 using Client.AlfaBeta;
+using Client.MinMax;
 using Game.GameBase;
 using GameBase;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -185,6 +187,51 @@ namespace UnitTestAIAlgorithm
 
             abs.AddToGame(new TestGame(), PlayerType.PlayerOne);
             AbstractStep step = abs.MakeDecision(state);
+            Assert.AreEqual(level1_0, ((TestStep)step).GetState());
+        }
+
+        [TestMethod]
+        public void MinimaxSearchLevel0()
+        {
+            var minmax = new MinimaxSearch();
+            IState state = new TestState(0);
+            AbstractStep step = minmax.MakeDecision(state);
+            Assert.AreEqual(null, step);
+        }
+
+        [TestMethod]
+        public void MinimaxSearchLevel1()
+        {
+            var minmax = new MinimaxSearch(2);
+            var state = new TestState(1);
+            var left = new TestState(4);
+            var right = new TestState(3);
+
+            state.AddChilds(left, right);
+
+            minmax.AddToGame(new TestGame(), PlayerType.PlayerOne);
+            AbstractStep step = minmax.MakeDecision(state);
+            Assert.AreEqual(1, ((TestStep)step).GetStep());
+            Assert.AreEqual(right, ((TestStep)step).GetState());
+        }
+
+        [TestMethod]
+        public void MinimaxSearchLevel2()
+        {
+            var minmax = new MinimaxSearch(4);
+            var state = new TestState(0);
+            var level1_0 = new TestState(0);
+            var level1_1 = new TestState(0);
+            var level2_0 = new TestState(2);
+            var level2_1 = new TestState(7);
+            var level2_2 = new TestState(1);
+            var level2_3 = new TestState(8);
+            state.AddChilds(level1_0, level1_1);
+            level1_0.AddChilds(level2_0, level2_1);
+            level1_1.AddChilds(level2_2, level2_3);
+
+            minmax.AddToGame(new TestGame(), PlayerType.PlayerOne);
+            AbstractStep step = minmax.MakeDecision(state);
             Assert.AreEqual(level1_0, ((TestStep)step).GetState());
         }
     }
