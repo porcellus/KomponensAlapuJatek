@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
 using GameBase;
@@ -12,6 +13,7 @@ namespace Client.MinMax
         private AbstractGame _Game;
         private PlayerType _PlayerType;
         private AdjacencyGraph<int, TaggedEdge<int, string>> _Graph;
+        private int _ExpandedNodes;
 
         public MinimaxSearch()
         { /**/ }
@@ -34,11 +36,53 @@ namespace Client.MinMax
 
         public void StepHandler(IState state)
         {
-            AbstractStep optimalStep = null; // call MakeDecision
+            AbstractStep optimalStep = MakeDecision(state);
             IEnumerable<AbstractStep> availableSteps = state.GetAvailableSteps();
             BuildGraph(availableSteps);
             AbstractStep selectedStep = null;
             _Game.DoStep(selectedStep, _PlayerType);
+        }
+
+        public AbstractStep MakeDecision(IState state)
+        {
+            _ExpandedNodes = 0;
+            AbstractStep result = null;
+            double resultValue = Double.NegativeInfinity;
+
+            foreach (AbstractStep step in state.GetAvailableSteps())
+            {
+                double value = MinValue(_Game.GetNextState(state, step));
+                if (value > resultValue)
+                {
+                    result = step;
+                    resultValue = value;
+                }
+            }
+            return result;
+        }
+
+        public double MaxValue(IState state)
+        {
+            _ExpandedNodes++;
+            if (_Game.IsTerminal(state))
+            {
+                return _Game.GetHeuristicValue(state);
+            }
+
+            return state.GetAvailableSteps().Select(step =>
+                MinValue(_Game.GetNextState(state, step))).Concat(new[] { Double.NegativeInfinity }).Max();
+        }
+
+        public double MinValue(IState state)
+        {
+            _ExpandedNodes++;
+            if (_Game.IsTerminal(state))
+            {
+                return -_Game.GetHeuristicValue(state);
+            }
+
+            return state.GetAvailableSteps().Select(step =>
+                MaxValue(_Game.GetNextState(state, step))).Concat(new[] { Double.PositiveInfinity }).Min();
         }
 
         /*      private AbstractStep MakeDecision(TState state)
@@ -91,7 +135,6 @@ namespace Client.MinMax
 
         private void BuildGraph(IEnumerable<AbstractStep> stpes)
         {
-            
             foreach (AbstractStep step in stpes)
             {
                 IState simulateStep = _Game.SimulateStep(step);
