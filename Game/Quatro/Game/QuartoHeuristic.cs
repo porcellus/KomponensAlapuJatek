@@ -13,7 +13,7 @@ namespace Game
         public int GetValue(Board board)
         {
             int ret = 0;
-            
+
 
             board.checkWinningState();
 
@@ -21,7 +21,13 @@ namespace Game
             {
 
 
-                ret = calculate( board);
+
+                ret += calculateRow(board);
+                ret += calculateCol(board);
+                ret += calculateCub(board);
+                ret += calculateDiag(board);
+
+
 
 
                 return ret;
@@ -34,242 +40,460 @@ namespace Game
 
         }
 
-        public int calculate( Board b)
+
+        public int calculateRow(Board b)
         {
             int sum = 0;
-            /*
+            int[] rowsColor = new int[4] { 2, 2, 2, 2 };
+            int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
+            int[] rowsShape = new int[4] { 2, 2, 2, 2 };
+            int[] rowsFull = new int[4] { 2, 2, 2, 2 };
 
-            //megnézzük a sorokat
+            for (int i = 0; i < b.BHeight; ++i)
+            {
+                for (int j = 0; j < b.BWidth; i++)
+                {
 
-            for (int i = 0; i < b.BWidth; i++)
-            {
-                if (b.BBoard[i, y] != null)
-                {
-                    if (b.BBoard[i, y].color == p.color)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[i, y].shape == p.shape)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[i, y].full == p.full)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[i, y].height == p.height)
-                    {
-                        sum += 1;
-                    }
-                }
 
-            }
-            //megnézzük az oszlopokat
-            for (int i = 0; i < b.BHeight; i++)
-            {
-                if (b.BBoard[x, i] != null)
-                {
-                    if (b.BBoard[x, i].color == p.color)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x, i].shape == p.shape)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x, i].full == p.full)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x, i].height == p.height)
-                    {
-                        sum += 1;
-                    }
-                }
+                    rowsColor[i] = b.BBoard[i, j].color;
+                    rowsHeigh[i] = b.BBoard[i, j].height;
+                    rowsShape[i] = b.BBoard[i, j].shape;
+                    rowsFull[i] = b.BBoard[i, j].full;
 
-            }
-            // négyzetek ellenőrzése
-            if (x - 1 > 0)
-            {
-                if (b.BBoard[x - 1, y] != null)
+
+                }
+                int countElement = (rowsColor).Count(s => s != 2);
+                if (rowsColor.Count(s => s == 1) == countElement)
                 {
-                    if (b.BBoard[x - 1, y].color == p.color)
+                    if (countElement == 1)
                     {
                         sum += 1;
                     }
-                    if (b.BBoard[x - 1, y].shape == p.shape)
+                    else if (countElement == 2)
                     {
-                        sum += 1;
+                        sum += 4;
                     }
-                    if (b.BBoard[x - 1, y].full == p.full)
+                    else if (countElement == 3)
                     {
-                        sum += 1;
+                        sum += 10;
                     }
-                    if (b.BBoard[x - 1, y].height == p.height)
+                    else if (countElement == 4 || countElement == 0)
                     {
-                        sum += 1;
+                        sum += 100;
                     }
                 }
-            }
-            if (x + 1 < 4)
-            {
-                if (b.BBoard[x + 1, y] != null)
+                countElement = (rowsHeigh).Count(s => s != 2);
+                if (rowsHeigh.Count(s => s == 1) == countElement)
                 {
-                    if (b.BBoard[x + 1, y].color == p.color)
+                    if (countElement == 1)
                     {
                         sum += 1;
                     }
-                    if (b.BBoard[x + 1, y].shape == p.shape)
+                    else if (countElement == 2)
                     {
-                        sum += 1;
+                        sum += 4;
                     }
-                    if (b.BBoard[x + 1, y].full == p.full)
+                    else if (countElement == 3)
                     {
-                        sum += 1;
+                        sum += 10;
                     }
-                    if (b.BBoard[x + 1, y].height == p.height)
+                    else if (countElement == 4 || countElement == 0)
                     {
-                        sum += 1;
+                        sum += 100;
                     }
                 }
-            }
-            if (y - 1 > 0)
-            {
-                if (b.BBoard[x, y - 1] != null)
+                countElement = (rowsShape).Count(s => s != 2);
+                if (rowsShape.Count(s => s == 1) == countElement)
                 {
-                    if (b.BBoard[x, y - 1].color == p.color)
+                    if (countElement == 1)
                     {
                         sum += 1;
                     }
-                    if (b.BBoard[x, y - 1].shape == p.shape)
+                    else if (countElement == 2)
                     {
-                        sum += 1;
+                        sum += 4;
                     }
-                    if (b.BBoard[x, y - 1].full == p.full)
+                    else if (countElement == 3)
                     {
-                        sum += 1;
+                        sum += 10;
                     }
-                    if (b.BBoard[x, y - 1].height == p.height)
+                    else if (countElement == 4 || countElement == 0)
                     {
-                        sum += 1;
+                        sum += 100;
                     }
                 }
-            }
-            if (y + 1 < 4)
-            {
-                if (b.BBoard[x, y + 1] != null)
+                countElement = (rowsFull).Count(s => s != 2);
+                if (rowsFull.Count(s => s == 1) == countElement)
                 {
-                    if (b.BBoard[x, y + 1].color == p.color)
+                    if (countElement == 1)
                     {
                         sum += 1;
                     }
-                    if (b.BBoard[x, y + 1].shape == p.shape)
+                    else if (countElement == 2)
                     {
-                        sum += 1;
+                        sum += 4;
                     }
-                    if (b.BBoard[x, y + 1].full == p.full)
+                    else if (countElement == 3)
                     {
-                        sum += 1;
+                        sum += 10;
                     }
-                    if (b.BBoard[x, y + 1].height == p.height)
+                    else if (countElement == 4 || countElement == 0)
                     {
-                        sum += 1;
-                    }
-                }
-            }
-            if (y + 1 < 4 && x + 1 < 4)
-            {
-                if (b.BBoard[x + 1, y + 1] != null)
-                {
-                    if (b.BBoard[x + 1, y + 1].color == p.color)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x + 1, y + 1].shape == p.shape)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x + 1, y + 1].full == p.full)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x + 1, y + 1].height == p.height)
-                    {
-                        sum += 1;
-                    }
-                }
-            }
-            if (y + 1 < 4 && x - 1 > 0)
-            {
-                if (b.BBoard[x - 1, y + 1] != null)
-                {
-                    if (b.BBoard[x - 1, y + 1].color == p.color)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x - 1, y + 1].shape == p.shape)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x - 1, y + 1].full == p.full)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x - 1, y + 1].height == p.height)
-                    {
-                        sum += 1;
-                    }
-                }
-            }
-            if (y - 1 > 0 && x - 1 > 0)
-            {
-                if (b.BBoard[x - 1, y - 1] != null)
-                {
-                    if (b.BBoard[x - 1, y - 1].color == p.color)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x - 1, y - 1].shape == p.shape)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x - 1, y - 1].full == p.full)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x - 1, y - 1].height == p.height)
-                    {
-                        sum += 1;
-                    }
-                }
-            }
-            if (y - 1 > 0 && x + 1 < 4)
-            {
-                if (b.BBoard[x + 1, y - 1] != null)
-                {
-                    if (b.BBoard[x + 1, y - 1].color == p.color)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x + 1, y - 1].shape == p.shape)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x + 1, y - 1].full == p.full)
-                    {
-                        sum += 1;
-                    }
-                    if (b.BBoard[x + 1, y - 1].height == p.height)
-                    {
-                        sum += 1;
+                        sum += 100;
                     }
                 }
             }
 
 
-            */
+
 
             return sum;
         }
+        public int calculateCol(Board b)
+        {
+            int sum = 0;
+
+            int[] rowsColor = new int[4] { 2, 2, 2, 2 };
+            int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
+            int[] rowsShape = new int[4] { 2, 2, 2, 2 };
+            int[] rowsFull = new int[4] { 2, 2, 2, 2 };
+
+            for (int i = 0; i < b.BHeight; i++)
+            {
+                for (int j = 0; j < b.BWidth; i++)
+                {
+                    if (b.BBoard[j, i] != null)
+                    {
+                        rowsColor[i] = b.BBoard[j, i].color;
+                        rowsHeigh[i] = b.BBoard[j, i].height;
+                        rowsShape[i] = b.BBoard[j, i].shape;
+                        rowsFull[i] = b.BBoard[j, i].full;
+                    }
+                }
+
+                int countElement = (rowsColor).Count(s => s != 2);
+                if (rowsColor.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsHeigh).Count(s => s != 2);
+                if (rowsHeigh.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsShape).Count(s => s != 2);
+                if (rowsShape.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsFull).Count(s => s != 2);
+                if (rowsFull.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+
+            }
+
+
+
+
+            return sum;
+
+
+        }
+        public int calculateCub(Board b)
+        {
+            int sum = 0;
+            int[] rowsColor = new int[4] { 2, 2, 2, 2 };
+            int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
+            int[] rowsShape = new int[4] { 2, 2, 2, 2 };
+            int[] rowsFull = new int[4] { 2, 2, 2, 2 };
+
+            for (int i = 0; i < b.BHeight - 1; i++)
+            {
+                if (b.BBoard[i, i] != null)
+                {
+                    rowsColor[0] = b.BBoard[i, i].color;
+                    rowsHeigh[0] = b.BBoard[i, i].height;
+                    rowsShape[0] = b.BBoard[i, i].shape;
+                    rowsFull[0] = b.BBoard[i, i].full;
+
+                }
+                if (b.BBoard[i, i + 1] != null)
+                {
+                    rowsColor[1] = b.BBoard[i, i + 1].color;
+                    rowsHeigh[1] = b.BBoard[i, i + 1].height;
+                    rowsShape[1] = b.BBoard[i, i + 1].shape;
+                    rowsFull[1] = b.BBoard[i, i + 1].full;
+                }
+                if (b.BBoard[i + 1, i + 1] != null)
+                {
+                    rowsColor[2] = b.BBoard[i + 1, i + 1].color;
+                    rowsHeigh[2] = b.BBoard[i + 1, i + 1].height;
+                    rowsShape[2] = b.BBoard[i + 1, i + 1].shape;
+                    rowsFull[2] = b.BBoard[i + 1, i + 1].full;
+                }
+                if (b.BBoard[i + 1, i] != null)
+                {
+                    rowsColor[3] = b.BBoard[i + 1, i].color;
+                    rowsHeigh[3] = b.BBoard[i + 1, i].height;
+                    rowsShape[3] = b.BBoard[i + 1, i].shape;
+                    rowsFull[3] = b.BBoard[i + 1, i].full;
+                }
+
+                int countElement = (rowsColor).Count(s => s != 2);
+                if (rowsColor.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 6;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsHeigh).Count(s => s != 2);
+                if (rowsHeigh.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 6;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsShape).Count(s => s != 2);
+                if (rowsShape.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 6;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsFull).Count(s => s != 2);
+                if (rowsFull.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 6;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+
+            }
+
+            return sum;
+        }
+        public int calculateDiag(Board b)
+        {
+
+            int sum = 0;
+            int[] rowsColor = new int[4] { 2, 2, 2, 2 };
+            int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
+            int[] rowsShape = new int[4] { 2, 2, 2, 2 };
+            int[] rowsFull = new int[4] { 2, 2, 2, 2 };
+
+            for (int i = 0; i < b.BHeight; i++)
+            {
+                for (int j = 0; j < b.BWidth; i++)
+                {
+                    if (i == j)
+                    {
+                        if (b.BBoard[i, j] != null)
+                        {
+                            rowsColor[i] = b.BBoard[i, j].color;
+                            rowsHeigh[i] = b.BBoard[i, j].height;
+                            rowsShape[i] = b.BBoard[i, j].shape;
+                            rowsFull[i] = b.BBoard[i, j].full;
+                        }
+                    }
+                }
+                int countElement = (rowsColor).Count(s => s != 2);
+                if (rowsColor.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsHeigh).Count(s => s != 2);
+                if (rowsHeigh.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsShape).Count(s => s != 2);
+                if (rowsShape.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+                countElement = (rowsFull).Count(s => s != 2);
+                if (rowsFull.Count(s => s == 1) == countElement)
+                {
+                    if (countElement == 1)
+                    {
+                        sum += 1;
+                    }
+                    else if (countElement == 2)
+                    {
+                        sum += 4;
+                    }
+                    else if (countElement == 3)
+                    {
+                        sum += 10;
+                    }
+                    else if (countElement == 4 || countElement == 0)
+                    {
+                        sum += 100;
+                    }
+                }
+            }
+
+            return sum;
+        }
+
     }
 }

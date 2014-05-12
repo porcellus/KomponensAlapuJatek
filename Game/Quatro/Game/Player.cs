@@ -8,7 +8,7 @@ using Game.GameBase;
 
 namespace Game
 {
-    class Player
+   public class Player
     {
        
         private PlayerType playerType;

@@ -6,13 +6,13 @@ using GameBase;
 
 namespace Game
 {
-    class QuartoStep: GameBase.AbstractStep
+    class QuartoStep : GameBase.AbstractStep
     {
         private int x;
 
         private int y;
 
-        private Piece p;
+        public Piece p;
 
 
 
@@ -22,17 +22,17 @@ namespace Game
             y = b;
             p = pie;
         }
-         public int X
+        public int X
         {
             get { return x; }
             set { x = value; }
         }
-         public Piece P
+        public Piece P
         {
             get { return p; }
             set { p = value; }
         }
-         public int Y
+        public int Y
         {
             get { return y; }
             set { y = value; }

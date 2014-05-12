@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using GameBase;
 using Game.GameBase;
+using Game.Quatro.Game;
 
 
 
 namespace Game
 {
-    class Board : IState
+    public  class Board : IState
     {
         private const int bWidth = 4;
 
@@ -23,7 +24,7 @@ namespace Game
         public int BHeight
         {
             get { return bHeight; }
-        } 
+        }
 
 
         bool winstate = false;
@@ -34,23 +35,25 @@ namespace Game
             set { winstate = value; }
         }
 
-        Piece[,] bBoard = new Piece[bWidth, bHeight]; //4*4 tábla létrehozása
+        private Piece[,] bBoard; //4*4 tábla létrehozása
 
-        internal Piece[,] BBoard
+        public Piece[,] BBoard
         {
             get { return bBoard; }
-           
+            set { bBoard = value; }
         }
+
+      
 
         //bábú lerakása
         public void insertPiece(int x, int y, Piece iPiece)
         {
-            bBoard[x , y] = iPiece;
+            bBoard[x, y] = iPiece;
 
         }
         public bool checkIsEmpty(int x, int y)
         {
-            if (bBoard[x - 1, y - 1] == null)
+            if (bBoard[x, y].color == 2)
             {
                 return true;
 
@@ -88,7 +91,7 @@ namespace Game
             {
                 for (int col = 0; col < 4; col++)
                 {
-                    if (bBoard[row, col] != null)
+                    if (bBoard[row, col].color != 2)
                     {
                         hg += Convert.ToInt16(bBoard[row, col].height);
                         cl += Convert.ToInt16(bBoard[row, col].color);
@@ -112,7 +115,7 @@ namespace Game
             {
                 for (int row = 0; row < 4; row++)
                 {
-                    if (bBoard[row, col] != null)
+                    if (bBoard[row, col].color != 2)
                     {
                         hg += Convert.ToInt16(bBoard[row, col].height);
                         cl += Convert.ToInt16(bBoard[row, col].color);
@@ -134,7 +137,7 @@ namespace Game
             int column = 0;
             for (int row = 0; row < 4; row++)
             {
-                if (bBoard[row, column] != null)
+                if (bBoard[row, column].color != 2)
                 {
                     hg += Convert.ToInt16(bBoard[row, column].height);
                     cl += Convert.ToInt16(bBoard[row, column].color);
@@ -156,7 +159,7 @@ namespace Game
             column = 3;
             for (int row = 0; row < 4; row++)
             {
-                if (bBoard[row, column] != null)
+                if (bBoard[row, column].color != 2)
                 {
                     hg += Convert.ToInt16(bBoard[row, column].height);
                     cl += Convert.ToInt16(bBoard[row, column].color);
@@ -180,7 +183,7 @@ namespace Game
             {
                 for (int col = 0; col < 3; col++)
                 {
-                    if ((bBoard[row, col] != null) && (bBoard[row + 1, col] != null) && (bBoard[row, col + 1] != null) && (bBoard[row + 1, col + 1] != null))
+                    if ((bBoard[row, col].color != 2) && (bBoard[row + 1, col].color != 2) && (bBoard[row, col + 1].color != 2) && (bBoard[row + 1, col + 1].color != 2))
                     {
                         hg += Convert.ToInt16(bBoard[row, col].height) + Convert.ToInt16(bBoard[row + 1, col].height) + Convert.ToInt16(bBoard[row, col + 1].height) + Convert.ToInt16(bBoard[row + 1, col + 1].height);
                         cl += Convert.ToInt16(bBoard[row, col].color) + Convert.ToInt16(bBoard[row + 1, col].color) + Convert.ToInt16(bBoard[row, col + 1].color) + Convert.ToInt16(bBoard[row + 1, col + 1].color);
@@ -207,64 +210,64 @@ namespace Game
 
             return (IState)returnBoard;
         }
-       
-        public override IEnumerable<AbstractStep> GetAvailableSteps()
+
+        public IEnumerable<AbstractStep> GetAvailableSteps()
         {
-           
-          List<QuartoStep> lista = new List<QuartoStep>();
 
-          QuartoStep step;
-         
-          if (Game.Quatro.Game.Quarto.SelectedPiece == null && bBoard == Game.Quatro.Game.Quarto.ActiveBoard.BBoard)
-          {
-              for (int i = 0; i < Game.Quatro.Game.Quarto.ActivePieces.Length; i++)
-              {
-                  for (int j = 0; j < 4; j++)
-                  {
-                      for (int k = 0; k < 4; k++)
-                      {
-                          if (bBoard[j, k] == null)
-                          {
+            List<QuartoStep> lista = new List<QuartoStep>();
 
+            QuartoStep step;
 
-                              step = new QuartoStep(j, k, Game.Quatro.Game.Quarto.SelectedPiece);
-                              lista.Add(step);
-                          }
-
-                      }
-
-                  }
-
-              }
-          
-          
-          }
-          else
-              {
-                  for (int i = 0; i < Game.Quatro.Game.Quarto.ActivePieces.Length; i++)
-                  {
-                      for (int j = 0; j < 4; j++)
-                      {
-                          for (int k = 0; k < 4; k++)
-                          {
-                              if (bBoard[j, k] == null)
-                              {
+            if (Quarto.SelectedPiece == null && bBoard == Quarto.ActiveBoard.BBoard)
+            {
+                for (int i = 0; i <Quarto.ActivePieces.Length; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int k = 0; k < 4; k++)
+                        {
+                            if (bBoard[j, k].color ==2)
+                            {
 
 
-                                  step = new QuartoStep(j, k, Game.Quatro.Game.Quarto.ActivePieces[i]);
-                                  lista.Add(step);
-                              }
+                                step = new QuartoStep(j, k, Quarto.SelectedPiece);
+                                lista.Add(step);
+                            }
 
-                          }
+                        }
 
-                      }
+                    }
 
-                  }
-              }
-
+                }
 
 
-          return lista;
-      }
+            }
+            else
+            {
+                for (int i = 0; i < Quarto.ActivePieces.Length; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int k = 0; k < 4; k++)
+                        {
+                            if (bBoard[j, k].color == 2)
+                            {
+
+
+                                step = new QuartoStep(j, k,Quarto.ActivePieces[i]);
+                                lista.Add(step);
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+
+
+
+            return lista;
+        }
     }
 }
