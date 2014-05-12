@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
@@ -44,11 +43,10 @@ namespace Client.MinMax
 
         public void StepHandler(IState state)
         {
+            //IEnumerable<AbstractStep> availableSteps = state.GetAvailableSteps();
+            //BuildGraph(availableSteps);
             AbstractStep optimalStep = MakeDecision(state);
-            IEnumerable<AbstractStep> availableSteps = state.GetAvailableSteps();
-            BuildGraph(availableSteps);
-            AbstractStep selectedStep = null;
-            _Game.DoStep(selectedStep, _PlayerType);
+            _Game.DoStep(optimalStep, _PlayerType);
         }
 
         public AbstractStep MakeDecision(IState state)
@@ -139,7 +137,7 @@ namespace Client.MinMax
                       value = Math.Min(value, MaxValue(_Game.GetResult(state, action), player));
                   }
                   return value;
-              }*/
+              }
 
         private void BuildGraph(IEnumerable<AbstractStep> stpes)
         {
@@ -147,6 +145,6 @@ namespace Client.MinMax
             {
                 IState simulateStep = _Game.SimulateStep(step);
             }
-        }
+        }*/
     }
 }
