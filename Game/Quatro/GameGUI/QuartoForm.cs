@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using Game.Quatro;
+
 using GameBase;
 using Game.GameBase;
-using Game.Quatro.Game;
+using Game;
+
 
 
 

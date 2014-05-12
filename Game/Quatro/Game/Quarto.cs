@@ -9,7 +9,7 @@ using Client.AIAlgorithmBase;
 using Game.GameBase;
 
 
-namespace Game.Quatro.Game
+namespace Game
 {
     public class Quarto
     {

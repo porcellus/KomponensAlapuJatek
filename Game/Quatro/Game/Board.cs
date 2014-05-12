@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using GameBase;
 using Game.GameBase;
-using Game.Quatro.Game;
 
 
 
 namespace Game
 {
-    public  class Board : IState
+    public class Board : IState
     {
         private const int bWidth = 4;
 

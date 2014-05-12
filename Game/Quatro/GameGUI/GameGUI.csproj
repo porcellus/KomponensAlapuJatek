@@ -34,7 +34,7 @@
       <HintPath>..\Game\bin\Debug\AIAlgorithmBase.dll</HintPath>
     </Reference>
     <Reference Include="Game">
-      <HintPath>..\Game\obj\Debug\Game.dll</HintPath>
+      <HintPath>..\Game\bin\Debug\Game.dll</HintPath>
     </Reference>
     <Reference Include="GameBase">
       <HintPath>..\Game\bin\Debug\GameBase.dll</HintPath>
