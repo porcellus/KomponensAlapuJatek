@@ -77,7 +77,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -97,7 +97,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -117,7 +117,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -137,7 +137,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -186,7 +186,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -206,7 +206,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -226,7 +226,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -246,7 +246,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -316,7 +316,7 @@ namespace Game
                     {
                         sum += 6;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -336,7 +336,7 @@ namespace Game
                     {
                         sum += 6;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -356,7 +356,7 @@ namespace Game
                     {
                         sum += 6;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -376,7 +376,7 @@ namespace Game
                     {
                         sum += 6;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -425,7 +425,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -445,7 +445,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -465,7 +465,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }
@@ -485,7 +485,7 @@ namespace Game
                     {
                         sum += 10;
                     }
-                    else if (countElement == 4 || countElement == 0)
+                    else if (countElement == 4 )
                     {
                         sum += 100;
                     }

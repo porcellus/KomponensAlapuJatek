@@ -13,50 +13,44 @@ namespace Game
 {
     public class Quarto
     {
-        public static Board activeBoard;
-       static QuartoHeuristic heuristic;
+        private static Board activeBoard;
 
-       
-        //actuális pálya lekérdezése
         public static Board ActiveBoard
         {
             get { return Quarto.activeBoard; }
-
+            
         }
+        static QuartoHeuristic heuristic;
 
-       
-
-       
+      
+             
         static Player[] player;
         //játékos tömb lekérdezése
-        public static Player[] Player
-        {
-            get { return Quarto.player; }
+        public static bool call = true;
 
-        }
         static Piece[] activePieces;
 
-        //a bábuk tömbjének lekérdése
         public static Piece[] ActivePieces
         {
             get { return Quarto.activePieces; }
-
+            
         }
+
+     
+       
         static int activePlayer;
         // az aktuális játékos indexe a Player tömbbne
-        public static int ActivePlayer
-        {
-            get { return Quarto.activePlayer; }
-
-        }
+       
         // az ellenfél számára választott bábú
         static Piece selectedPiece;
 
         public static Piece SelectedPiece
         {
             get { return Quarto.selectedPiece; }
-
+           
         }
+
+        
 
         static BackgroundWorker gameThread = new BackgroundWorker();
         public static void initGame()
@@ -78,9 +72,7 @@ namespace Game
                     }
                 }
                 player = new Player[2];
-                player[0] = new Player();
-
-                player[1] = new Player();
+               
 
 
 
@@ -132,7 +124,45 @@ namespace Game
 
 
         //az elenfél által választott bábut lerakjuk pálya x y korrdinátára 0 tól indexelve
-        public static void updateGameState(int x, int y)
+        public  Piece[,] getAviableStep()
+        {
+            try
+            {
+                return activeBoard.BBoard;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        
+        }
+        public Piece[] getAviablePiece()
+        {
+            try
+            {
+                return activePieces;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public bool getWinningState()
+        {
+            return activeBoard.Winstate;
+        }
+        public Piece getSelectedPiece()
+        {
+            try
+            {
+                return selectedPiece;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public void updateGameState(int x, int y)
         {
             try
             {
@@ -141,7 +171,7 @@ namespace Game
                     activeBoard.insertPiece(x, y, selectedPiece);
 
                     selectedPiece = null;
-                    activePlayer = (activePlayer + 1) % 2;
+                   //activePlayer = (activePlayer + 1) % 2;
                     activeBoard.checkWinningState();
                 }
 
@@ -185,65 +215,55 @@ namespace Game
             }
 
         }
+        public bool isTreminate(IState state)
+        {
+            try
+            {
+                Board sState = (Board)state;
+                sState.checkWinningState();
+
+                return sState.Winstate;
+            }
+            catch(Exception )
+            {
+                return false;
+            }
+
+        }
 
         private static void startGameProcess(object sender, DoWorkEventArgs e)
         {
             //egy külön szálként indítjuk el a játékot ez maga a háttérfolyamat
-
+            initGame();
             //addig mig a nem nyert valaki vagy nem raktak le minden bábút
             while (activeBoard.Winstate == false || !activeBoard.checkIsFull())
             {
-
-
-                if (selectedPiece == null)
+                if ((player[0].PlayerType == PlayerType.PlayerOne || player[0].PlayerType == PlayerType.PlayerTwo) && (player[1].PlayerType == PlayerType.PlayerOne || player[1].PlayerType == PlayerType.PlayerTwo))
                 {
-                    if (Player[activePlayer].PlayerEntity == EntityType.HumanPlayer)
+                    if (call)
                     {
-
-                        Thread.Sleep(1000);
-                        ///megvárjuk míg a játékos lerak egy bábut
-
+                        GameBase.AbstractGame.StepHandler step = new AbstractGame.StepHandler(player[activePlayer].Callback);
+                        step(activeBoard);
+                        call = false;
                     }
-                    else
-                    {
-                        //itt kell meghivni az ai algoritmust
-                        Thread.Sleep(1000);
-                    }
+                    //várunk a játékosokra
+                            Thread.Sleep(1000);
+                        
+                 
                 }
-                if (selectedPiece != null)
-                {
-                    if (Player[activePlayer].PlayerEntity == EntityType.HumanPlayer)
-                    {
+                // várunk a játékosok regisztrációjára
+                Thread.Sleep(1000);
 
-
-                        Thread.Sleep(1000);
-                        //várunk míg a játékos lerak egy bábut
-
-
-                    }
-                    else
-                    {
-                        // az AI lerakja a bábút
-                        Thread.Sleep(1000);
-
-                    }
-
-
-                }
             }
         }
-        public double GetHeuristicValue(IState state, EntityType player)
+        public  double GetHeuristicValue(IState state)
         {
             if (state is Board)
             {
                 Board b = (Board)state;
                 int value = heuristic.GetValue(b);
 
-                if (player == EntityType.HumanPlayer)
-                {
-                    value *= -1;
-
-                }
+               
                 return value;
 
             }
@@ -254,7 +274,7 @@ namespace Game
 
         }
 
-        public static void StartGame()
+        public  void StartGame()
         {
 
             try
@@ -269,7 +289,7 @@ namespace Game
 
 
         }
-        public void SetHeuristic<Board>(IHeuristic<Board> heur)
+        public  void  SetHeuristic<Board>(IHeuristic<Board> heur)
         {
             if (!(heur is QuartoHeuristic))
                 throw new ArgumentException("Not valid heuristic type for this game!");
@@ -277,67 +297,81 @@ namespace Game
             heuristic = (QuartoHeuristic)heur;
         }
 
-        public string GetGameTypeInfo()
+        public  string GetGameTypeInfo()
         {
             return "Quarto";
         }
 
-        public void RegisterAsPlayer<TAlgorithm>(ref AbstractGame.StepHandler onStep, PlayerType playerType, EntityType controller, TAlgorithm algorithm)
+        public  void RegisterAsPlayer<TAlgorithm>(ref AbstractGame.StepHandler onStep, PlayerType playerType, EntityType controller, TAlgorithm algorithm)
         {
             if (!(algorithm is IAIAlgorithm))
                 throw new Exception("Not valid algorithm type!");
 
-            if (Player == null)
-            {
+           
                 int index = 1;
                 // Index in the players list 
                 if (playerType == PlayerType.PlayerOne)
                 {
                     index = 0;
                 }
-                Player[index].PlayerEntity = controller;
-                Player[index].PlayerType = playerType;
-                Player[index].Algorithm = (IAIAlgorithm)algorithm;
-            }
-
-        }
-        public static void RegisterAsPlayer(PlayerType playerType, EntityType controller)
-        {
-
-
-            if (Player == null)
-            {
-                int index = 1;
-                // Index in the players list 
-                if (playerType == PlayerType.PlayerOne)
+                if (player[index].PlayerType != PlayerType.PlayerOne && player[index].PlayerType != PlayerType.PlayerTwo)
                 {
-                    index = 0;
+                    player[index].PlayerEntity = controller;
+                    player[index].PlayerType = playerType;
+                    player[index].Algorithm = (IAIAlgorithm)algorithm;
+                    player[index].Callback = onStep;
                 }
-                Player[index].PlayerEntity = controller;
-                Player[index].PlayerType = playerType;
-                //Player[index].Algorithm = (IAIAlgorithm)algorithm;
-            }
 
         }
-        public AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
+         public  IState SimulateStep(AbstractStep step )
         {
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");
 
             QuartoStep cStep = (QuartoStep)step;
-            if (selectedPiece == null)
+            Board clone = activeBoard;
+
+            clone.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+
+            return (IState)clone;
+            
+        }
+        public override IState GetNextState(IState current, AbstractStep step)
+        {
+            Board returnBoard = ((Board)current);
+            returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+
+            return (IState)returnBoard;
+        }
+        
+       
+        public override AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
+        {
+            if (!(step is QuartoStep))
+                throw new Exception("Not proper step type!");
+            if (player[activePlayer].PlayerType == playerType)
             {
-                selectPiece(playerType, cStep.P); ;
+                QuartoStep cStep = (QuartoStep)step;
+                if (selectedPiece == null)
+                {
+                    selectPiece(playerType, cStep.P);
+                    call = true;
+                }
+                else
+                {
+                    updateGameState(cStep.X, cStep.Y);
+                    call = true;
+
+                }
+
+
+
+                return AbstractStep.Result.Success;
             }
             else
             {
-                updateGameState(cStep.X, cStep.Y);
-
+                return AbstractStep.Result.Failure;
             }
-
-
-
-            return AbstractStep.Result.Success;
         }
     }
 

@@ -202,13 +202,7 @@ namespace Game
             }
 
         }
-        public IState GetNextState(IState current, AbstractStep step)
-        {
-            Board returnBoard = ((Board)current);
-            returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
-
-            return (IState)returnBoard;
-        }
+       
 
         public IEnumerable<AbstractStep> GetAvailableSteps()
         {
