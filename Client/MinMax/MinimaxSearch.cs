@@ -2,7 +2,6 @@
 using System.Linq;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
-using GameBase;
 using QuickGraph;
 
 namespace Client.MinMax
