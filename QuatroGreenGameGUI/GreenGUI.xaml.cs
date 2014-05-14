@@ -26,6 +26,7 @@ namespace Game.QuatroGreenGameGUI
         Int32 turns = 0;
         String[] players;
         Quarto quatro;
+        PlayerType iam = PlayerType.PlayerOne;
 
         public GreenGUI(Quarto _quatro)
         {
@@ -35,14 +36,20 @@ namespace Game.QuatroGreenGameGUI
             AbstractGame.StepHandler ost = new AbstractGame.StepHandler(OnStep);
             quatro.RegisterAsPlayer(ref ost);
 
-            players = new String[2] { "Peter", "Paul" };
+            players = new String[2] { "You", "Opponent" };
             ShowNextEvent();
         }
 
         private void OnStep(IState state)
         {
             //state.GetAvailableSteps();
-            
+            Piece[] pa = quatro.getAviablePiece();
+            Piece[,] paa = quatro.getAviableStep();
+            Piece p = quatro.getSelectedPiece();
+            bool w = quatro.getWinningState();
+            bool m = quatro.getIsMyMove();
+
+            //TODO everything
         }
 
         private void ShowNextEvent()
@@ -59,7 +66,9 @@ namespace Game.QuatroGreenGameGUI
             selection = id;
             ImNext.Source = (btn.Content as Image).Source;
             btn.Visibility = System.Windows.Visibility.Hidden;
-            
+
+            //quatro.DoStep();
+
             turns = 1 - turns;
             ShowNextEvent();
         }
@@ -76,7 +85,15 @@ namespace Game.QuatroGreenGameGUI
             selection = -1;
             btn.IsEnabled = false;
 
+            QuartoStep qs = new QuartoStep(0, 4, new Piece(id));
+            quatro.DoStep(qs, iam);
+
             ShowNextEvent();
+        }
+
+        public void AddToGame(PlayerType pt)
+        {
+            iam = pt;
         }
     }
 }

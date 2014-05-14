@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GameBase;
+using Game.GameBase;
 
 namespace Game
 {
-    class QuartoStep : GameBase.AbstractStep
+    public class QuartoStep : GameBase.AbstractStep
     {
         private int x;
 

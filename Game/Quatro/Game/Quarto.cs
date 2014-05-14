@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Threading;
-using Game.GameBase;
 using Client.AIAlgorithmBase;
+using Game;
 using Game.GameBase;
 
 
@@ -50,7 +50,10 @@ namespace Game
            
         }
 
-        
+        public bool getIsMyMove()
+        {
+            return true;
+        }
 
         static BackgroundWorker gameThread = new BackgroundWorker();
         public static void initGame()
@@ -350,7 +353,7 @@ namespace Game
         }
         
        
-        public AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
+        public AbstractStep.Result DoStep(Game.QuartoStep step, PlayerType playerType)
         {
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");
