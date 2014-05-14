@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Threading;
-using GameBase;
 using Client.AIAlgorithmBase;
+using Game;
 using Game.GameBase;
 
 
@@ -53,7 +53,10 @@ namespace Game
            
         }
 
-        
+        public bool getIsMyMove()
+        {
+            return true;
+        }
 
         static BackgroundWorker gameThread = new BackgroundWorker();
         public static void initGame()
@@ -304,11 +307,20 @@ namespace Game
         {
             return "Quarto";
         }
+
         public override int SimulateStep(AbstractStep step, int dummyInt)
         {
            return 0;
         }
+
+
+        public  void RegisterAsPlayer(ref AbstractGame.StepHandler onStep)
+        {
+            // THIS IS THE RIGHT SIGNATURE!!!    
+        }
+
         public override void RegisterAsPlayer<TAlgorithm>(ref AbstractGame.StepHandler onStep, PlayerType playerType, EntityType controller, TAlgorithm algorithm)
+
         {
             if (!(algorithm is IAIAlgorithm))
                 throw new Exception("Not valid algorithm type!");

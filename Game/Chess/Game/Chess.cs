@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.GameBase;
 using Client.AIAlgorithmBase;
-using GameBase;
+using Game;
+using Game.GameBase;
 
 namespace Game.Chess.Game
 {

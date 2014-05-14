@@ -1,0 +1,179 @@
+﻿<UserControl x:Class="Game.QuatroGreenGameGUI.GreenGUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="440.299" d:DesignWidth="594.03">
+    <Grid Background="Aquamarine" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="400" Width="550">
+
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="550" Height="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="11*"/>
+                <RowDefinition Height="223*"/>
+            </Grid.RowDefinitions>
+
+            <Grid ShowGridLines="True" Margin="20,20,330,180" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Grid.Row="0" Tag="0" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="0" Tag="1" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="0" Tag="2" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="0" Tag="3" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+
+                <Button Grid.Column="0" Grid.Row="1" Tag="4" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="1" Tag="5" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="1" Tag="6" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="1" Tag="7" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+
+                <Button Grid.Column="0" Grid.Row="2" Tag="8" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="2" Tag="9" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="2" Tag="10" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="2" Tag="11" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+
+                <Button Grid.Column="0" Grid.Row="3" Tag="12" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="3" Tag="13" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="3" Tag="14" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="3" Tag="15" Click="BtPut_Click">
+                    <Image Source="Images/empty.png" />
+                </Button>
+            </Grid>
+
+            <Grid ShowGridLines="True" Margin="330,20,20,180" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Grid.Row="0" Tag="0" Click="BtChoose_Click">
+                    <Image Source="Images/piece-0.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="0" Tag="1" Click="BtChoose_Click">
+                    <Image Source="Images/piece-1.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="0" Tag="2" Click="BtChoose_Click">
+                    <Image Source="Images/piece-2.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="0" Tag="3" Click="BtChoose_Click">
+                    <Image Source="Images/piece-3.png" />
+                </Button>
+
+                <Button Grid.Column="0" Grid.Row="1" Tag="4" Click="BtChoose_Click">
+                    <Image Source="Images/piece-4.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="1" Tag="5" Click="BtChoose_Click">
+                    <Image Source="Images/piece-5.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="1" Tag="6" Click="BtChoose_Click">
+                    <Image Source="Images/piece-6.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="1" Tag="7" Click="BtChoose_Click">
+                    <Image Source="Images/piece-7.png" />
+                </Button>
+
+                <Button Grid.Column="0" Grid.Row="2" Tag="8" Click="BtChoose_Click">
+                    <Image Source="Images/piece-8.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="2" Tag="9" Click="BtChoose_Click">
+                    <Image Source="Images/piece-9.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="2" Tag="10" Click="BtChoose_Click">
+                    <Image Source="Images/piece-10.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="2" Tag="11" Click="BtChoose_Click">
+                    <Image Source="Images/piece-11.png" />
+                </Button>
+
+                <Button Grid.Column="0" Grid.Row="3" Tag="12" Click="BtChoose_Click">
+                    <Image Source="Images/piece-12.png" />
+                </Button>
+                <Button Grid.Column="1" Grid.Row="3" Tag="13" Click="BtChoose_Click">
+                    <Image Source="Images/piece-13.png" />
+                </Button>
+                <Button Grid.Column="2" Grid.Row="3" Tag="14" Click="BtChoose_Click">
+                    <Image Source="Images/piece-14.png" />
+                </Button>
+                <Button Grid.Column="3" Grid.Row="3" Tag="15" Click="BtChoose_Click">
+                    <Image Source="Images/piece-15.png" />
+                </Button>
+
+            </Grid>
+
+
+            <Label Content="Game area" RenderTransformOrigin="0.5,0.5" Margin="19,216,420,140" Grid.Row="1" />
+            <Label Content="Available pieces" Margin="330,217,111,138" Grid.Row="1"/>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Height="70" Width="70" Margin="19,291,461,20">
+                <Image Name="ImNext" Height="70" Width="70" Source="Images/unknown.png"/>
+            </Border>
+            <Label Content="Next piece" HorizontalAlignment="Left" Margin="20,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="70"/>
+            <Label Content="Next event" HorizontalAlignment="Left" Margin="106,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="70"/>
+            <Label Name="LbNextEvent" Content="Peter choose" HorizontalAlignment="Left" Height="70" Margin="106,291,0,0" Grid.Row="1" VerticalAlignment="Top" Width="409" FontSize="36"/>
+            <Image Name="ImUnknown" Visibility="Hidden" Source="Images/unknown.png"/>
+        </Grid>
+    </Grid>
+
+    <UserControl.Resources>
+        <Style TargetType="Button" >
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="Aquamarine" />
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="45" />
+        </Style>
+        <Style TargetType="Image" >
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+        </Style>
+    </UserControl.Resources>
+</UserControl>

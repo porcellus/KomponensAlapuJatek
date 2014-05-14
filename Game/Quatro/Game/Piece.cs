@@ -40,7 +40,26 @@ namespace Game
             set { Full = value; }
         }
 
+        public Piece()
+        {
+        }
 
+        public Piece(int vSum)
+        {
+            int vHeight = vSum % 2;
+            vSum = (vSum - vHeight) / 2;
+            int vColor = vSum % 2;
+            vSum = (vSum - vColor) / 2;
+            int vShape = vSum % 2;
+            vSum = (vSum - vShape) / 2;
+            int vFull = vSum;
+            setPiece(vHeight, vColor, vShape, vFull);
+        }
+
+        public Piece(int vHeight, int vColor, int vShape, int vFull)
+        {
+            setPiece(vHeight, vColor, vShape, vFull);
+        }
 
         public void setPiece(int vHeight, int vColor, int vShape, int vFull)
         {

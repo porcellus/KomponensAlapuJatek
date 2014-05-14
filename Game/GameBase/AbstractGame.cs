@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GameBase;
+using Game.GameBase;
 
 namespace Game.GameBase
 {
