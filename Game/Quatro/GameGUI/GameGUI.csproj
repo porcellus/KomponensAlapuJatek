@@ -39,15 +39,19 @@
     <Reference Include="GameBase">
       <HintPath>..\Game\bin\Debug\GameBase.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameGUI.cs" />
@@ -100,6 +104,12 @@
     <None Include="Resources\0010.png" />
     <None Include="Resources\0001.png" />
     <None Include="Resources\0000.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\QuatroGreenGameGUI\QuatroGreenGameGUI.csproj">
+      <Project>{6876337f-632b-43e9-a5b3-15773cc88575}</Project>
+      <Name>QuatroGreenGameGUI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

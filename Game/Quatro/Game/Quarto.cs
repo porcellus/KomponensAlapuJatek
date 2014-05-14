@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Threading;
-using GameBase;
+using Game.GameBase;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
 
@@ -302,6 +302,11 @@ namespace Game
             return "Quarto";
         }
 
+        public  void RegisterAsPlayer(ref AbstractGame.StepHandler onStep)
+        {
+            // THIS IS THE RIGHT SIGNATURE!!!    
+        }
+
         public  void RegisterAsPlayer<TAlgorithm>(ref AbstractGame.StepHandler onStep, PlayerType playerType, EntityType controller, TAlgorithm algorithm)
         {
             if (!(algorithm is IAIAlgorithm))
@@ -336,7 +341,7 @@ namespace Game
             return (IState)clone;
             
         }
-        public override IState GetNextState(IState current, AbstractStep step)
+        public IState GetNextState(IState current, AbstractStep step)
         {
             Board returnBoard = ((Board)current);
             returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
@@ -345,7 +350,7 @@ namespace Game
         }
         
        
-        public override AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
+        public AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
         {
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");

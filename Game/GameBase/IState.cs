@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Game.GameBase;
 
-namespace GameBase
+namespace Game.GameBase
 {
     public interface IState
     {
-        IEnumerable<AbstractStep> GetAvailableSteps();
+        public IEnumerable<AbstractStep> GetAvailableSteps();
     }
 }
