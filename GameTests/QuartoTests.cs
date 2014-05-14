@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Game;
 using Game.GameBase;
-using GameBase;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Game.Tests
 {
@@ -66,7 +66,7 @@ namespace Game.Tests
         public void IsTerminalTest()
         {
             initGame();
-            if (!IsTerminal(ActiveBoard))
+            if (!IsTerminal((IState)ActiveBoard))
             {
                 Assert.IsTrue(true);
             }
@@ -176,8 +176,8 @@ namespace Game.Tests
             activePlayer = 0;
             player[0] = new Player();
             player[0].PlayerType = PlayerType.PlayerOne;
-
-            DoStep(step, PlayerType.PlayerOne);
+            AbstractStep sStep = (AbstractStep)step;
+            DoStep(sStep, PlayerType.PlayerOne);
 
             if (SelectedPiece != null)
             {
