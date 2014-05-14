@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BED5D87B-8CAC-41BC-9B44-5788B839EC6C}</ProjectGuid>
+    <ProjectGuid>{E9E26377-D2EE-456A-B566-09E533EFFCE8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Connector</RootNamespace>
-    <AssemblyName>Connector</AssemblyName>
+    <RootNamespace>Server</RootNamespace>
+    <AssemblyName>Server</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -36,7 +36,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connector.cs" />
+    <Compile Include="Lobby.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="ServerClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
