@@ -391,6 +391,11 @@ namespace Game
                 return AbstractStep.Result.Failure;
             }
         }
+
+        public bool getIsChoose()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
