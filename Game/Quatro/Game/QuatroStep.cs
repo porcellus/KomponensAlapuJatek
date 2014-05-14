@@ -6,7 +6,7 @@ using GameBase;
 
 namespace Game
 {
-    class QuartoStep : GameBase.AbstractStep
+   public class QuartoStep : GameBase.AbstractStep
     {
         private int x;
 

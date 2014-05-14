@@ -11,7 +11,7 @@ using Game.GameBase;
 
 namespace Game
 {
-    public class Quarto
+    public class Quarto : AbstractGame
     {
         private static Board activeBoard;
 
@@ -20,11 +20,11 @@ namespace Game
             get { return Quarto.activeBoard; }
             
         }
-        static QuartoHeuristic heuristic;
+        public static QuartoHeuristic heuristic = new QuartoHeuristic();
 
       
              
-        static Player[] player;
+        public static Player[] player;
         //játékos tömb lekérdezése
         public static bool call = true;
 
@@ -36,17 +36,20 @@ namespace Game
             
         }
 
-     
-       
-        static int activePlayer;
+
         // az aktuális játékos indexe a Player tömbbne
        
+       public static int activePlayer;
+      
         // az ellenfél számára választott bábú
         static Piece selectedPiece;
+
+       
 
         public static Piece SelectedPiece
         {
             get { return Quarto.selectedPiece; }
+            set { Quarto.selectedPiece = value; }
            
         }
 
@@ -72,9 +75,9 @@ namespace Game
                     }
                 }
                 player = new Player[2];
-               
 
 
+           
 
                 //a bábuk tömbje 1 0 kommentezve a Pieaces osztálynál
                 activePieces = new Piece[16];
@@ -215,7 +218,7 @@ namespace Game
             }
 
         }
-        public bool isTreminate(IState state)
+        public override bool IsTerminal(IState state)
         {
             try
             {
@@ -256,7 +259,7 @@ namespace Game
 
             }
         }
-        public  double GetHeuristicValue(IState state)
+        public override double GetHeuristicValue(IState state)
         {
             if (state is Board)
             {
@@ -274,7 +277,7 @@ namespace Game
 
         }
 
-        public  void StartGame()
+        public override void StartGame()
         {
 
             try
@@ -289,7 +292,7 @@ namespace Game
 
 
         }
-        public  void  SetHeuristic<Board>(IHeuristic<Board> heur)
+        public override void SetHeuristic<Board>(IHeuristic<Board> heur)
         {
             if (!(heur is QuartoHeuristic))
                 throw new ArgumentException("Not valid heuristic type for this game!");
@@ -297,12 +300,15 @@ namespace Game
             heuristic = (QuartoHeuristic)heur;
         }
 
-        public  string GetGameTypeInfo()
+        public override string GetGameTypeInfo()
         {
             return "Quarto";
         }
-
-        public  void RegisterAsPlayer<TAlgorithm>(ref AbstractGame.StepHandler onStep, PlayerType playerType, EntityType controller, TAlgorithm algorithm)
+        public override int SimulateStep(AbstractStep step, int dummyInt)
+        {
+           return 0;
+        }
+        public override void RegisterAsPlayer<TAlgorithm>(ref AbstractGame.StepHandler onStep, PlayerType playerType, EntityType controller, TAlgorithm algorithm)
         {
             if (!(algorithm is IAIAlgorithm))
                 throw new Exception("Not valid algorithm type!");
@@ -323,7 +329,7 @@ namespace Game
                 }
 
         }
-         public  IState SimulateStep(AbstractStep step )
+        public override IState SimulateStep(AbstractStep step)
         {
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");

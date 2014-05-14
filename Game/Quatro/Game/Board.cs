@@ -34,7 +34,7 @@ namespace Game
             set { winstate = value; }
         }
 
-        private Piece[,] bBoard; //4*4 tábla létrehozása
+        private Piece[,] bBoard= new Piece[bWidth,bHeight] ; //4*4 tábla létrehozása
 
         public Piece[,] BBoard
         {
@@ -202,65 +202,72 @@ namespace Game
             }
 
         }
-       
+
 
         public IEnumerable<AbstractStep> GetAvailableSteps()
         {
-
-            List<QuartoStep> lista = new List<QuartoStep>();
-
-            QuartoStep step;
-
-            if (Quarto.SelectedPiece == null && bBoard == Quarto.ActiveBoard.BBoard)
+            try
             {
-                for (int i = 0; i <Quarto.ActivePieces.Length; i++)
+                List<QuartoStep> lista = new List<QuartoStep>();
+
+                QuartoStep step;
+
+                if (Quarto.SelectedPiece == null && Quarto.ActiveBoard.BBoard != null && bBoard == Quarto.ActiveBoard.BBoard)
                 {
-                    for (int j = 0; j < 4; j++)
+
+                    for (int i = 0; i < Quarto.ActivePieces.Length; i++)
                     {
-                        for (int k = 0; k < 4; k++)
+                        for (int j = 0; j < 4; j++)
                         {
-                            if (bBoard[j, k].color ==2)
+                            for (int k = 0; k < 4; k++)
                             {
+                                if (bBoard[j, k].color == 2)
+                                {
 
 
-                                step = new QuartoStep(j, k, Quarto.SelectedPiece);
-                                lista.Add(step);
+                                    step = new QuartoStep(j, k, Quarto.SelectedPiece);
+                                    lista.Add(step);
+                                }
+
                             }
 
                         }
 
                     }
 
+
                 }
-
-
-            }
-            else
-            {
-                for (int i = 0; i < Quarto.ActivePieces.Length; i++)
+                else
                 {
-                    for (int j = 0; j < 4; j++)
+                    for (int i = 0; i < Quarto.ActivePieces.Length; i++)
                     {
-                        for (int k = 0; k < 4; k++)
+                        for (int j = 0; j < 4; j++)
                         {
-                            if (bBoard[j, k].color == 2)
+                            for (int k = 0; k < 4; k++)
                             {
+                                if (bBoard[j, k].color == 2)
+                                {
 
 
-                                step = new QuartoStep(j, k,Quarto.ActivePieces[i]);
-                                lista.Add(step);
+                                    step = new QuartoStep(j, k, Quarto.ActivePieces[i]);
+                                    lista.Add(step);
+                                }
+
                             }
 
                         }
 
                     }
-
                 }
+
+
+
+                return lista;
             }
-
-
-
-            return lista;
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
