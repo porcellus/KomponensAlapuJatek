@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class Lobby
+    public class Lobby
     {
         private List<ServerClient> clients;
 
@@ -39,16 +39,17 @@ namespace Server
             return clients;
         }
 
-        public String getClientsName()
+        public String getClientsInfo(String gametype)
         {
-            String names = "";
-            foreach(ServerClient client in clients)
+            String infos = "";
+            foreach (ServerClient client in clients)
             {
-                names += client.name + "\n";
+                if (client.gametype.Equals(gametype))
+                {
+                    infos += client.name + "," + client.ip + "," + client.port + ";";
+                }
             }
-            return names;
-
-
+            return infos;
 
         }
 
