@@ -106,11 +106,11 @@ namespace Game.QuatroGreenGameGUI
         {
             // Gets all of the data from the quatro object
             Piece[] pa = quatro.getAviablePiece();
-            Piece[,] paa = quatro.getAviableStep();
-            Piece p = quatro.getSelectedPiece();
+            Piece[,] paa = quatro.getAviableStep(); // pálya, ahol 2222 a szabad
+            Piece p = quatro.getSelectedPiece(); // null, ha semmi
             bool w = quatro.getWinningState();
-            bool m = quatro.getIsMyMove();
-            bool c = quatro.getIsChoose();
+            bool m = quatro.getIsMyMove(iam);
+            bool c = (p != null);
 
             // Sets the game area according to the data given
             for (int i = 0; i < 16; i++)

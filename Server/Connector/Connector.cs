@@ -168,7 +168,7 @@ namespace Server
                 if(firstplayer)
                 {
                     byte[] readbuffer = new byte[1024];
-                    opponentstream.ReadAsync(readbuffer,0,readbuffer.Length);
+                    opponentstream.Read(readbuffer,0,readbuffer.Length);
 
                      String output = "";
                      for (int i = 0; i < readbuffer.Length; i++) output += Convert.ToString(readbuffer[i]);
