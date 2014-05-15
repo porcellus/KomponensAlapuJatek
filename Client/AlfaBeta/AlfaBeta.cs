@@ -31,7 +31,7 @@ namespace Client.AlfaBeta
             game.DoStep(aStep, playerType);
         }
 
-        public AbstractStep MakeDecision(IState state)
+        protected AbstractStep MakeDecision(IState state)
         {
             int level = 0;
             AbstractStep result = default(AbstractStep);
@@ -49,7 +49,7 @@ namespace Client.AlfaBeta
             return result;
         }
 
-        public double MinValue(int level, IState state, double alpha, double beta)
+        protected double MinValue(int level, IState state, double alpha, double beta)
         {
             level++;
             if (game.IsTerminal(state) || level == depth)
@@ -66,7 +66,7 @@ namespace Client.AlfaBeta
             return value;
         }
 
-        public double MaxValue(int level, IState state, double alpha, double beta)
+        protected double MaxValue(int level, IState state, double alpha, double beta)
         {
             level++;
             if (game.IsTerminal(state) || level == depth)
