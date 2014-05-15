@@ -66,7 +66,7 @@ namespace Client.MinMax
             return result;
         }
 
-        public double MaxValue(IState state)
+        private double MaxValue(IState state)
         {
             _ExpandedNodes++;
             if (_Game.IsTerminal(state) || _Depth == _ExpandedNodes)
@@ -78,7 +78,7 @@ namespace Client.MinMax
                 MinValue(_Game.GetNextState(state, step))).Concat(new[] { Double.NegativeInfinity }).Max();
         }
 
-        public double MinValue(IState state)
+        private double MinValue(IState state)
         {
             _ExpandedNodes++;
             if (_Game.IsTerminal(state) || _Depth == _ExpandedNodes)
