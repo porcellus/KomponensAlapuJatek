@@ -64,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\ClientFactory.cs" />
     <Compile Include="ViewModel\Annotations.cs" />
+    <Compile Include="ViewModel\BooleanNegationVisibilityConverter.cs" />
     <Compile Include="ViewModel\BooleanToColorConverter.cs" />
     <Compile Include="ViewModel\BooleanToConnectionStateConverter.cs" />
     <Compile Include="ViewModel\SelectorViewModel.cs" />
