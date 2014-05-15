@@ -31,7 +31,7 @@ namespace Client.AlfaBeta
             game.DoStep(aStep, playerType);
         }
 
-        protected AbstractStep MakeDecision(IState state)
+        public AbstractStep MakeDecision(IState state)
         {
             int level = 0;
             AbstractStep result = default(AbstractStep);
