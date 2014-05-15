@@ -1,7 +1,6 @@
 ﻿using System;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
-using GameBase;
 
 namespace Client.AlfaBeta
 {
