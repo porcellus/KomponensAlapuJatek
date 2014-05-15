@@ -165,6 +165,7 @@
     <ProjectReference Include="..\AlfaBeta\AlfaBeta.csproj">
       <Project>{24267a3b-c589-43a2-ae3f-4476f0a02373}</Project>
       <Name>AlfaBeta</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\QuatroGreenGameGUI\QuatroGreenGameGUI.csproj">
       <Project>{6876337f-632b-43e9-a5b3-15773cc88575}</Project>
       <Name>QuatroGreenGameGUI</Name>
