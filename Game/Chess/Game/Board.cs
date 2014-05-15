@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Runtime.Serialization;
 using Game.GameBase;
 
 namespace Game
@@ -20,21 +20,21 @@ namespace Game
             if (dim1[0] != dim2[0] || dim1[1] != dim2[1])
 		        return false;
 
-            for (int i = 1; i <= dim1[1]; ++i)
-		        for (int j = 1; j <= dim1[0]; ++j)
-			        if (b1.getRealTypeByRC(i, j) != b2.getRealTypeByRC(i, j))
+            for (int i = 0; i < dim1[1]; ++i)
+		        for (int j = 0; j < dim1[0]; ++j)
+                    if (b1.getFigureAt(i, j).getFigureType() != b2.getFigureAt(i, j).getFigureType() ||
+                        b1.getFigureAt(i, j).isWhite() != b2.getFigureAt(i, j).isWhite())
 				        return false;
 	        return true;  
         }
 
-	    protected String		    content;
-        protected String            contentReal;
-        protected String            contentColor;
         protected int[]             dimension;
 
         protected String            symList;
         protected int               symIndex;
         protected ChessHeuristic    heuristic;
+
+        protected Figure[,]         data;
 
         public Board()
         {
@@ -59,42 +59,46 @@ namespace Game
             return heuristic.GetValue(this);
         }
 
-	    public void	setContentByRC(int row, int col, char item)
+        public Figure[,] getData()
         {
-            StringBuilder sb            = new StringBuilder(content);
-            sb[Index(row, col) - 1]     = item;
-            content                     = sb.ToString();
+            return data;
         }
             
-	    public void	setContent(String c)			
-        { 
-            content = c; 
-            contentReal = c; 
-        }
-
-	    public void	setContentColor(String c)		
+	    public void	setContent(String fig, String col)			
         {
-            contentColor = c; 
+            if (data == null)
+                return;
+
+            if (fig.Length != col.Length)
+                return;
+
+            for (int i = 0; i < fig.Length; ++i)
+            {
+                int row        = i / dimension[0];
+                int column     = i % dimension[1];
+
+                Figure.FigureType ftype = (Figure.FigureType)(int.Parse(fig[i] + ""));
+
+                if (ftype == Figure.FigureType.Nothing)
+                    continue;
+
+                bool white      = col[i] == '1';
+
+                Figure figure   = new Figure(ftype, row, column, this);
+                figure.setColor(white);
+                data[row, column]  = figure;
+            }
         }
 
 	    public void	setDimension(int[] dim)		
         {
-            dimension = dim; 
+            dimension   = dim;
+            data        = new Figure[dim[0], dim[1]];
         }
 
-	    public string getContent()						
+	    public Figure getFigureAt(int row, int col)	
         { 
-            return content; 
-        }
-
-	    public char	getContentColor(int row, int col)	
-        { 
-            return contentColor[Index(row, col) - 1]; 
-        }
-
-	    public char getRealTypeByRC(int row, int col)	
-        { 
-            return contentReal[Index(row, col) - 1]; 
+            return data[row, col]; 
         }
 
         public int[] getDimension()						
@@ -102,11 +106,11 @@ namespace Game
             return dimension; 
         }
 
-	    public char	getItemByRC(int row, int col)
+        public Figure getItemByRC(int row, int col)
         {
-            if (col < 1 || row < 1 || col > dimension[0] || row > dimension[1])
-                return (char)Figure.FigureType.Nothing;
-            return getItemByIndex(Index(row, col));
+            if (col < 0 || row < 0 || col >= dimension[0] || row >= dimension[1])
+                return null;
+            return data[row,col];
         }
 
 	    public char	getNextSym()
@@ -118,43 +122,33 @@ namespace Game
 
         public void Step(int fromRow, int fromCol, int toRow, int toCol)
         {
-            StringBuilder sb                = new StringBuilder(content);
-            sb[Index(toRow, toCol) - 1]     = content[Index(fromRow, fromCol) - 1];
-            sb[Index(fromRow, fromCol) - 1] = '0';
-            content                         = sb.ToString();
+            data[fromRow, fromCol].setRC(toRow, toCol);
 
-            sb                              = new StringBuilder(contentColor);
-            sb[Index(toRow, toCol) - 1]     = contentColor[Index(fromRow, fromCol) - 1];
-            sb[Index(fromRow, fromCol) - 1] = '0';
-            contentColor                    = sb.ToString();
-
-            sb                              = new StringBuilder(contentReal);
-            sb[Index(toRow, toCol) - 1]     = contentReal[Index(fromRow, fromCol) - 1];
-            sb[Index(fromRow, fromCol) - 1] = '0';
-            contentReal                     = sb.ToString();
+            data[toRow, toCol]          = data[fromRow, fromCol];
+            data[fromRow, fromCol]      = null;
         }
 
         public bool checkTest(bool white)
         {
-            for (int i=1; i<=dimension[1]; ++i)
-		        for (int j=1; j<=dimension[0]; ++j)
+            for (int i=0; i<dimension[1]; ++i)
+		        for (int j=0; j<dimension[0]; ++j)
 		        {
-			        char sym	= getRealTypeByRC(i,j);
+                    Figure figure = getFigureAt(i, j);
 
-                    if (sym != (char)Figure.FigureType.Nothing)
-			        {
-				        bool enemy;
+                    if (figure == null || figure.getFigureType() == Figure.FigureType.Nothing)
+                        continue;
 
-				        if ((getContentColor(i,j) == '1' && !white) || (getContentColor(i,j) == '2' && white))
-					        enemy = true;
-				        else
-					        enemy = false;
+				    bool enemy;
 
-				        if (enemy)
-					        foreach (int[] step in Figure.getLegalSteps(this, i, j, true))
-						        if (step[2] == 3.0f)
-							        return true;
-			        }
+                    if (figure.isWhite() != white)
+					    enemy = true;
+				    else
+					    enemy = false;
+
+				    if (enemy)
+					    foreach (int[] step in Figure.getLegalSteps(this, figure, true))
+						    if (step[2] == 3.0f)
+							    return true;
 		        }
 
             return false;
@@ -162,32 +156,33 @@ namespace Game
 
         public bool checkmateTest(bool white)
         {
-            for (int i=1; i<=dimension[1]; ++i)
-		        for (int j=1; j<=dimension[0]; ++j)
-		        {
-			        char sym	= getRealTypeByRC(i,j);
+            for (int i=0; i<dimension[1]; ++i)
+		        for (int j=0; j<dimension[0]; ++j)
+                {
+                    Figure figure = getFigureAt(i, j);
 
-                    if (sym != (char)Figure.FigureType.Nothing)
-			        {
-				        bool enemy;
+                    if (figure == null || figure.getFigureType() == Figure.FigureType.Nothing)
+                        continue;
 
-				        if ((getContentColor(i,j) == '1' && !white) || (getContentColor(i,j) == '2' && white))
-					        enemy = true;
-				        else
-					        enemy = false;
+                    bool enemy;
 
-				        Board tBoard;
+                    if (figure.isWhite() != white)
+                        enemy = true;
+                    else
+                        enemy = false;
 
-				        if (!enemy)
-					        foreach (int[] step in Figure.getLegalSteps(this, i, j, false))
-					        {
-						        tBoard = this.Clone();
-						        tBoard.Step(i,j,step[0],step[1]);
+				    Board tBoard;
 
-						        if (!tBoard.checkTest(white))
-							        return false;
-					        }
-			        }
+				    if (!enemy)
+					    foreach (int[] step in Figure.getLegalSteps(this, figure, false))
+					    {
+						    tBoard = this.Clone();
+						    tBoard.Step(i, j, step[0], step[1]);
+
+						    if (!tBoard.checkTest(white))
+							    return false;
+					    }
+			        
 		        }
 
 	        return true;
@@ -195,21 +190,31 @@ namespace Game
 
 	    public Board Clone()
         {
-            Board b = new Board();
+            Board b     = new Board();
 
             b.setDimension(this.dimension);
-            b.setContent(this.contentReal);
-            b.setContentColor(this.contentColor);
             b.setHeuristic(this.heuristic);
+            b.setContent("0000000000000000000000000000000000000000000000000000000000000000", 
+                         "0000000000000000000000000000000000000000000000000000000000000000");
+
+            foreach (Figure fig in data)
+            {
+                if (fig == null || fig.getFigureType() == Figure.FigureType.Nothing)
+                    continue;
+
+                Figure clone = fig.Clone();
+                fig.setBoard(b);
+                b.addFigure(fig);
+            }
 
             return b;
         }
 
-	    protected char getItemByIndex(int ind)
+        public void addFigure(Figure fig)
         {
-            return content[ind - 1];
+            data[fig.getRow(), fig.getCol()] = fig;
         }
-
+        
         protected int Index(int row, int col)
         {
             return (row - 1) * (int)dimension[0] + col;

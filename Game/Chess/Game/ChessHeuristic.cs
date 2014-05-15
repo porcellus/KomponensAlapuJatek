@@ -7,6 +7,7 @@ using Game.GameBase;
 
 namespace Game
 {
+    [Serializable]
     public class ChessHeuristic : IHeuristic<Board>
     {
         // Megadja, hogy mekkora az adott tábla értéke
@@ -18,21 +19,20 @@ namespace Game
             for (int i = 1; i <= dimension[1]; ++i)
                 for (int j = 1; j <= dimension[0]; ++j)
                 {
-                    char figure = board.getRealTypeByRC(i, j);
+                    Figure figure = board.getFigureAt(i, j);
 
-                    if (figure != (char)Figure.FigureType.Nothing)
+                    if (figure == null || figure.getFigureType() == Figure.FigureType.Nothing)
+                        continue;
+
+                    int modifier    = figure.isWhite() ? 1 : -1;
+                    int fvalue      = GetFigureValue(figure.getFigureType());
+                    value           += fvalue * modifier;
+
+                    foreach (int[] vec in Figure.getLegalSteps(board, figure, false))
                     {
-                        int modifier    = board.getContentColor(i, j) == '1' ? 1 : -1;
-                        int ftype       = (int)figure - 48;
-                        int fvalue      = GetFigureValue((Figure.FigureType)ftype);
-                        value           += fvalue * modifier;
-
-                        foreach (int[] vec in Figure.getLegalSteps(board, i, j, false))
-                        {
-                            if (vec[2] == 1)        value += 1 * modifier;
-                            else if (vec[2] == 2)   value += GetFigureValue((Figure.FigureType)(board.getRealTypeByRC(vec[0], vec[1]) - 48)) * modifier * 6 + modifier * 14;
-                            else if (vec[2] == 3)   value += 100 * modifier;
-                        }
+                        if (vec[2] == 1)        value += 1 * modifier;
+                        else if (vec[2] == 2)   value += GetFigureValue(board.getFigureAt(vec[0], vec[1]).getFigureType()) * modifier * 6 + modifier * 14;
+                        else if (vec[2] == 3)   value += 100 * modifier;
                     }
                 }
 

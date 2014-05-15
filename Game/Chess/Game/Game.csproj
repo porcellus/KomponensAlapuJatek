@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Game</RootNamespace>
-    <AssemblyName>ChessGame</AssemblyName>
+    <AssemblyName>Game</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,6 +44,7 @@
     <Compile Include="ChessHeuristic.cs" />
     <Compile Include="ChessStep.cs" />
     <Compile Include="Figure.cs" />
+    <Compile Include="ObjectCopier.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

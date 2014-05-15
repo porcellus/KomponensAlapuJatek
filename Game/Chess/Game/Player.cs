@@ -18,10 +18,20 @@ namespace Game
 
         public Player(Board b, bool w, EntityType ptype, IAIAlgorithm alg)
         {
-            type            = ptype;
-            white           = w;
-            board           = b;
-            algorithm       = alg;
+            type = ptype;
+            white = w;
+            board = b;
+            algorithm = alg;
+        }
+
+        public Player(Board b, bool w, EntityType ptype)
+        {
+            if (ptype != EntityType.HumanPlayer)
+                throw new Exception("Missing algorithm for computer player.");
+
+            type = ptype;
+            white = w;
+            board = b;
         }
 
         ~Player()
