@@ -7,14 +7,20 @@ namespace Game.GameBase
     {
         public abstract string GetGameTypeInfo();
         public delegate void StepHandler(IState state);
-        public abstract void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, PlayerType playerType, EntityType entityType, TAlgorithm algorithm);
-        public abstract void SetHeuristic<TBoard>(IHeuristic<TBoard> heuristic);
+        public abstract void RegisterAsPlayer(ref StepHandler onStep, PlayerType playerType);
+
+        // public abstract void SetHeuristic<TBoard>(IHeuristic<TBoard> heuristic);
+        // return type lehetne void
         public abstract AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType);
-        public abstract IState SimulateStep(AbstractStep step);
-        public abstract int SimulateStep(AbstractStep step, int dummyInt);
-        public abstract void StartGame();
-        public abstract bool IsTerminal(IState state);
-        public abstract double GetHeuristicValue(IState state);
-        public abstract IState GetNextState(IState current, AbstractStep step);
+
+        //public abstract AbstractGame SimulateStep(AbstractStep step);
+        // use  state.GetAvailableSteps() instead
+        //public abstract bool IsTerminal(IState state);
+
+        // return the heuristic value of the state according to the given playerType
+        public abstract double GetHeuristicValue(IState state, PlayerType playerType);
+
+        public abstract IState SimulateStep(IState current, AbstractStep step);
+        public abstract IEnumerable<AbstractStep> GetAvailableSteps(IState state);
     }
 } 

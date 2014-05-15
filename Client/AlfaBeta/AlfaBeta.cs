@@ -27,6 +27,7 @@ namespace Client.AlfaBeta
         public void AlfaBetaStepHandler(IState state)
         {
             Console.WriteLine("AlfaBeta Stephandler has been called.");
+            if (playerType != state.CurrentPlayer) return;
             AbstractStep aStep = MakeDecision(state);
             game.DoStep(aStep, playerType);
         }
@@ -36,9 +37,9 @@ namespace Client.AlfaBeta
             int level = 0;
             AbstractStep result = default(AbstractStep);
             double resultValue = Double.NegativeInfinity;
-            foreach (AbstractStep step in state.GetAvailableSteps())
+            foreach (AbstractStep step in game.GetAvailableSteps(state))
             {
-                Double value = MinValue(level, game.GetNextState(state, step),
+                Double value = MinValue(level, game.SimulateStep(state, step),
                                 Double.NegativeInfinity, Double.PositiveInfinity);
                 if (value > resultValue)
                 {
@@ -52,13 +53,13 @@ namespace Client.AlfaBeta
         protected double MinValue(int level, IState state, double alpha, double beta)
         {
             level++;
-            if (game.IsTerminal(state) || level == depth)
-                return -game.GetHeuristicValue(state);
+            if (level == depth)
+                return game.GetHeuristicValue(state, playerType);
             double value = Double.PositiveInfinity;
-            foreach (AbstractStep step in state.GetAvailableSteps())
+            foreach (AbstractStep step in game.GetAvailableSteps(state))
             {
                 value = Math.Min(value, MaxValue(level,
-                game.GetNextState(state, step), alpha, beta));
+                game.SimulateStep(state, step), alpha, beta));
                 if (value <= alpha)
                     return value;
                 beta = Math.Min(beta, value);
@@ -66,16 +67,21 @@ namespace Client.AlfaBeta
             return value;
         }
 
+        private PlayerType GetOtherPlayer(PlayerType player)
+        {
+            
+        }
+
         protected double MaxValue(int level, IState state, double alpha, double beta)
         {
             level++;
-            if (game.IsTerminal(state) || level == depth)
-                return game.GetHeuristicValue(state);
+            if (level == depth)
+                return game.GetHeuristicValue(state, playerType);
             double value = Double.NegativeInfinity;
-            foreach (AbstractStep step in state.GetAvailableSteps())
+            foreach (AbstractStep step in game.GetAvailableSteps(state))
             {
                 value = Math.Max(value, MinValue(level,
-                      game.GetNextState(state, step), alpha, beta));
+                      game.SimulateStep(state, step), alpha, beta));
                 if (value >= beta)
                     return value;
                 alpha = Math.Max(alpha, value);
@@ -88,7 +94,7 @@ namespace Client.AlfaBeta
             this.game = game;
             this.playerType = playerType;
             AbstractGame.StepHandler stepHandler = AlfaBetaStepHandler;
-            game.RegisterAsPlayer<AlphaBetaSearch>(ref stepHandler, playerType, EntityType.ComputerPlayer, this);
+            game.RegisterAsPlayer(ref stepHandler, playerType);
         }
 
     }

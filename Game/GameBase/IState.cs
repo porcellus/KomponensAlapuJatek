@@ -5,6 +5,6 @@ namespace Game.GameBase
 {
     public interface IState
     {
-        IEnumerable<AbstractStep> GetAvailableSteps();
+        PlayerType CurrentPlayer { get; set; }
     }
 }
