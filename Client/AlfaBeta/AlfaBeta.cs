@@ -67,10 +67,6 @@ namespace Client.AlfaBeta
             return value;
         }
 
-        private PlayerType GetOtherPlayer(PlayerType player)
-        {
-            
-        }
 
         protected double MaxValue(int level, IState state, double alpha, double beta)
         {
