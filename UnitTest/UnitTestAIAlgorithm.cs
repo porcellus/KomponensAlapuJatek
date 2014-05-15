@@ -4,7 +4,6 @@ using Client.AIAlgorithmBase;
 using Client.AlfaBeta;
 using Client.MinMax;
 using Game.GameBase;
-using GameBase;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTestAIAlgorithm

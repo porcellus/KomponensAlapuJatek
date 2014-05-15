@@ -47,12 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AbstractStep.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Client\Client\Client.csproj">
-      <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
-      <Name>Client</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

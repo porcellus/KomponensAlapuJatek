@@ -154,9 +154,31 @@
       <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
       <Name>GameBase</Name>
     </ProjectReference>
+<<<<<<< e59250c0686ae64dac55f4dff1cd55820bc8f301
+    <ProjectReference Include="..\..\Game\Quatro\Game\Game.csproj">
+      <Project>{01f3ca3f-d432-465a-bf18-a0eafab97b80}</Project>
+      <Name>Game %28Game\Quatro\Game%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AIAlgorithmBase\AIAlgorithmBase.csproj">
+      <Project>{27a307cf-d22f-4097-91f2-ee541604000f}</Project>
+      <Name>AIAlgorithmBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AlfaBeta\AlfaBeta.csproj">
+      <Project>{24267a3b-c589-43a2-ae3f-4476f0a02373}</Project>
+      <Name>AlfaBeta</Name>
+=======
+    <ProjectReference Include="..\..\QuatroGreenGameGUI\QuatroGreenGameGUI.csproj">
+      <Project>{6876337f-632b-43e9-a5b3-15773cc88575}</Project>
+      <Name>QuatroGreenGameGUI</Name>
+>>>>>>> e1b45e7ae3a6848c408ee108e47cea5ddcacbe19
+    </ProjectReference>
     <ProjectReference Include="..\Client\Client.csproj">
       <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
       <Name>Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MinMax\MinMax.csproj">
+      <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>
+      <Name>MinMax</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

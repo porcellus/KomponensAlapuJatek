@@ -10,7 +10,7 @@ namespace ClientGUI.Model
 
         public static IClient CreateClient(ClientType clientType)
         {
-            if (clientType == ClientType.MOCK)
+            /*if (clientType == ClientType.MOCK)
             {
                 IClient mockedClient = MockRepository.GenerateMock<IClient>();
                 mockedClient.Stub(x => x.GetAvailableGameTypes()).Return(new[] {"Chess", "Quatro"});
@@ -21,7 +21,7 @@ namespace ClientGUI.Model
                     .WhenCalled(x => Thread.Sleep(5000))
                     .Return(true);
                 return mockedClient;
-            }
+            }*/
             return new GameClient();
         }
 

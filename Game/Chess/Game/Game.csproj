@@ -44,6 +44,7 @@
     <Compile Include="ChessHeuristic.cs" />
     <Compile Include="ChessStep.cs" />
     <Compile Include="Figure.cs" />
+    <Compile Include="ObjectCopier.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,7 +59,7 @@
     </ProjectReference>
     <ProjectReference Include="..\GameGUI\GameGUI.csproj">
       <Project>{e2795faa-e49c-45d1-b19b-ac5625a0bf1d}</Project>
-      <Name>GameGUI</Name>
+      <Name>GameGUI %28Game\Chess\GameGUI%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

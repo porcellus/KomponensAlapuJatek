@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Game.GameBase;
-using GameBase;
 
 namespace Game
 {
-    class QuartoHeuristic : IHeuristic<Board>
+   public class QuartoHeuristic : IHeuristic<Board>
     {
 
         public int GetValue(Board board)
         {
-            int ret = 0;
+            double ret = 0;
 
 
             board.checkWinningState();
@@ -30,7 +29,7 @@ namespace Game
 
 
 
-                return ret;
+                return (int)ret;
             }
             else
             {
@@ -41,17 +40,17 @@ namespace Game
         }
 
 
-        public int calculateRow(Board b)
+        public double calculateRow(Board b)
         {
-            int sum = 0;
+            double sum = 0;
             int[] rowsColor = new int[4] { 2, 2, 2, 2 };
             int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
             int[] rowsShape = new int[4] { 2, 2, 2, 2 };
             int[] rowsFull = new int[4] { 2, 2, 2, 2 };
 
-            for (int i = 0; i < b.BHeight; ++i)
+            for (int i = 0; i < b.BHeight; i++)
             {
-                for (int j = 0; j < b.BWidth; i++)
+                for (int j = 0; j < b.BWidth; j++)
                 {
 
 
@@ -67,15 +66,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -87,15 +86,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -107,15 +106,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -127,15 +126,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -149,9 +148,9 @@ namespace Game
 
             return sum;
         }
-        public int calculateCol(Board b)
+        public double calculateCol(Board b)
         {
-            int sum = 0;
+            double sum = 0;
 
             int[] rowsColor = new int[4] { 2, 2, 2, 2 };
             int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
@@ -160,7 +159,7 @@ namespace Game
 
             for (int i = 0; i < b.BHeight; i++)
             {
-                for (int j = 0; j < b.BWidth; i++)
+                for (int j = 0; j < b.BWidth; j++)
                 {
                     if (b.BBoard[j, i] != null)
                     {
@@ -176,15 +175,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -196,15 +195,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -216,15 +215,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -236,15 +235,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -261,9 +260,9 @@ namespace Game
 
 
         }
-        public int calculateCub(Board b)
+        public double calculateCub(Board b)
         {
-            int sum = 0;
+            double sum = 0;
             int[] rowsColor = new int[4] { 2, 2, 2, 2 };
             int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
             int[] rowsShape = new int[4] { 2, 2, 2, 2 };
@@ -306,11 +305,11 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
@@ -326,11 +325,11 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
@@ -346,11 +345,11 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
@@ -366,11 +365,11 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
@@ -386,10 +385,10 @@ namespace Game
 
             return sum;
         }
-        public int calculateDiag(Board b)
+        public double calculateDiag(Board b)
         {
 
-            int sum = 0;
+            double sum = 0;
             int[] rowsColor = new int[4] { 2, 2, 2, 2 };
             int[] rowsHeigh = new int[4] { 2, 2, 2, 2 };
             int[] rowsShape = new int[4] { 2, 2, 2, 2 };
@@ -397,7 +396,7 @@ namespace Game
 
             for (int i = 0; i < b.BHeight; i++)
             {
-                for (int j = 0; j < b.BWidth; i++)
+                for (int j = 0; j < b.BWidth; j++)
                 {
                     if (i == j)
                     {
@@ -415,15 +414,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -435,15 +434,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -455,15 +454,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {
@@ -475,15 +474,15 @@ namespace Game
                 {
                     if (countElement == 1)
                     {
-                        sum += 1;
+                        sum += 0.3;
                     }
                     else if (countElement == 2)
                     {
-                        sum += 4;
+                        sum += 1.2;
                     }
                     else if (countElement == 3)
                     {
-                        sum += 10;
+                        sum += 3;
                     }
                     else if (countElement == 4 )
                     {

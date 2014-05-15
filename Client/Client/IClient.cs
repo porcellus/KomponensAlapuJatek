@@ -6,9 +6,9 @@ namespace Client.Client
     {
         IList<string> GetAvailableGameTypes();
         IList<int> GetGamesInLobby(string lobby);
-        bool JoinGame(int gameId);
+        bool JoinGame(string opponentData);
         bool ConnectToServer(string ip, string port);
-        void CreateLocalGame(object aiAlgorithm);
+        void CreateLocalGame(string gameName, string aiAlgorithm, object playerPosition);
         void StartNetworkGame(string gameType, object startPosition);
     }
 }
