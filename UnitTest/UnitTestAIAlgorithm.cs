@@ -15,12 +15,7 @@ namespace UnitTestAIAlgorithm
             throw new NotImplementedException();
         }
 
-        public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, PlayerType playerType, EntityType entityType,
-            TAlgorithm algorithm)
-        {
-        }
-
-        public override void SetHeuristic<TBoard>(IHeuristic<TBoard> heuristic)
+        public override void RegisterAsPlayer(ref StepHandler onStep, PlayerType playerType)
         {
             throw new NotImplementedException();
         }
@@ -30,31 +25,7 @@ namespace UnitTestAIAlgorithm
             throw new NotImplementedException();
         }
 
-        public override IState SimulateStep(AbstractStep step)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int SimulateStep(AbstractStep step, int dummyInt)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void StartGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool IsTerminal(IState state)
-        {
-            if (state is TestState)
-            {
-                return ((TestState)state).GetChildCount() == 0;
-            }
-            throw new NotImplementedException();
-        }
-
-        public override double GetHeuristicValue(IState state)
+        public override double GetHeuristicValue(IState state, PlayerType playerType)
         {
             if (state is TestState)
             {
@@ -63,12 +34,24 @@ namespace UnitTestAIAlgorithm
             throw new NotImplementedException();
         }
 
-        public override IState GetNextState(IState current, AbstractStep step)
+        public override IState SimulateStep(IState current, AbstractStep step)
         {
             if (current is TestState && step is TestStep)
             {
                 return ((TestState)current).getChildAt(((TestStep)step).GetStep());
             }
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<AbstractStep> GetAvailableSteps(IState state)
+        {
+            List<AbstractStep> steps = new List<AbstractStep>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                steps.Add(new TestStep(list[i], i));
+            }
+            return steps;
+
             throw new NotImplementedException();
         }
     }
@@ -95,8 +78,8 @@ namespace UnitTestAIAlgorithm
     }
     class TestState : IState
     {
-        List<IState> list = new List<IState>();
         private double hValue;
+        List<IState> list = new List<IState>();
 
         public TestState(double value)
         {
@@ -115,15 +98,6 @@ namespace UnitTestAIAlgorithm
         {
             hValue = value;
         }
-        public IEnumerable<AbstractStep> GetAvailableSteps()
-        {
-            List<AbstractStep> steps = new List<AbstractStep>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                steps.Add(new TestStep(list[i], i));
-            }
-            return steps;
-        }
 
         public IState getChildAt(int getStep)
         {
@@ -139,6 +113,8 @@ namespace UnitTestAIAlgorithm
         {
             return list.Count;
         }
+
+        public PlayerType CurrentPlayer { get; set; }
     }
     [TestClass]
     public class UnitTestAB
