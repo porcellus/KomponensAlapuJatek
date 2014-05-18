@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GameBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Game\Quatro\Game\bin\Debug\GameBase.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -60,9 +56,13 @@
     <Compile Include="QuartoTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Game\GameBase\GameBase.csproj">
+      <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
+      <Name>GameBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Game\Quatro\Game\Game.csproj">
       <Project>{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}</Project>
-      <Name>Game %28Game\Quatro\Game%29</Name>
+      <Name>Game</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

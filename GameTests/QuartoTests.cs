@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Game;
-using Game.GameBase;
+﻿using Game.GameBase;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Game.Tests

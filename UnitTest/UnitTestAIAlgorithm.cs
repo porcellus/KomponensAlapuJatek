@@ -46,13 +46,12 @@ namespace UnitTestAIAlgorithm
         public override IEnumerable<AbstractStep> GetAvailableSteps(IState state)
         {
             List<AbstractStep> steps = new List<AbstractStep>();
+            List<IState> list = new List<IState>();
             for (int i = 0; i < list.Count; i++)
             {
                 steps.Add(new TestStep(list[i], i));
             }
             return steps;
-
-            throw new NotImplementedException();
         }
     }
     class TestStep : AbstractStep
