@@ -62,7 +62,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Game\Quatro\Game\Game.csproj">
       <Project>{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}</Project>
-      <Name>Game %28Game\Quatro\Game%29</Name>
+      <Name>Game</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

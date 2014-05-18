@@ -1,11 +1,11 @@
 ﻿<UserControl x:Class="ClientGUI.View.QuatroGame"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:greenGui="clr-namespace:Game.QuatroGreenGameGUI;assembly=QuatroGreenGameGUI">
+    >
     <Grid Background="Aquamarine" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="400" Width="550">
-
-        <greenGui:GreenGui>
-        </greenGui:GreenGui>
+        <Label Content="Quatro placeholder"/>
+        <!--<greenGui:GreenGUI>
+        </greenGui:GreenGUI>-->
 
     </Grid>
 </UserControl>

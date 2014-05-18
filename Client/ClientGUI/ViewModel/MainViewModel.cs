@@ -20,7 +20,7 @@ namespace ClientGUI.ViewModel
 
         public MainViewModel()
         {
-            _client = ClientFactory.CreateClient(ClientFactory.ClientType.LIVE);
+            _client = ClientFactory.CreateClient(ClientFactory.ClientType.MOCK);
             GamesList = _client.GetAvailableGameTypes();
             SetupViewModels();
             SetupCommands();
