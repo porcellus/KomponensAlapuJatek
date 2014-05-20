@@ -12,19 +12,59 @@ namespace Game
     public class Board : IState
     {
         private const int bWidth = 4;
+        private const int bHeight = 4;
+        private PlayerType currentPlayer;
+        private  QuartoHeuristic heuristic = new QuartoHeuristic();
+
+        public  QuartoHeuristic Heuristic
+        {
+            get { return heuristic; }
+            set { heuristic = value; }
+        }
+        private Player[] player = new Player[2];
+
+        public  Player[] Player
+        {
+            get { return player; }
+            set { player = value; }
+        }
+        private  int activePlayerIndex = 0;
+
+        public  int ActivePlayerIndex
+        {
+            get { return activePlayerIndex; }
+            set { activePlayerIndex = value; }
+        }
+        private  Piece[] activePieces;
+
+        public  Piece[] ActivePieces
+        {
+            get { return activePieces; }
+            set { activePieces = value; }
+        }
+        private Piece selectedPiece;
+
+        public Piece SelectedPiece
+        {
+            get { return selectedPiece; }
+            set { selectedPiece = value; }
+        }
 
         public int BWidth
         {
             get { return bWidth; }
         }
 
-        private const int bHeight = 4;
-
         public int BHeight
         {
             get { return bHeight; }
         }
-
+        public PlayerType CurrentPlayer
+        {
+            get { return currentPlayer; }
+            set {  currentPlayer = value;}
+        }
+       
 
         bool winstate = false;
 
@@ -204,70 +244,6 @@ namespace Game
         }
 
 
-        public IEnumerable<AbstractStep> GetAvailableSteps()
-        {
-            try
-            {
-                List<QuartoStep> lista = new List<QuartoStep>();
-
-                QuartoStep step;
-
-                if (Quarto.SelectedPiece == null && Quarto.ActiveBoard.BBoard != null && bBoard == Quarto.ActiveBoard.BBoard)
-                {
-
-                    for (int i = 0; i < Quarto.ActivePieces.Length; i++)
-                    {
-                        for (int j = 0; j < 4; j++)
-                        {
-                            for (int k = 0; k < 4; k++)
-                            {
-                                if (bBoard[j, k].color == 2)
-                                {
-
-
-                                    step = new QuartoStep(j, k, Quarto.SelectedPiece);
-                                    lista.Add(step);
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-
-                }
-                else
-                {
-                    for (int i = 0; i < Quarto.ActivePieces.Length; i++)
-                    {
-                        for (int j = 0; j < 4; j++)
-                        {
-                            for (int k = 0; k < 4; k++)
-                            {
-                                if (bBoard[j, k].color == 2)
-                                {
-
-
-                                    step = new QuartoStep(j, k, Quarto.ActivePieces[i]);
-                                    lista.Add(step);
-                                }
-
-                            }
-
-                        }
-
-                    }
-                }
-
-
-
-                return lista;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+       
     }
 }
