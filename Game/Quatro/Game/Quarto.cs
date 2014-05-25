@@ -123,6 +123,7 @@ namespace Game
                         activeBoard.SelectedPiece = select;
                         activeBoard.ActivePieces = activeBoard.ActivePieces.Where(w => w != activeBoard.SelectedPiece).ToArray();
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
+                        activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
                     }
                     catch (Exception)
                     {
@@ -136,6 +137,7 @@ namespace Game
                         activeBoard.SelectedPiece = select;
                         activeBoard.ActivePieces = activeBoard.ActivePieces.Where(w => w != activeBoard.SelectedPiece).ToArray();
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
+                        activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
                     }
                     catch (Exception)
                     {
@@ -154,19 +156,8 @@ namespace Game
             //addig mig a nem nyert valaki vagy nem raktak le minden bábút
             while (activeBoard.Winstate == false || !activeBoard.checkIsFull())
             {
-                if ((activeBoard.Player[0].PlayerType == PlayerType.PlayerOne || activeBoard.Player[0].PlayerType == PlayerType.PlayerTwo) && (activeBoard.Player[1].PlayerType == PlayerType.PlayerOne || activeBoard.Player[1].PlayerType == PlayerType.PlayerTwo))
-                {
-                   
-                        //GameBase.AbstractGame.StepHandler step = new AbstractGame.StepHandler(activeBoard.Player[activeBoard.ActivePlayerIndex].Callback);
-                        activeBoard.Player[activeBoard.ActivePlayerIndex].Callback((IState)activeBoard);
-                       
-                   
-                    //várunk a játékosokra
-                            Thread.Sleep(1000);
-                        
-                 
-                }
-                // várunk a játékosok regisztrációjára
+                
+                
                 Thread.Sleep(1000);
 
             }
@@ -233,6 +224,10 @@ namespace Game
                
                     activeBoard.Player[index].Callback = onStep;
                 }
+                if (activeBoard.Player[0].PlayerType != null && activeBoard.Player[0].PlayerType != null)
+                {
+                    StartGame();
+                }
 
         }
         
@@ -241,7 +236,7 @@ namespace Game
             Board returnBoard = ((Board)current);
             returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
 
-            return (IState)returnBoard;
+            return returnBoard;
         }
         
        
@@ -265,6 +260,7 @@ namespace Game
                 }
 
 
+                activeBoard.Player[activeBoard.ActivePlayerIndex].Callback(activeBoard);
 
                 return AbstractStep.Result.Success;
             }
