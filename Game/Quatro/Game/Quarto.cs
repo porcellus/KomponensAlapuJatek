@@ -260,14 +260,12 @@ namespace Game
                 }
 
 
-                activeBoard.Player[activeBoard.ActivePlayerIndex].Callback(activeBoard);
+               
+            }
+            activeBoard.Player[0].Callback(activeBoard);
+            activeBoard.Player[1].Callback(activeBoard);
 
-                return AbstractStep.Result.Success;
-            }
-            else
-            {
-                return AbstractStep.Result.Failure;
-            }
+            return AbstractStep.Result.Success;
         }
         public override IEnumerable<AbstractStep> GetAvailableSteps(IState st)
         {
