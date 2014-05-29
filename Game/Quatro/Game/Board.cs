@@ -16,6 +16,76 @@ namespace Game
         private PlayerType currentPlayer;
         private  QuartoHeuristic heuristic = new QuartoHeuristic();
 
+        public Board(Board oBoard)
+        {
+            for (int i = 0; i < BHeight; i++)
+            {
+                for (int j = 0; j < BWidth; j++)
+                {
+                    BBoard[i, j] = new Piece();
+                    BBoard[i, j].color = oBoard.BBoard[i, j].color;
+                    BBoard[i, j].height = oBoard.BBoard[i, j].height;
+                    BBoard[i, j].shape = oBoard.BBoard[i, j].shape;
+                    BBoard[i, j].full = oBoard.BBoard[i, j].full;
+                }
+            }
+            ActivePieces = new Piece[16];
+            for (int i = 0; i < 16; ++i)
+            {
+                ActivePieces[i] = new Piece();
+                ActivePieces[i].setPiece(oBoard.ActivePieces[i].height, oBoard.ActivePieces[i].color, oBoard.ActivePieces[i].shape, oBoard.ActivePieces[i].full);
+            }
+        }
+
+        public Board()
+        {
+
+            for (int i = 0; i < BHeight; i++)
+            {
+                for (int j = 0; j < BWidth; j++)
+                {
+                    BBoard[i, j] = new Piece();
+                    BBoard[i, j].color = 2;
+                    BBoard[i, j].height = 2;
+                    BBoard[i, j].shape = 2;
+                    BBoard[i, j].full = 2;
+                }
+            }
+            ActivePieces = new Piece[16];
+            ActivePieces[0] = new Piece();
+            ActivePieces[0].setPiece(1, 1, 1, 1);
+            ActivePieces[1] = new Piece();
+            ActivePieces[1].setPiece(1, 1, 1, 0);
+            ActivePieces[2] = new Piece();
+            ActivePieces[2].setPiece(1, 1, 0, 1);
+            ActivePieces[3] = new Piece();
+            ActivePieces[3].setPiece(1, 1, 0, 0);
+            ActivePieces[4] = new Piece();
+            ActivePieces[4].setPiece(1, 0, 1, 1);
+            ActivePieces[5] = new Piece();
+            ActivePieces[5].setPiece(1, 0, 1, 0);
+            ActivePieces[6] = new Piece();
+            ActivePieces[6].setPiece(1, 0, 0, 1);
+            ActivePieces[7] = new Piece();
+            ActivePieces[7].setPiece(1, 0, 0, 0);
+            ActivePieces[8] = new Piece();
+            ActivePieces[8].setPiece(0, 1, 1, 1);
+            ActivePieces[9] = new Piece();
+            ActivePieces[9].setPiece(0, 1, 1, 0);
+            ActivePieces[10] = new Piece();
+            ActivePieces[10].setPiece(0, 1, 0, 1);
+            ActivePieces[11] = new Piece();
+            ActivePieces[11].setPiece(0, 1, 0, 0);
+            ActivePieces[12] = new Piece();
+            ActivePieces[12].setPiece(0, 0, 1, 1);
+            ActivePieces[13] = new Piece();
+            ActivePieces[13].setPiece(0, 0, 1, 0);
+            ActivePieces[14] = new Piece();
+            ActivePieces[14].setPiece(0, 0, 0, 1);
+            ActivePieces[15] = new Piece();
+            ActivePieces[15].setPiece(0, 0, 0, 0);
+        }
+
         public  QuartoHeuristic Heuristic
         {
             get { return heuristic; }
@@ -78,7 +148,7 @@ namespace Game
 
         public Piece[,] BBoard
         {
-            get { return bBoard; }
+            get { return (Piece[,])bBoard.Clone(); }
             set { bBoard = value; }
         }
 
@@ -88,7 +158,7 @@ namespace Game
         public void insertPiece(int x, int y, Piece iPiece)
         {
             bBoard[x, y] = iPiece;
-
+            //System.Diagnostics.Debug.WriteLine(this + "written value of "+x+":"+y+"="+iPiece);
         }
         public bool checkIsEmpty(int x, int y)
         {

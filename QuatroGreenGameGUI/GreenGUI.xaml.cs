@@ -40,28 +40,21 @@ namespace Game.QuatroGreenGameGUI
 
         // Constructs the UserControl GreenGUI
         // _quatro: this object holds all of the game data the can be queried
-        public GreenGUI(Quarto _quatro)
+        public GreenGUI()
         {
             InitializeComponent();
-
-            // Sets the quatro object
-            quatro = _quatro;
-
-            // Sets a callback for every step happened
-            AbstractGame.StepHandler ost = new AbstractGame.StepHandler(OnStep);
-            quatro.RegisterAsPlayer(ref ost);
-
+            
             // Load images
             for (int i = 0; i < 16; i++)
             {
                 Image im = new Image();
-                im.Source = new BitmapImage(new Uri("Images/piece-" + i + ".png"));
+                im.Source = new BitmapImage(new Uri(@"/Images/piece-0.png", UriKind.Relative));
                 images[i] = im;
             }
             imageEmpty = new Image();
-            imageEmpty.Source = new BitmapImage(new Uri("Images/empty.png"));
+            imageEmpty.Source = new BitmapImage(new Uri(@"/Images/empty.png", UriKind.Relative));
             imageUnknown = new Image();
-            imageUnknown.Source = new BitmapImage(new Uri("Images/unknown.png"));
+            imageUnknown.Source = new BitmapImage(new Uri(@"/Images/unknown.png", UriKind.Relative));
 
             // Create buttons (area)
             for (int i = 0; i < 16; i++)
@@ -105,11 +98,13 @@ namespace Game.QuatroGreenGameGUI
         private void OnStep(IState state)
         {
             // Gets all of the data from the quatro object
-            Piece[] pa = quatro.getAviablePiece();
-            Piece[,] paa = quatro.getAviableStep(); // pálya, ahol 2222 a szabad
-            Piece p = quatro.getSelectedPiece(); // null, ha semmi
-            bool w = quatro.getWinningState();
-            bool m = quatro.getIsMyMove(iam);
+            if(!(state is Board)) return;
+            var board = (Board) state;
+            Piece[] pa = board.ActivePieces;
+            Piece[,] paa = board.BBoard; // pálya, ahol 2222 a szabad
+            Piece p = board.SelectedPiece; // null, ha semmi
+            bool w = paa.Length == 0;
+            bool m = board.CurrentPlayer == iam;
             bool c = (p != null);
 
             // Sets the game area according to the data given
@@ -118,11 +113,14 @@ namespace Game.QuatroGreenGameGUI
                 area[i % 4, i / 4].IsEnabled = false;
                 (area[i % 4, i / 4].Content as Image).Source = imageEmpty.Source;
             }
+
+            int j = 0;
             foreach (Piece y in paa)
             {
                 int id = y.getNumber();
-                if(m && !c)available[id % 4, id / 4].IsEnabled = true;
-                (area[id % 4, id / 4].Content as Image).Source = images[id].Source;
+                if(m && !c)available[j % 4, j / 4].IsEnabled = true;
+                (area[j % 4, j / 4].Content as Image).Source = id < 16 ? images[id].Source : imageEmpty.Source;
+                ++j;
             }
 
             // Sets the available pieces according to the data given
@@ -135,7 +133,7 @@ namespace Game.QuatroGreenGameGUI
             {
                 int id = x.getNumber();
                 if (m && c) available[id % 4, id / 4].IsEnabled = true;
-                (available[id % 4, id / 4].Content as Image).Source = images[id].Source;
+                (available[id % 4, id / 4].Content as Image).Source = id < 16 ? images[id].Source : imageEmpty.Source;
             }
 
             // Sets the selected piece
@@ -205,9 +203,16 @@ namespace Game.QuatroGreenGameGUI
 
         // Defines am i a player one or player two
         // pt:PlayerType -II-
-        public void AddToGame(PlayerType pt)
+        public void AddToGame(Quarto game, PlayerType pt)
         {
             iam = pt;
+
+            // Sets the quatro object
+            quatro = game;
+
+            // Sets a callback for every step happened
+            AbstractGame.StepHandler ost = new AbstractGame.StepHandler(OnStep);
+            quatro.RegisterAsPlayer(ref ost, iam);
         }
     }
 }
