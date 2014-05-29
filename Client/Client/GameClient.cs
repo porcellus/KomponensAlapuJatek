@@ -85,7 +85,7 @@ namespace Client.Client
         {
             _Connector = new Server.Connector();
 
-            _Connector.connectoServer(ip, Int32.Parse(ip), "name", "Chess");
+            _Connector.connectoServer(ip, Int32.Parse(port), "name", "Chess");
 
             return true;
         }
