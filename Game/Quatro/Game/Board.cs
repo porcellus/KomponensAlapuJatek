@@ -16,6 +16,55 @@ namespace Game
         private PlayerType currentPlayer;
         private  QuartoHeuristic heuristic = new QuartoHeuristic();
 
+        public Board(Board oBoard)
+        {
+            bBoard = new Piece[bWidth, bHeight];
+            for (int i = 0; i < BHeight; i++)
+            {
+                for (int j = 0; j < BWidth; j++)
+                {
+                    bBoard[i, j] = new Piece(oBoard.BBoard[i, j].color,
+                                             oBoard.BBoard[i, j].height,
+                                             oBoard.BBoard[i, j].shape,
+                                             oBoard.BBoard[i, j].full);
+                }
+            }
+            ActivePieces = new Piece[16];
+            for (int i = 0; i < 16; ++i)
+            {
+                ActivePieces[i] = new Piece(oBoard.ActivePieces[i].height, oBoard.ActivePieces[i].color, oBoard.ActivePieces[i].shape, oBoard.ActivePieces[i].full);
+            }
+        }
+
+        public Board()
+        {
+            bBoard = new Piece[bWidth,bHeight];
+            for (int i = 0; i < BHeight; i++)
+            {
+                for (int j = 0; j < BWidth; j++)
+                {
+                    bBoard[i, j] = new Piece();
+                }
+            }
+            ActivePieces = new Piece[16];
+            ActivePieces[0] = new Piece(1, 1, 1, 1);
+            ActivePieces[1] = new Piece(1, 1, 1, 0);
+            ActivePieces[2] = new Piece(1, 1, 0, 1);
+            ActivePieces[3] = new Piece(1, 1, 0, 0);
+            ActivePieces[4] = new Piece(1, 0, 1, 1);
+            ActivePieces[5] = new Piece(1, 0, 1, 0);
+            ActivePieces[6] = new Piece(1, 0, 0, 1);
+            ActivePieces[7] = new Piece(1, 0, 0, 0);
+            ActivePieces[8] = new Piece(0, 1, 1, 1);
+            ActivePieces[9] = new Piece(0, 1, 1, 0);
+            ActivePieces[10] = new Piece(0, 1, 0, 1);
+            ActivePieces[11] = new Piece(0, 1, 0, 0);
+            ActivePieces[12] = new Piece(0, 0, 1, 1);
+            ActivePieces[13] = new Piece(0, 0, 1, 0);
+            ActivePieces[14] = new Piece(0, 0, 0, 1);
+            ActivePieces[15] = new Piece(0, 0, 0, 0);
+        }
+
         public  QuartoHeuristic Heuristic
         {
             get { return heuristic; }
@@ -74,21 +123,35 @@ namespace Game
             set { winstate = value; }
         }
 
-        private Piece[,] bBoard= new Piece[bWidth,bHeight] ; //4*4 tábla létrehozása
+        private Piece[,] bBoard; //4*4 tábla létrehozása
 
-        public Piece[,] BBoard
+        private ReadOnlyBoard rBoard;
+        public ReadOnlyBoard BBoard
         {
-            get { return bBoard; }
-            set { bBoard = value; }
+            get { return rBoard ?? (rBoard = new ReadOnlyBoard(bBoard)); }
         }
 
+        public class ReadOnlyBoard
+        {
+            
+            private Piece[,] _board;
+            public ReadOnlyBoard(Piece[,] board)
+            {
+                _board = board;
+            }
+
+            public Piece this[int i, int j]
+            {
+                get { return _board[i, j]; }
+            }
+        }
       
 
         //bábú lerakása
         public void insertPiece(int x, int y, Piece iPiece)
         {
             bBoard[x, y] = iPiece;
-
+            //System.Diagnostics.Debug.WriteLine(this + "written value of "+x+":"+y+"="+iPiece);
         }
         public bool checkIsEmpty(int x, int y)
         {

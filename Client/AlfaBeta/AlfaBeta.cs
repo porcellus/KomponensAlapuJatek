@@ -1,6 +1,7 @@
 ﻿using System;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
+using System.Linq;
 
 namespace Client.AlfaBeta
 {
@@ -53,13 +54,13 @@ namespace Client.AlfaBeta
         protected double MinValue(int level, IState state, double alpha, double beta)
         {
             level++;
-            if (level == depth)
+            if (level == depth || game.GetAvailableSteps(state).ToList().Count == 0)
                 return game.GetHeuristicValue(state, playerType);
             double value = Double.PositiveInfinity;
             foreach (AbstractStep step in game.GetAvailableSteps(state))
             {
                 value = Math.Min(value, MaxValue(level,
-                game.SimulateStep(state, step), alpha, beta));
+                    game.SimulateStep(state, step), alpha, beta));
                 if (value <= alpha)
                     return value;
                 beta = Math.Min(beta, value);
@@ -71,7 +72,7 @@ namespace Client.AlfaBeta
         protected double MaxValue(int level, IState state, double alpha, double beta)
         {
             level++;
-            if (level == depth)
+            if (level == depth || game.GetAvailableSteps(state).ToList().Count == 0)
                 return game.GetHeuristicValue(state, playerType);
             double value = Double.NegativeInfinity;
             foreach (AbstractStep step in game.GetAvailableSteps(state))

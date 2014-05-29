@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Game.GameBase;
+using System.Windows.Controls;
 
 namespace Game.GameBase
 {
@@ -22,5 +22,13 @@ namespace Game.GameBase
 
         public abstract IState SimulateStep(IState current, AbstractStep step);
         public abstract IEnumerable<AbstractStep> GetAvailableSteps(IState state);
+    }
+
+    public interface GameGUI<TGameType>{}
+
+    public abstract class AbstractGameGUI
+    {
+        public abstract void AddToGame(AbstractGame game, PlayerType pt);
+        public abstract UserControl GetGameGUI();
     }
 } 
