@@ -8,12 +8,11 @@ using Game.GameBase;
 
 namespace Game
 {
-    class Player
+   public class Player
     {
        
         private PlayerType playerType;
-        private IAIAlgorithm algorithm;
-        private EntityType playerEntity;
+      
         private GameBase.AbstractGame.StepHandler callback;
 
         public GameBase.AbstractGame.StepHandler Callback
@@ -28,18 +27,7 @@ namespace Game
         }
       
 
-        public EntityType PlayerEntity
-        {
-            get { return playerEntity; }
-            set { playerEntity = value; }
-        }
-      
-
-        public IAIAlgorithm Algorithm
-        {
-            get { return algorithm; }
-            set { algorithm = value; }
-        }
+        
        
     }
 }

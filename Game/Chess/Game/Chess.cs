@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Client.AIAlgorithmBase;
-using Game;
 using Game.GameBase;
+using Client.AIAlgorithmBase;
+using GameBase;
 
-namespace Game.Chess.Game
+namespace Game
 {
     public class Chess : AbstractGame
     {
         // Pályaelemek
-        private Dictionary<char, Figure>          figures;
         private Board                             board;
 
 	    // Játékosok
@@ -47,22 +46,9 @@ namespace Game.Chess.Game
         }
 
         /* GUI által használt függvények */
-        public LinkedList< int[] > GetFigures()
+        public Figure[,] GetFigures()
         {
-            LinkedList<int[]> result = new LinkedList<int[]>();
-
-            // int[0] - Figura típusa
-            // int[1] - Figura színe
-            // int[2,3] - X,Y koordinátája
-            for (int r = 1; r < board.getDimension()[0]; ++r)
-                for (int c = 1; c < board.getDimension()[1]; ++c)
-                    if (board.getItemByRC(r, c) != (char)Figure.FigureType.Nothing && board.getItemByRC(r, c) != (char)Figure.FigureType.Nothing)
-                    {
-                        int[] figure = new int[] { 0, 0, r, c };
-                        result.AddLast(figure);
-                    }
-
-            return result;
+            return board.getData();
         }
 
         public int GUI_Action_Step(int fromRow, int fromCol, int toRow, int toCol)
@@ -85,44 +71,17 @@ namespace Game.Chess.Game
             board               = new Board();
             board.setHeuristic(heuristic);
             board.setDimension(dimension);
-            board.setContent("5432134566666666000000000000000000000000000000006666666654312345");
-            board.setContentColor("2222222222222222000000000000000000000000000000001111111111111111");
+            board.setContent("5432134566666666000000000000000000000000000000006666666654312345",
+                             "2222222222222222000000000000000000000000000000001111111111111111");
             
             waiting             = players[0].IsHuman();
-            figures             = new Dictionary<char,Figure>();
 
-            for (int i = 0; i<board.getDimension()[1]; ++i)
-	        {
-		        for (int j = 0; j<board.getDimension()[0]; ++j)
-		        {
-				    // A mezőhöz tartozó bábú
-				    char temp = board.getItemByRC(i+1,j+1);
-
-                    if (temp != (char)Figure.FigureType.Nothing)
-			        {	
-					        int type        = (int)(temp) - 48;
-					        Figure figure   = new Figure(type, i+1, j+1, board);
-					        --type;
-					
-					        if (board.getContentColor(i+1, j+1) == '2')
-						        figure.setColor(false);
-					        else if (board.getContentColor(i+1, j+1) == '1')
-						        figure.setColor(true);
-
-					        char fsym       = board.getNextSym();
-					        board.setContentByRC(i+1, j+1, fsym);	
-                            figures.Add(fsym, figure);
-			        }
+            foreach (Figure figure in board.getData())
+                if (figure != null && figure.getFigureType() != Figure.FigureType.Nothing)
+                {
+                    Console.WriteLine(figure.getFigureType());
+                    figure.calculateLegalSteps();
                 }
-            }
-
-            foreach (Figure figure in figures.Values)
-                figure.calculateLegalSteps();
-
-            while (alive)
-            {
-                FrameUpdate();
-            }
         }
 
         public override bool IsTerminal(IState state)
@@ -158,11 +117,7 @@ namespace Game.Chess.Game
         {
 	        cPlayer			= 0;
             board           = null;
-
-	        figures.Clear();
-
             players         = null;
-            figures         = null;
         }
 
         public void changePlayer()			    // Játékos váltása
@@ -180,6 +135,17 @@ namespace Game.Chess.Game
             Reset();
         }
 
+        public void AddHumanPlayer(GameBase.PlayerType playerType)
+        {
+            if (players == null)
+                players     = new Player[2];
+
+            // Index in the players list 
+            int index       = playerType == PlayerType.PlayerOne ? 0 : 1;
+            Player player   = new Player(board, index == 0, EntityType.HumanPlayer);
+            players[index]  = player;
+        }
+
         /* Interface methods */
         public override void SetHeuristic<Board>(IHeuristic<Board> heuristic)
         {
@@ -194,7 +160,12 @@ namespace Game.Chess.Game
             return "";
         }
 
-        public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, GameBase.PlayerType playerType, GameBase.EntityType controller, TAlgorithm algorithm)
+        public override void RegisterAsHumanPlayer(ref StepHandler onStep, GameBase.PlayerType playerType)
+        {
+            AddHumanPlayer(playerType);
+        }
+
+        public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, GameBase.PlayerType playerType, TAlgorithm algorithm)
         {
             if (!(algorithm is IAIAlgorithm))
                 throw new Exception("Not valid algorithm type!");
@@ -204,7 +175,7 @@ namespace Game.Chess.Game
 
             // Index in the players list 
             int index       = playerType == PlayerType.PlayerOne ? 0 : 1;
-            Player player   = new Player(board, index == 0, controller, (IAIAlgorithm)algorithm);
+            Player player   = new Player(board, index == 0, EntityType.ComputerPlayer, (IAIAlgorithm)algorithm);
 
             players[index]  = player;
         }

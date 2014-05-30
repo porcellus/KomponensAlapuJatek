@@ -35,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -142,7 +144,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Game\Quatro\Game\Game.csproj">
       <Project>{01f3ca3f-d432-465a-bf18-a0eafab97b80}</Project>
-      <Name>Game %28Game\Quatro\Game%29</Name>
+      <Name>Game</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

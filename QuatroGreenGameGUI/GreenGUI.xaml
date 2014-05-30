@@ -7,7 +7,7 @@
              d:DesignHeight="440.299" d:DesignWidth="594.03">
     <Grid Background="Aquamarine" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="400" Width="550">
 
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="550" Height="400">
+        <Grid Name="gameArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="550" Height="400">
             <Grid.RowDefinitions>
                 <RowDefinition Height="11*"/>
                 <RowDefinition Height="223*"/>
@@ -80,7 +80,7 @@
                 </Button>
             </Grid>
 
-            <Grid ShowGridLines="True" Margin="330,20,20,180" Grid.Row="1">
+            <Grid Name="availablePieces" ShowGridLines="True" Margin="330,20,20,180" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />

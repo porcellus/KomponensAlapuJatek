@@ -40,6 +40,10 @@ namespace Game
             set { Full = value; }
         }
 
+        public int getNumber(){
+            return 8 * full + 4 * shape + 2 * color + height;
+        }
+
         public Piece()
         {
         }

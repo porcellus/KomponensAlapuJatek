@@ -2,11 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:ClientGUI.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <viewModel:BooleanNegationVisibilityConverter x:Key="BooleanNegationVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Rectangle Fill="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="BackgroundRect"/>
@@ -29,7 +31,7 @@
                         <ComboBox Height="20" Width="80" Margin="71 0 0 0"
                              ItemsSource="{Binding GameTypes}" 
                             SelectedItem="{Binding SelectedGameType}"  />
-                    </StackPanel>
+                    </StackPanel>                    
                     <StackPanel Orientation="Horizontal">
                         <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Játék"/>
                         <ComboBox Height="20" Width="80" Margin="106 0 0 0"
@@ -37,7 +39,14 @@
                             SelectedItem="{Binding SelectedGame}"  />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
-                                Visibility="{Binding IsConnectedToServer, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Visibility="{Binding IsOnlineGame, Converter={StaticResource BooleanNegationVisibilityConverter}}">
+                        <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Heurisztika"/>
+                        <ComboBox Height="20" Width="80" Margin="75 0 0 0"
+                             ItemsSource="{Binding HeuristicsList}" 
+                            SelectedItem="{Binding SelectedHeuristic}"  />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding IsOnlineGame, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Lobby"/>
                         <ComboBox Height="20" Width="80" Margin="100 0 0 0" HorizontalAlignment="Right"
                               ItemsSource="{Binding AvailableLobbies}" 

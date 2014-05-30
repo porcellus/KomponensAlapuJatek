@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -64,6 +66,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\ClientFactory.cs" />
     <Compile Include="ViewModel\Annotations.cs" />
+    <Compile Include="ViewModel\BooleanNegationVisibilityConverter.cs" />
     <Compile Include="ViewModel\BooleanToColorConverter.cs" />
     <Compile Include="ViewModel\BooleanToConnectionStateConverter.cs" />
     <Compile Include="ViewModel\SelectorViewModel.cs" />
@@ -145,17 +148,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Game\Chess\Game\Game.csproj">
-      <Project>{b1621383-4b85-4fe0-b737-a4d295916748}</Project>
-      <Name>Game</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Game\GameBase\GameBase.csproj">
-      <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
-      <Name>GameBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Client\Client.csproj">
       <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
       <Name>Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MinMax\MinMax.csproj">
+      <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>
+      <Name>MinMax</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +178,7 @@
     <Resource Include="View\Images\unknown.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

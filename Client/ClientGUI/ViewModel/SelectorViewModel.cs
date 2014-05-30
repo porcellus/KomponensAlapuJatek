@@ -20,13 +20,18 @@ namespace ClientGUI.ViewModel
         private bool _isSelectorVisible;
         private string _selectedGame;
         private string _selectedLobby;
+        private IList<string> _heuristicsList;
+        private string _selectedHeuristic;
+        private GameType _selectedGameType;
 
         public SelectorViewModel(IClient client)
         {
             _client = client;
             IsSelectorVisible = false;
             GamesList = _client.GetAvailableGameTypes();
+            HeuristicsList = _client.GetAvailableAIAlgorithms();
             SetupCommands();
+            SelectedGameType = GameType.OFFLINE;
         }
 
         public RelayCommand PerformSelectionCommand { get; private set; }
@@ -37,7 +42,25 @@ namespace ClientGUI.ViewModel
             get { return new[] {GameType.OFFLINE, GameType.ONLINE}; }
         }
 
-        public GameType SelectedGameType { get; set; }
+        public GameType SelectedGameType
+        {
+            get { return _selectedGameType; }
+            set
+            {
+                if (_selectedGameType != value)
+                {
+                    _selectedGameType = value;
+                    OnPropertyChanged("SelectedGameType");
+                    OnPropertyChanged("IsOnlineGame");
+                    PerformSelectionCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public bool IsOnlineGame
+        {
+            get { return IsConnectedToServer && SelectedGameType == GameType.ONLINE; }
+        }
 
         public IList<string> GamesList
         {
@@ -48,6 +71,33 @@ namespace ClientGUI.ViewModel
                 {
                     _gamesList = value;
                     OnPropertyChanged("GamesList");
+                }
+            }
+        }
+
+        public IList<string> HeuristicsList
+        {
+            get { return _heuristicsList; }
+            set
+            {
+                if (_heuristicsList != value)
+                {
+                    _heuristicsList = value;
+                    OnPropertyChanged("HeuristicsList");
+                }
+            }
+        }
+
+        public string SelectedHeuristic
+        {
+            get { return _selectedHeuristic; }
+            set
+            {
+                if (_selectedHeuristic != value)
+                {
+                    _selectedHeuristic = value;
+                    OnPropertyChanged("SelectedHeuristic");
+                    PerformSelectionCommand.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -152,13 +202,14 @@ namespace ClientGUI.ViewModel
         private bool CanPerformSelectionExecute()
         {
             return (CanSelectLobby && !string.IsNullOrEmpty(SelectedLobby)) ||
-                   (!IsConnectedToServer && !string.IsNullOrEmpty(SelectedGame));
+                   (!IsConnectedToServer && !string.IsNullOrEmpty(SelectedGame) && !string.IsNullOrEmpty(SelectedHeuristic)) ||
+                   (SelectedGameType == GameType.OFFLINE && !string.IsNullOrEmpty(SelectedGame) && !string.IsNullOrEmpty(SelectedHeuristic));
         }
 
         private void PerformSelection()
         {
             CreateGame(this, new EventArgs());
-            IsSelectorVisible = false;
+            CloseSelector();
         }
 
         private void RaiseErrorOccured()
@@ -168,6 +219,9 @@ namespace ClientGUI.ViewModel
 
         private void CloseSelector()
         {
+            SelectedGame = null;
+            SelectedLobby = null;
+            SelectedHeuristic = null;
             IsSelectorVisible = false;
         }
     }
