@@ -119,8 +119,8 @@ namespace GameTypeManager
                     System.Diagnostics.Debug.WriteLine(", and found gui, added.");
                 } else System.Diagnostics.Debug.WriteLine(", but no gui, not added.");
             }
+            return GameDict;
         }
 
-        private Dictionary<string, KeyValuePair<Func<AbstractGame>, Func<AbstractGameGUI>>> GameDict;
     }
 }
