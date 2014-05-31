@@ -68,24 +68,20 @@ namespace Game
                 //kiválasztjuk a bábút amit az ellenfélnek le kell tenni majd kivesszük a bábúk tömbbjéből
                 if (type == PlayerType.PlayerOne && activeBoard.ActivePlayerIndex == 0)
                 {
-                    try
-                    {
+                   
                         activeBoard.SelectedPiece = select;
-                        activeBoard.ActivePieces = activeBoard.ActivePieces.Where(w => w != activeBoard.SelectedPiece).ToArray();
+                       
+                        activeBoard.setActivePieces( activeBoard.ActivePieces, activeBoard.SelectedPiece);
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
                         activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception("Hiba történt");
-                    }
+                   
                 }
                 else if (type == PlayerType.PlayerTwo && activeBoard.ActivePlayerIndex == 1)
                 {
                     try
                     {
                         activeBoard.SelectedPiece = select;
-                        activeBoard.ActivePieces = activeBoard.ActivePieces.Where(w => w != activeBoard.SelectedPiece).ToArray();
+                        activeBoard.setActivePieces(activeBoard.ActivePieces, activeBoard.SelectedPiece);
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
                         activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
                     }
@@ -114,8 +110,13 @@ namespace Game
             if (state is Board)
             {
                 Board b = (Board)state;
-                int value = b.Heuristic.GetValue(b);
 
+
+                int value = b.Heuristic.GetValue(b);
+                if (current == PlayerType.PlayerOne)
+                {
+                    return -value;
+                }
                
                 return value;
 
@@ -180,9 +181,33 @@ namespace Game
         
         public override IState SimulateStep(IState current, AbstractStep step)
         {
+            if (!(step is QuartoStep))
+                throw new Exception("Not proper step type!");
+            QuartoStep cStep = (QuartoStep)step;
             Board returnBoard = new Board((Board)current);
-            returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+                
 
+            if (returnBoard.SelectedPiece == null)
+            {
+                returnBoard.SelectedPiece= cStep.P;
+                returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
+               // returnBoard.ActivePieces = returnBoard.ActivePieces.Where(w => w != returnBoard.SelectedPiece).ToArray();
+            }
+            else
+            {
+               
+                    returnBoard.insertPiece(cStep.X, cStep.Y, returnBoard.SelectedPiece);
+                    returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
+                    returnBoard.SelectedPiece = null;
+                    //activePlayer = (activePlayer + 1) % 2;
+                    returnBoard.checkWinningState();
+               
+            }
+            //returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+            if (returnBoard == (Board)current)
+            {
+                return null;
+            }
             return returnBoard;
         }
         
@@ -229,9 +254,17 @@ namespace Game
                 }
                 System.Diagnostics.Debug.WriteLine("");
             }
-
-            activeBoard.Player[0].Callback(activeBoard);
-            activeBoard.Player[1].Callback(activeBoard);
+            if (activeBoard.Player[0].PlayerType == activeBoard.CurrentPlayer)
+            {
+                activeBoard.Player[0].Callback(activeBoard);
+            }
+            else
+            {   
+                if (activeBoard.Winstate == false || activeBoard.checkIsFull())
+                {
+                    activeBoard.Player[1].Callback(activeBoard);
+                }
+            }
 
             return AbstractStep.Result.Success;
         }
@@ -239,12 +272,12 @@ namespace Game
         {
             try
             {
-                Board  state = (Board)st;
+                Board  state = new Board((Board)st);
                 List<QuartoStep> lista = new List<QuartoStep>();
 
                 QuartoStep step;
 
-                if (activeBoard.SelectedPiece != null && activeBoard.BBoard != null && activeBoard == (Board)state)
+                if (state.SelectedPiece != null )
                 {
                     for (int j = 0; j < 4; j++)
                     {
@@ -252,7 +285,7 @@ namespace Game
                         {
                             if (state.BBoard[j, k].color == 2)
                             {
-                                step = new QuartoStep(j, k, activeBoard.SelectedPiece);
+                                step = new QuartoStep(j, k, state.SelectedPiece);
                                 lista.Add(step);
                             }
                         }
@@ -261,7 +294,7 @@ namespace Game
                 }
                 else
                 {
-                    for (int i = 0; i < activeBoard.ActivePieces.Length; i++)
+                    for (int i = 0; i < state.ActivePieces.Length; i++)
                     {
                         for (int j = 0; j < 4; j++)
                         {
@@ -269,7 +302,7 @@ namespace Game
                             {
                                 if (state.BBoard[j, k].color == 2)
                                 {
-                                    step = new QuartoStep(j, k, activeBoard.ActivePieces[i]);
+                                    step = new QuartoStep(j, k, state.ActivePieces[i]);
                                     lista.Add(step);
                                 }
 

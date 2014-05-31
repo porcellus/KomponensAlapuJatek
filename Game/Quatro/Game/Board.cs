@@ -18,22 +18,24 @@ namespace Game
 
         public Board(Board oBoard)
         {
-            bBoard = new Piece[bWidth, bHeight];
-            for (int i = 0; i < BHeight; i++)
-            {
-                for (int j = 0; j < BWidth; j++)
+               bBoard = new Piece[4, 4];
+                for (int i = 0; i < BHeight; i++)
                 {
-                    bBoard[i, j] = new Piece(oBoard.BBoard[i, j].color,
-                                             oBoard.BBoard[i, j].height,
-                                             oBoard.BBoard[i, j].shape,
-                                             oBoard.BBoard[i, j].full);
+                    for (int j = 0; j < BWidth; j++)
+                    {
+                        bBoard[i, j] = new Piece(oBoard.BBoard[i, j].color,
+                                                 oBoard.BBoard[i, j].height,
+                                                 oBoard.BBoard[i, j].shape,
+                                                 oBoard.BBoard[i, j].full);
+                    }
                 }
-            }
-            ActivePieces = new Piece[16];
-            for (int i = 0; i < 16; ++i)
-            {
-                ActivePieces[i] = new Piece(oBoard.ActivePieces[i].height, oBoard.ActivePieces[i].color, oBoard.ActivePieces[i].shape, oBoard.ActivePieces[i].full);
-            }
+                ActivePieces = new Piece[oBoard.activePieces.Length];
+                for (int i = 0; i < oBoard.activePieces.Length; ++i)
+                {
+                    ActivePieces[i] = new Piece(oBoard.ActivePieces[i].height, oBoard.ActivePieces[i].color, oBoard.ActivePieces[i].shape, oBoard.ActivePieces[i].full);
+                }
+                SelectedPiece = oBoard.SelectedPiece;
+           
         }
 
         public Board()
@@ -63,6 +65,20 @@ namespace Game
             ActivePieces[13] = new Piece(0, 0, 1, 0);
             ActivePieces[14] = new Piece(0, 0, 0, 1);
             ActivePieces[15] = new Piece(0, 0, 0, 0);
+        }
+        public void setActivePieces(Piece[] list, Piece p)
+        {
+            activePieces = new Piece[activePieces.Length - 1];
+            int index=0;
+            for (int i = 0; i < list.Length-1; i++)
+            {
+                if (list[i] != p)
+                {
+                    activePieces[index] = new Piece(list[i].height, list[i].color, list[i].shape, list[i].full);
+                    index++;
+                }
+            }
+
         }
 
         public  QuartoHeuristic Heuristic
@@ -171,7 +187,7 @@ namespace Game
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (bBoard[i, j] == null)
+                    if (bBoard[i, j].color == 2)
                     {
                         return false;
                     }
