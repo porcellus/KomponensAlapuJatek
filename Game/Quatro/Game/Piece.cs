@@ -66,7 +66,7 @@ namespace Game
             setPiece(vHeight, vColor, vShape, vFull);
         }
         
-        private void setPiece(int vHeight, int vColor, int vShape, int vFull)
+        public void setPiece(int vHeight, int vColor, int vShape, int vFull)
         {
             Height = vHeight; //1 magas 0 alacsony
             Color = vColor;  //1 fehér 0 fekete
