@@ -4,6 +4,7 @@ using Game.GameBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameTypeManager;
 
 namespace Client.Client
 {
@@ -11,7 +12,7 @@ namespace Client.Client
     {
         private Server.Connector _Connector;
         private List<Int32> lobbyList;
-        private IDictionary<string, KeyValuePair<Func<AbstractGame>, Func<AbstractGameGUI>>> GameDict;
+        private IDictionary<string, GamePair> GameDict;
         private Dictionary<String, Type> AIAlgDict;
 
         public IList<string> GetAvailableGameTypes()
@@ -31,7 +32,7 @@ namespace Client.Client
 
         public UserControl getGameGUI(AbstractGame game)
         {
-            var gamegui = GameDict[game.GetType().Name].Value();
+            var gamegui = GameDict[game.GetType().Name].GameGuiFunc();
             var gui = gamegui.GetGameGUI();
             gamegui.AddToGame(game, PlayerType.PlayerOne);
             return gui;
@@ -39,7 +40,7 @@ namespace Client.Client
 
         public AbstractGame CreateLocalGame(string gameName)
         {
-            return GameDict[gameName].Key();
+            return GameDict[gameName].GameFunc();
         }
 
         public IList<string> GetAvailableAIAlgorithms()

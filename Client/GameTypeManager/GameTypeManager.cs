@@ -8,6 +8,16 @@ using Game.GameBase;
 
 namespace GameTypeManager
 {
+    public class GamePair
+    {
+        public Func<AbstractGame> GameFunc { get; set; }
+        public Func<AbstractGameGUI> GameGuiFunc { get; set; }
+        public GamePair(Func<AbstractGame> gameFunc, Func<AbstractGameGUI> gameGuiFunc)
+        {
+            GameFunc = gameFunc;
+            GameGuiFunc = gameGuiFunc;
+        }
+    }
     public class GameTypeManager
     {
         private GameTypeManager() {}
@@ -22,7 +32,7 @@ namespace GameTypeManager
         }
         public Dictionary<String, Type> GetAIAlgDict()
         {
-            Dictionary<String, Type> AIAlgDict = new Dictionary<String, Type>();
+            Dictionary<String, Type> aiAlgDict = new Dictionary<String, Type>();
             String path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
 
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -34,14 +44,14 @@ namespace GameTypeManager
                 {
                     if (t.GetInterfaces().Contains(typeof(IAIAlgorithm)))
                     {
-                        AIAlgDict.Add(t.Name, t);
+                        aiAlgDict.Add(t.Name, t);
                     }
                 }
             }
-            return AIAlgDict;
+            return aiAlgDict;
         }
 
-        public IDictionary<string, KeyValuePair<Func<AbstractGame>, Func<AbstractGameGUI>>> GetGameTypeDict()
+        public IDictionary<string, GamePair> GetGameTypeDict()
         {        
             var gameDict = new Dictionary<string, Type>();
             var guiDict = new Dictionary<string, Type>();
@@ -103,14 +113,14 @@ namespace GameTypeManager
                 }
                 //System.Diagnostics.Debug.Unindent();
             }
-            var GameDict = new Dictionary<string, KeyValuePair<Func<AbstractGame>, Func<AbstractGameGUI>>>();
+            var result = new Dictionary<string, GamePair>();
             
             foreach (var game in gameDict)
             {
                 System.Diagnostics.Debug.Write("Trying to add " + game.Key);
                 if (guiDict.ContainsKey(game.Key))
                 {
-                    GameDict[game.Key] = new KeyValuePair<Func<AbstractGame>, Func<AbstractGameGUI>>(
+                    result[game.Key] = new GamePair(
                         () => Activator.CreateInstance(game.Value) as AbstractGame,
                         () =>
                             {
@@ -121,7 +131,7 @@ namespace GameTypeManager
                     //System.Diagnostics.Debug.WriteLine(", and found gui, added.");
                 } //else System.Diagnostics.Debug.WriteLine(", but no gui, not added.");
             }
-            return GameDict;
+            return result;
         }
 
     }
