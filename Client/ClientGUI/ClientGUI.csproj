@@ -148,9 +148,21 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Game\GameBase\GameBase.csproj">
+      <Project>{FAEF5AD0-CADB-4419-A733-7DC39ED40D2A}</Project>
+      <Name>GameBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Game\Quatro\GameGUI\GameGUI.csproj">
+      <Project>{762ad1bc-e710-4f41-a4d0-d924143780ec}</Project>
+      <Name>GameGUI %28Game\Quatro\GameGUI%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AIAlgorithmBase\AIAlgorithmBase.csproj">
+      <Project>{27A307CF-D22F-4097-91F2-EE541604000F}</Project>
+      <Name>AIAlgorithmBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Client\Client.csproj">
       <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
-      <Name>Client</Name>
+      <Name>Client %28Client\Client%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\MinMax\MinMax.csproj">
       <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>

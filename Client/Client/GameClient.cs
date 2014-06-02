@@ -1,15 +1,9 @@
-﻿using Client.AIAlgorithmBase;
-using Game;
+﻿using System.Windows.Controls;
+using Client.AIAlgorithmBase;
 using Game.GameBase;
 using System;
 using System.Collections.Generic;
-using Client;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Reflection;
-using System.IO;
 
 namespace Client.Client
 {
@@ -17,38 +11,35 @@ namespace Client.Client
     {
         private Server.Connector _Connector;
         private List<Int32> lobbyList;
-
-        private Dictionary<String, Type> GameDict;
+        private IDictionary<string, KeyValuePair<Func<AbstractGame>, Func<AbstractGameGUI>>> GameDict;
         private Dictionary<String, Type> AIAlgDict;
 
         public IList<string> GetAvailableGameTypes()
         {
-
             if (GameDict == null)
             {
-                BuildGameTypeDict();
+                GameDict = GameTypeManager.GameTypeManager.GetInstance().GetGameTypeDict();
             }
+
             return GameDict.Keys.ToList();
         }
 
-        private void BuildGameTypeDict()
+        public IAIAlgorithm GetAI(string aiType)
         {
-            GameDict = new Dictionary<String, Type>();
-            String path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+            return Activator.CreateInstance(AIAlgDict[aiType]) as IAIAlgorithm;
+        }
 
-            DirectoryInfo dir = new DirectoryInfo(path);
-            FileInfo[] files = dir.GetFiles("*.dll");
-            foreach (FileInfo fi in files)
-            {
-                Assembly ass = Assembly.LoadFrom(fi.Name);
-                foreach (Type t in ass.GetTypes())
-                {
-                    if (t.IsSubclassOf(typeof(AbstractGame)) && t.GetConstructor(Type.EmptyTypes) != null)
-                    {
-                        GameDict.Add(t.Name, t);
-                    }
-                }
-            }
+        public UserControl getGameGUI(AbstractGame game)
+        {
+            var gamegui = GameDict[game.GetType().Name].Value();
+            var gui = gamegui.GetGameGUI();
+            gamegui.AddToGame(game, PlayerType.PlayerOne);
+            return gui;
+        }
+
+        public AbstractGame CreateLocalGame(string gameName)
+        {
+            return GameDict[gameName].Key();
         }
 
         public IList<string> GetAvailableAIAlgorithms()
@@ -56,30 +47,12 @@ namespace Client.Client
 
             if (AIAlgDict == null)
             {
-                BuildAIAlgDict();
+                AIAlgDict = GameTypeManager.GameTypeManager.GetInstance().GetAIAlgDict();
             }
             return AIAlgDict.Keys.ToList();
         }
 
-        private void BuildAIAlgDict()
-        {
-            AIAlgDict = new Dictionary<String, Type>();
-            String path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-
-            DirectoryInfo dir = new DirectoryInfo(path);
-            FileInfo[] dlls = dir.GetFiles("*.dll");
-            foreach (FileInfo fi in dlls)
-            {
-                Assembly ass = Assembly.LoadFrom(fi.Name);
-                foreach (Type t in ass.GetTypes())
-                {
-                    if (t.GetInterfaces().Contains(typeof(IAIAlgorithm)))
-                    {
-                        AIAlgDict.Add(t.Name, t);
-                    }
-                }
-            }
-        }
+  
 
         public bool ConnectToServer(string ip, string port)
         {
@@ -102,7 +75,7 @@ namespace Client.Client
         }
 
         public void CreateLocalGame(string gameName, string aiAlgorithm, object playerPosition)
-        {
+        {/*
             Type gameType;
             gameType = GameDict[gameName];
             AbstractGame game = Activator.CreateInstance(gameType) as AbstractGame;
@@ -111,7 +84,7 @@ namespace Client.Client
             Type algType;
             algType = GameDict[aiAlgorithm];
             IAIAlgorithm aiAlg = Activator.CreateInstance(algType) as IAIAlgorithm;
-            aiAlg.AddToGame(game, PlayerType.PlayerTwo);
+            aiAlg.AddToGame(game, PlayerType.PlayerTwo);*/
         }
 
         public void StartNetworkGame(string gameType, object startPosition)

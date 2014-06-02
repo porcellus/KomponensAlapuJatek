@@ -13,74 +13,23 @@ namespace Game
 {
     public class Quarto : AbstractGame
     {
-        public static Board activeBoard = new Board();
+        public Board activeBoard;
 
-             
-      
-        
+        public Quarto()
+        {
+            activeBoard = new Board();
+        }
 
         static BackgroundWorker gameThread = new BackgroundWorker();
-        public static void initGame()
+        public void initGame()
         {
             // ezzel a függvénnyel inicializáljuk és indítjuk a játékot
             try
             {
-               
-                for (int i = 0; i < activeBoard.BHeight; i++)
-                {
-                    for (int j = 0; j < activeBoard.BWidth; j++)
-                    {
-                        activeBoard.BBoard[i, j] = new Piece();
-                        activeBoard.BBoard[i, j].color = 2;
-                        activeBoard.BBoard[i, j].height = 2;
-                        activeBoard.BBoard[i, j].shape = 2;
-                        activeBoard.BBoard[i, j].full = 2;
-
-                    }
-                }
-              
-
-
-           
-
-                //a bábuk tömbje 1 0 kommentezve a Pieaces osztálynál
-               
-                activeBoard.ActivePieces[0] = new Piece();
-                activeBoard.ActivePieces[0].setPiece(1, 1, 1, 1);
-                activeBoard.ActivePieces[1] = new Piece();
-                activeBoard.ActivePieces[1].setPiece(1, 1, 1, 0);
-                activeBoard.ActivePieces[2] = new Piece();
-                activeBoard.ActivePieces[2].setPiece(1, 1, 0, 1);
-                activeBoard.ActivePieces[3] = new Piece();
-                activeBoard.ActivePieces[3].setPiece(1, 1, 0, 0);
-                activeBoard.ActivePieces[4] = new Piece();
-                activeBoard.ActivePieces[4].setPiece(1, 0, 1, 1);
-                activeBoard.ActivePieces[5] = new Piece();
-                activeBoard.ActivePieces[5].setPiece(1, 0, 1, 0);
-                activeBoard.ActivePieces[6] = new Piece();
-                activeBoard.ActivePieces[6].setPiece(1, 0, 0, 1);
-                activeBoard.ActivePieces[7] = new Piece();
-                activeBoard.ActivePieces[7].setPiece(1, 0, 0, 0);
-                activeBoard.ActivePieces[8] = new Piece();
-                activeBoard.ActivePieces[8].setPiece(0, 1, 1, 1);
-                activeBoard.ActivePieces[9] = new Piece();
-                activeBoard.ActivePieces[9].setPiece(0, 1, 1, 0);
-                activeBoard.ActivePieces[10] = new Piece();
-                activeBoard.ActivePieces[10].setPiece(0, 1, 0, 1);
-                activeBoard.ActivePieces[11] = new Piece();
-                activeBoard.ActivePieces[11].setPiece(0, 1, 0, 0);
-                activeBoard.ActivePieces[12] = new Piece();
-                activeBoard.ActivePieces[12].setPiece(0, 0, 1, 1);
-                activeBoard.ActivePieces[13] = new Piece();
-                activeBoard.ActivePieces[13].setPiece(0, 0, 1, 0);
-                activeBoard.ActivePieces[14] = new Piece();
-                activeBoard.ActivePieces[14].setPiece(0, 0, 0, 1);
-                activeBoard.ActivePieces[15] = new Piece();
-                activeBoard.ActivePieces[15].setPiece(0, 0, 0, 0);
-
                 //eldöntjük hogy ki kezd
                 Random random = new Random();
-                activeBoard.ActivePlayerIndex = random.Next(0, 1000) % 2;
+                //activeBoard.ActivePlayerIndex = random.Next(0, 1000) % 2;
+                activeBoard.ActivePlayerIndex = 0;
             }
             catch (Exception)
             {
@@ -111,31 +60,28 @@ namespace Game
                 throw new Exception("A Lépés nem sikerült");
             }
         }
-        public static void selectPiece(PlayerType type, Piece select)
+
+        public void selectPiece(PlayerType type, Piece select)
         {
             if (activeBoard.SelectedPiece == null)
             {
                 //kiválasztjuk a bábút amit az ellenfélnek le kell tenni majd kivesszük a bábúk tömbbjéből
                 if (type == PlayerType.PlayerOne && activeBoard.ActivePlayerIndex == 0)
                 {
-                    try
-                    {
+                   
                         activeBoard.SelectedPiece = select;
-                        activeBoard.ActivePieces = activeBoard.ActivePieces.Where(w => w != activeBoard.SelectedPiece).ToArray();
+                       
+                        activeBoard.setActivePieces( activeBoard.ActivePieces, activeBoard.SelectedPiece);
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
                         activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception("Hiba történt");
-                    }
+                   
                 }
                 else if (type == PlayerType.PlayerTwo && activeBoard.ActivePlayerIndex == 1)
                 {
                     try
                     {
                         activeBoard.SelectedPiece = select;
-                        activeBoard.ActivePieces = activeBoard.ActivePieces.Where(w => w != activeBoard.SelectedPiece).ToArray();
+                        activeBoard.setActivePieces(activeBoard.ActivePieces, activeBoard.SelectedPiece);
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
                         activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
                     }
@@ -149,17 +95,14 @@ namespace Game
         }
         
 
-        private static void startGameProcess(object sender, DoWorkEventArgs e)
+        private void startGameProcess(object sender, DoWorkEventArgs e)
         {
             //egy külön szálként indítjuk el a játékot ez maga a háttérfolyamat
             initGame();
             //addig mig a nem nyert valaki vagy nem raktak le minden bábút
             while (activeBoard.Winstate == false || !activeBoard.checkIsFull())
             {
-                
-                
-                Thread.Sleep(1000);
-
+                //Thread.Sleep(1000);
             }
         }
         public override double GetHeuristicValue(IState state, PlayerType current )
@@ -167,8 +110,13 @@ namespace Game
             if (state is Board)
             {
                 Board b = (Board)state;
-                int value = b.Heuristic.GetValue(b);
 
+
+                int value = b.Heuristic.GetValue(b);
+                if (current == PlayerType.PlayerOne)
+                {
+                    return -value;
+                }
                
                 return value;
 
@@ -217,14 +165,14 @@ namespace Game
                 {
                     index = 0;
                 }
-                if (activeBoard.Player[index].PlayerType != PlayerType.PlayerOne && activeBoard.Player[index].PlayerType != PlayerType.PlayerTwo)
-                {
-                    
+                //if (activeBoard.Player[index].PlayerType != PlayerType.PlayerOne && activeBoard.Player[index].PlayerType != PlayerType.PlayerTwo)
+                //{
+                   activeBoard.Player[index] = new Player();
                     activeBoard.Player[index].PlayerType = playerType;
                
                     activeBoard.Player[index].Callback = onStep;
-                }
-                if (activeBoard.Player[0].PlayerType != null && activeBoard.Player[0].PlayerType != null)
+                //}
+                if (activeBoard.Player[0] != null && activeBoard.Player[1] != null && activeBoard.Player[0].PlayerType != null && activeBoard.Player[0].PlayerType != null)
                 {
                     StartGame();
                 }
@@ -233,37 +181,90 @@ namespace Game
         
         public override IState SimulateStep(IState current, AbstractStep step)
         {
-            Board returnBoard = ((Board)current);
-            returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+            if (!(step is QuartoStep))
+                throw new Exception("Not proper step type!");
+            QuartoStep cStep = (QuartoStep)step;
+            Board returnBoard = new Board((Board)current);
+                
 
+            if (returnBoard.SelectedPiece == null)
+            {
+                returnBoard.SelectedPiece= cStep.P;
+                returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
+               // returnBoard.ActivePieces = returnBoard.ActivePieces.Where(w => w != returnBoard.SelectedPiece).ToArray();
+            }
+            else
+            {
+               
+                    returnBoard.insertPiece(cStep.X, cStep.Y, returnBoard.SelectedPiece);
+                    returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
+                    returnBoard.SelectedPiece = null;
+                    //activePlayer = (activePlayer + 1) % 2;
+                    returnBoard.checkWinningState();
+               
+            }
+            //returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+            if (returnBoard == (Board)current)
+            {
+                return null;
+            }
             return returnBoard;
         }
         
+        private string pieceToString(Piece p)
+        {
+            if (p == null || p.color == 2) return "----";
+            var ret = "";
+            if (p.height == 1) ret += "M";
+            else ret += "A";
+            if(p.full == 1) ret += "T";
+            else ret += "U";
+            if (p.shape == 1) ret += "O";
+            else ret += "Z";
+            if (p.color == 1) ret += "Z";
+            else ret += "K";
+            return ret;
+        }
        
         public override AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
         {
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");
+            QuartoStep cStep = (QuartoStep)step;
             if (activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType == playerType)
             {
-                QuartoStep cStep = (QuartoStep)step;
                 if (activeBoard.SelectedPiece == null)
                 {
                     selectPiece(playerType, cStep.P);
-                    
                 }
                 else
                 {
                     updateGameState(cStep.X, cStep.Y);
-                    
-
                 }
-
-
-               
             }
-            activeBoard.Player[0].Callback(activeBoard);
-            activeBoard.Player[1].Callback(activeBoard);
+            System.Diagnostics.Debug.WriteLine(playerType + " steps: " + cStep.X + "," + cStep.Y + ":" + pieceToString(cStep.p));
+            System.Diagnostics.Debug.WriteLine("==>");
+            System.Diagnostics.Debug.WriteLine("Selected piece: " + pieceToString(activeBoard.SelectedPiece));
+            for (int i = 0; i < 4; ++i )
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    System.Diagnostics.Debug.Write(pieceToString(activeBoard.BBoard[i, j]));
+                    System.Diagnostics.Debug.Write(" - ");
+                }
+                System.Diagnostics.Debug.WriteLine("");
+            }
+            if (activeBoard.Player[0].PlayerType == activeBoard.CurrentPlayer)
+            {
+                activeBoard.Player[0].Callback(activeBoard);
+            }
+            else
+            {   
+                if (activeBoard.Winstate == false || activeBoard.checkIsFull())
+                {
+                    activeBoard.Player[1].Callback(activeBoard);
+                }
+            }
 
             return AbstractStep.Result.Success;
         }
@@ -271,39 +272,29 @@ namespace Game
         {
             try
             {
-              Board  state = (Board)st;
+                Board  state = new Board((Board)st);
                 List<QuartoStep> lista = new List<QuartoStep>();
 
                 QuartoStep step;
 
-                if (activeBoard.SelectedPiece == null && activeBoard.BBoard != null && activeBoard == (Board)state)
+                if (state.SelectedPiece != null )
                 {
-
-                    for (int i = 0; i < activeBoard.ActivePieces.Length; i++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (int k = 0; k < 4; k++)
                         {
-                            for (int k = 0; k < 4; k++)
+                            if (state.BBoard[j, k].color == 2)
                             {
-                                if (state.BBoard[j, k].color == 2)
-                                {
-
-
-                                    step = new QuartoStep(j, k, activeBoard.SelectedPiece);
-                                    lista.Add(step);
-                                }
-
+                                step = new QuartoStep(j, k, state.SelectedPiece);
+                                lista.Add(step);
                             }
-
                         }
 
                     }
-
-
                 }
                 else
                 {
-                    for (int i = 0; i < activeBoard.ActivePieces.Length; i++)
+                    for (int i = 0; i < state.ActivePieces.Length; i++)
                     {
                         for (int j = 0; j < 4; j++)
                         {
@@ -311,9 +302,7 @@ namespace Game
                             {
                                 if (state.BBoard[j, k].color == 2)
                                 {
-
-
-                                    step = new QuartoStep(j, k, activeBoard.ActivePieces[i]);
+                                    step = new QuartoStep(j, k, state.ActivePieces[i]);
                                     lista.Add(step);
                                 }
 
@@ -330,7 +319,7 @@ namespace Game
             }
             catch (Exception)
             {
-                return null;
+                return new List<QuartoStep>();
             }
         }
 

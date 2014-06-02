@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Controls;
 using Client.Client;
 using ClientGUI.Model;
 using ClientGUI.View;
+using Game.GameBase;
 
 namespace ClientGUI.ViewModel
 {
@@ -20,7 +22,7 @@ namespace ClientGUI.ViewModel
 
         public MainViewModel()
         {
-            _client = ClientFactory.CreateClient(ClientFactory.ClientType.MOCK);
+            _client = ClientFactory.CreateClient(ClientFactory.ClientType.LIVE);
             GamesList = _client.GetAvailableGameTypes();
             SetupViewModels();
             SetupCommands();
@@ -158,6 +160,15 @@ namespace ClientGUI.ViewModel
 
         private UserControl GetControlForSelectedGame()
         {
+            var game = _client.CreateLocalGame(SelectorViewModel.SelectedGame);
+            if(_client.GetAvailableAIAlgorithms().Count >0){
+                _client.GetAI(_client.GetAvailableAIAlgorithms()[0]).AddToGame(game,PlayerType.PlayerTwo);
+                System.Diagnostics.Debug.WriteLine(_client.GetAvailableAIAlgorithms()[0]);
+            }
+
+            return _client.getGameGUI(game);
+            
+            /*
             switch (SelectorViewModel.SelectedGame)
             {
                 case "Chess":
@@ -166,7 +177,7 @@ namespace ClientGUI.ViewModel
                     return new QuatroGame();
                 default:
                     return null;
-            }
+            }*/
         }
     }
 }

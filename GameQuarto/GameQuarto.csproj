@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76F939C6-4D6C-4745-8093-8558887327C6}</ProjectGuid>
+    <ProjectGuid>{07909161-1910-4086-88B6-C9AA9ED38D07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTest</RootNamespace>
-    <AssemblyName>UnitTest</AssemblyName>
+    <RootNamespace>GameQuarto</RootNamespace>
+    <AssemblyName>GameQuarto</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,33 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
-    <Compile Include="UnitTestAIAlgorithm.cs" />
+    <Compile Include="BoardTests.cs" />
+    <Compile Include="PieceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Client\AIAlgorithmBase\AIAlgorithmBase.csproj">
-      <Project>{27A307CF-D22F-4097-91F2-EE541604000F}</Project>
-      <Name>AIAlgorithmBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Client\AlfaBeta\AlfaBeta.csproj">
-      <Project>{24267A3B-C589-43A2-AE3F-4476F0A02373}</Project>
-      <Name>AlfaBeta</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Client\Client\Client.csproj">
-      <Project>{3645d980-be1e-4851-b1ad-17f8909d111c}</Project>
-      <Name>Client %28Client\Client%29</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Client\MinMax\MinMax.csproj">
-      <Project>{d4cf5e94-f40e-4e9c-a269-db3da83294e1}</Project>
-      <Name>MinMax</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Game\GameBase\GameBase.csproj">
-      <Project>{FAEF5AD0-CADB-4419-A733-7DC39ED40D2A}</Project>
-      <Name>GameBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Game\Quatro\Game\Game.csproj">
-      <Project>{01f3ca3f-d432-465a-bf18-a0eafab97b80}</Project>
+      <Project>{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}</Project>
       <Name>Game %28Game\Quatro\Game%29</Name>
     </ProjectReference>
   </ItemGroup>

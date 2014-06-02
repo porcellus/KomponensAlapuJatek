@@ -109,7 +109,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Game\Game.csproj">
       <Project>{01f3ca3f-d432-465a-bf18-a0eafab97b80}</Project>
-      <Name>Game</Name>
+      <Name>Game %28Game\Quatro\Game%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

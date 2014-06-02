@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientGUI", "Client\ClientGUI\ClientGUI.csproj", "{7E783BFA-DA38-4892-9CA3-62326DE3637F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{762AD1BC-E710-4F41-A4D0-D924143780EC} = {762AD1BC-E710-4F41-A4D0-D924143780EC}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{0587C9B4-7BB4-41B9-B378-FD0C74A508D6}"
 EndProject
@@ -47,6 +51,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuartoTests", "GameTests\Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuatroGreenGameGUI", "QuatroGreenGameGUI\QuatroGreenGameGUI.csproj", "{6876337F-632B-43E9-A5B3-15773CC88575}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{14EB8916-017E-4530-AE1E-F30CE92BE04D}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,9 +96,11 @@ Global
 		{E2795FAA-E49C-45D1-B19B-AC5625A0BF1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2795FAA-E49C-45D1-B19B-AC5625A0BF1D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01F3CA3F-D432-465A-BF18-A0EAFAB97B80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{762AD1BC-E710-4F41-A4D0-D924143780EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{762AD1BC-E710-4F41-A4D0-D924143780EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{762AD1BC-E710-4F41-A4D0-D924143780EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{762AD1BC-E710-4F41-A4D0-D924143780EC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C4BDA50-3EA0-4EDB-B145-9F995721F50A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -110,6 +123,7 @@ Global
 		{D74951B9-B84C-4CDF-A214-C81016BA88BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D74951B9-B84C-4CDF-A214-C81016BA88BF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6876337F-632B-43E9-A5B3-15773CC88575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6876337F-632B-43E9-A5B3-15773CC88575}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6876337F-632B-43E9-A5B3-15773CC88575}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6876337F-632B-43E9-A5B3-15773CC88575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

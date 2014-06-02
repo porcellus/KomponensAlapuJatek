@@ -13,24 +13,27 @@ using Game.GameBase;
 namespace Game.Quatro.GameGUI
 {
     //GameGUI - the main reason of this class is to give back a new game gui user control
-    public class GameGUI
+    public class GameGUI : AbstractGameGUI, GameGUI<Quarto>
     {
         QuatroGreenGameGUI.GreenGUI gui;
 
         //returns a new GameGui
         //_quatro: a quatro object
-        public UserControl getGameGui(Game.Quarto _quatro)
-        {
-            gui = new Game.QuatroGreenGameGUI.GreenGUI(_quatro);
-            return gui;
-        }
 
         // Sets the UserControl to player one or two
         // game: nothing to do
         // pt: player one or two
-        public void AddToGame(object game, PlayerType pt)
+        public override void AddToGame(AbstractGame game, PlayerType pt)
         {
-            gui.AddToGame(pt);
+            if(game is Quarto)
+                gui.AddToGame((Quarto) game, pt);
+            else throw new Exception("Bad game type");
+        }
+
+        public override UserControl GetGameGUI()
+        {
+            gui = new Game.QuatroGreenGameGUI.GreenGUI();
+            return gui;
         }
     }
 }

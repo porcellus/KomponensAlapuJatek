@@ -15,7 +15,7 @@ namespace Game
         public int height
         {
             get { return Height; }
-            set { Height = value; }
+           // set { Height = value; }
         }
 
 
@@ -23,21 +23,21 @@ namespace Game
         public int color
         {
             get { return Color; }
-            set { Color = value; }
+            //set { Color = value; }
         }
 
 
         public int shape
         {
             get { return Shape; }
-            set { Shape = value; }
+            //set { Shape = value; }
         }
 
 
         public int full
         {
             get { return Full; }
-            set { Full = value; }
+            //set { Full = value; }
         }
 
         public int getNumber(){
@@ -46,6 +46,7 @@ namespace Game
 
         public Piece()
         {
+            setPiece(2,2,2,2);
         }
 
         public Piece(int vSum)
@@ -64,7 +65,7 @@ namespace Game
         {
             setPiece(vHeight, vColor, vShape, vFull);
         }
-
+        
         public void setPiece(int vHeight, int vColor, int vShape, int vFull)
         {
             Height = vHeight; //1 magas 0 alacsony
