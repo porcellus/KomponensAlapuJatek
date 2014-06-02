@@ -197,7 +197,7 @@ namespace Game
             {
                
                     returnBoard.insertPiece(cStep.X, cStep.Y, returnBoard.SelectedPiece);
-                    returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
+                    //returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
                     returnBoard.SelectedPiece = null;
                     //activePlayer = (activePlayer + 1) % 2;
                     returnBoard.checkWinningState();
@@ -228,6 +228,11 @@ namespace Game
        
         public override AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
         {
+            if (activeBoard.Winstate || activeBoard.checkIsFull())
+            {
+                return AbstractStep.Result.Failure;
+            }
+
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");
             QuartoStep cStep = (QuartoStep)step;
@@ -260,10 +265,7 @@ namespace Game
             }
             else
             {   
-                if (activeBoard.Winstate == false || activeBoard.checkIsFull())
-                {
-                    activeBoard.Player[1].Callback(activeBoard);
-                }
+               activeBoard.Player[1].Callback(activeBoard);
             }
 
             return AbstractStep.Result.Success;

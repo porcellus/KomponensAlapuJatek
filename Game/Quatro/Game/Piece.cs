@@ -5,20 +5,18 @@ using System.Text;
 
 namespace Game
 {
-    public class Piece
+    public class Piece : IEquatable<Piece>
     {
-        private int Height = 2; //1 magas 0 alacsony
-        private int Color = 2;  //1 fehér 0 fekete
-        private int Shape = 2;  //1 kerek 0 szögletes
-        private int Full = 2;   //1 lyukas 0 sima
+        private int Height = 2; 
+        private int Color = 2;  
+        private int Shape = 2;  
+        private int Full = 2;   
 
         public int height
         {
             get { return Height; }
            // set { Height = value; }
         }
-
-
 
         public int color
         {
@@ -41,7 +39,8 @@ namespace Game
         }
 
         public int getNumber(){
-            return 8 * full + 4 * shape + 2 * color + height;
+            return 8 * color + 4 * height + 2 * shape + full;
+            //return 8 * full + 4 * shape + 2 * color + height;
         }
 
         public Piece()
@@ -51,14 +50,13 @@ namespace Game
 
         public Piece(int vSum)
         {
-            int vHeight = vSum % 2;
-            vSum = (vSum - vHeight) / 2;
-            int vColor = vSum % 2;
-            vSum = (vSum - vColor) / 2;
-            int vShape = vSum % 2;
-            vSum = (vSum - vShape) / 2;
-            int vFull = vSum;
-            setPiece(vHeight, vColor, vShape, vFull);
+            Full = vSum % 2;
+            vSum = (vSum - Full) / 2;
+            Shape = vSum % 2;
+            vSum = (vSum - Shape) / 2;
+            Height = vSum % 2;
+            vSum = (vSum - Height) / 2;
+            Color = vSum;
         }
 
         public Piece(int vHeight, int vColor, int vShape, int vFull)
@@ -74,5 +72,15 @@ namespace Game
             Full = vFull;   //1 lyukas 0 sima
 
         }
+        public bool Equals(Piece p1)
+        {
+            if (p1 == null)
+            {
+                return false;
+            }
+            return (Height == p1.Height && Color == p1.Color && Shape == p1.Shape && Full == p1.Full);
+         
+        }
+
     }
 }

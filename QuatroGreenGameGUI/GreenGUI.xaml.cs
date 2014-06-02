@@ -66,9 +66,9 @@ namespace Game.QuatroGreenGameGUI
                 Image im = new Image();
                 im.Source = imageEmpty.Source;
                 b.Content = im;
-                b.SetValue(Grid.RowProperty, i%4);
-                b.SetValue(Grid.ColumnProperty, i/4);
-                area[i%4,i/4] = b;
+                b.SetValue(Grid.RowProperty, i/4);
+                b.SetValue(Grid.ColumnProperty, i%4);
+                area[i/4,i%4] = b;
             }
 
             // Create buttons (available)
@@ -81,9 +81,9 @@ namespace Game.QuatroGreenGameGUI
                 Image im = new Image();
                 im.Source = images[i].Source;
                 b.Content = im;
-                b.SetValue(Grid.RowProperty, i % 4);
-                b.SetValue(Grid.ColumnProperty, i / 4);
-                available[i%4,i/4] = b;
+                b.SetValue(Grid.RowProperty, i / 4);
+                b.SetValue(Grid.ColumnProperty, i % 4);
+                available[i/4,i%4] = b;
             }
 
             // Set the two player string
@@ -111,29 +111,34 @@ namespace Game.QuatroGreenGameGUI
             // Sets the game area according to the data given
             for (int i = 0; i < 16; i++)
             {
-                area[i % 4, i / 4].IsEnabled = false;
-                (area[i % 4, i / 4].Content as Image).Source = imageEmpty.Source;
+                var btn = (((System.Windows.Controls.Panel)(gameArea.Children[0])).Children[i]) as Button;
+                btn.IsEnabled = false;
+                (btn.Content as Image).Source = imageEmpty.Source;
+                
             }
 
             for (int i = 0; i < 16; i++)
             {
-                int id = paa[i%4, i/4].getNumber();
-                if (m && !c) area[i % 4, i / 4].IsEnabled = true;
-                (area[i % 4, i / 4].Content as Image).Source = id < 16 ? images[id].Source : imageEmpty.Source;
+                var btn = (((System.Windows.Controls.Panel)(gameArea.Children[0])).Children[i]) as Button;
+                int id = paa[i/4, i%4].getNumber();
+                if (m && c) btn.IsEnabled = true;
+                (btn.Content as Image).Source = id < 16 ? images[id].Source : imageEmpty.Source;
+
             }
-            (area[1, 1].Content as Image).Source = images[1].Source;
 
             // Sets the available pieces according to the data given
             for (int i = 0; i < 16; i++)
             {
-                available[i % 4, i / 4].IsEnabled = false;
-                (available[i % 4, i / 4].Content as Image).Source = imageEmpty.Source;
+                var btn = (((System.Windows.Controls.Panel)(availablePieces)).Children[i]) as Button;
+                btn.IsEnabled = false;
+                (btn.Content as Image).Source = imageEmpty.Source;
             }
             foreach (Piece x in pa)
             {
                 int id = x.getNumber();
-                if (m && c) available[id % 4, id / 4].IsEnabled = true;
-                (available[id % 4, id / 4].Content as Image).Source = id < 16 ? images[id].Source : imageEmpty.Source;
+                var btn = (((System.Windows.Controls.Panel)(availablePieces)).Children[id]) as Button;
+                if (m && !c) btn.IsEnabled = true;
+                (btn.Content as Image).Source = id < 16 ? images[id].Source : imageEmpty.Source;
             }
 
             // Sets the selected piece
@@ -141,7 +146,7 @@ namespace Game.QuatroGreenGameGUI
             else ImNext.Source = images[p.getNumber()].Source;
             
             // Tells if someone wins the game
-            if (w) MessageBox.Show(m?"You lose.":"You win!");
+            if (w) MessageBox.Show(!m ? "You lose.":"You win!");
             
             // Changes if the other player comes
             turns = m ? 0 : 1;
@@ -192,7 +197,7 @@ namespace Game.QuatroGreenGameGUI
             btn.IsEnabled = false;
 
             // Sends the step to the quatro object
-            QuartoStep qs = new QuartoStep(id % 4, id / 4, null);
+            QuartoStep qs = new QuartoStep(id / 4, id % 4, null);
             quatro.DoStep(qs, iam);
 
             ShowNextEvent();

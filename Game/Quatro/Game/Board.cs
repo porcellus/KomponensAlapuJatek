@@ -66,19 +66,12 @@ namespace Game
             ActivePieces[14] = new Piece(0, 0, 0, 1);
             ActivePieces[15] = new Piece(0, 0, 0, 0);
         }
+
         public void setActivePieces(Piece[] list, Piece p)
         {
-            activePieces = new Piece[activePieces.Length - 1];
-            int index=0;
-            for (int i = 0; i < list.Length-1; i++)
-            {
-                if (list[i] != p)
-                {
-                    activePieces[index] = new Piece(list[i].height, list[i].color, list[i].shape, list[i].full);
-                    index++;
-                }
-            }
-
+            var nList = list.ToList();
+            nList.RemoveAll(a => a.Equals(p));
+            activePieces = nList.ToArray();
         }
 
         public  QuartoHeuristic Heuristic
@@ -217,9 +210,14 @@ namespace Game
                         fl += Convert.ToInt16(bBoard[row, col].full);
 
                     }
+                    else
+                    {
+                        hg = cl = sp = fl = -1;
+                        break;
+                    }
 
                 }
-                winstate = ((hg == 4) || (cl == 4) || (sp == 4) || (fl == 4));
+                winstate = (win(hg) || win(cl) || win(sp) || win(fl));
                 hg = 0;
                 cl = 0;
                 sp = 0;
@@ -241,9 +239,14 @@ namespace Game
                         fl += Convert.ToInt16(bBoard[row, col].full);
 
                     }
+                    else
+                    {
+                        hg = cl = sp = fl = -1;
+                        break;
+                    }
 
                 }
-                winstate = ((hg == 4) || (cl == 4) || (sp == 4) || (fl == 4));
+                winstate = (win(hg) || win(cl) || win(sp) || win(fl));
                 hg = 0;
                 cl = 0;
                 sp = 0;
@@ -263,10 +266,15 @@ namespace Game
                     fl += Convert.ToInt16(bBoard[row, column].full);
 
                 }
+                else
+                {
+                    hg = cl = sp = fl = -1;
+                    break;
+                }
                 column++;
 
             }
-            winstate = ((hg == 4) || (cl == 4) || (sp == 4) || (fl == 4));
+            winstate = (win(hg) || win(cl) || win(sp) || win(fl));
             hg = 0;
             cl = 0;
             sp = 0;
@@ -285,10 +293,15 @@ namespace Game
                     fl += Convert.ToInt16(bBoard[row, column].full);
 
                 }
+                else
+                {
+                    hg = cl = sp = fl = -1;
+                    break;
+                }
                 column--;
 
             }
-            winstate = ((hg == 4) || (cl == 4) || (sp == 4) || (fl == 4));
+            winstate = (win(hg) || win(cl) || win(sp) || win(fl));
             hg = 0;
             cl = 0;
             sp = 0;
@@ -309,7 +322,12 @@ namespace Game
                         cl += Convert.ToInt16(bBoard[row, col].full) + Convert.ToInt16(bBoard[row + 1, col].full) + Convert.ToInt16(bBoard[row, col + 1].full) + Convert.ToInt16(bBoard[row + 1, col + 1].full);
 
                     }
-                    winstate = ((hg == 4) || (cl == 4) || (sp == 4) || (fl == 4));
+                    else
+                    {
+                        hg = cl = sp = fl = -1;
+                        break;
+                    }
+                    winstate = (win(hg) || win(cl) || win(sp) || win(fl));
                     hg = 0;
                     cl = 0;
                     sp = 0;
@@ -323,6 +341,9 @@ namespace Game
         }
 
 
-       
+        private Boolean win(int valami)
+        {
+            return valami == 0 || valami == 4;
+        }
     }
 }
