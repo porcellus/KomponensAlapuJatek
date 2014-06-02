@@ -33,9 +33,6 @@
     <Reference Include="AIAlgorithmBase">
       <HintPath>..\Game\bin\Debug\AIAlgorithmBase.dll</HintPath>
     </Reference>
-    <Reference Include="GameBase">
-      <HintPath>..\Game\bin\Debug\GameBase.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -106,6 +103,10 @@
     <ProjectReference Include="..\..\..\QuatroGreenGameGUI\QuatroGreenGameGUI.csproj">
       <Project>{6876337f-632b-43e9-a5b3-15773cc88575}</Project>
       <Name>QuatroGreenGameGUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GameBase\GameBase.csproj">
+      <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
+      <Name>GameBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\Game\Game.csproj">
       <Project>{01f3ca3f-d432-465a-bf18-a0eafab97b80}</Project>

@@ -13,7 +13,7 @@ using Game.GameBase;
 namespace Game.Quatro.GameGUI
 {
     //GameGUI - the main reason of this class is to give back a new game gui user control
-    public class GameGUI : AbstractGameGUI, GameGUI<Quarto>
+    public class GameGUI :AbstractGameGUI, GameGUI<Quarto>
     {
         QuatroGreenGameGUI.GreenGUI gui;
 
