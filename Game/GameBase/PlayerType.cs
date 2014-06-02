@@ -5,6 +5,8 @@ namespace Game.GameBase
     public enum PlayerType
     {
         PlayerOne,
-        PlayerTwo
+        PlayerTwo,
+        Observer,
+        NoOne
     }
 }

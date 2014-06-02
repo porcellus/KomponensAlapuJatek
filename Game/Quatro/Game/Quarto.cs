@@ -259,14 +259,14 @@ namespace Game
                 }
                 System.Diagnostics.Debug.WriteLine("");
             }
-            if (activeBoard.Player[0].PlayerType == activeBoard.CurrentPlayer)
+
+            if (activeBoard.Winstate || activeBoard.checkIsFull())
             {
-                activeBoard.Player[0].Callback(activeBoard);
+                activeBoard.CurrentPlayer = PlayerType.NoOne;
             }
-            else
-            {   
-               activeBoard.Player[1].Callback(activeBoard);
-            }
+
+            activeBoard.Player[0].Callback(activeBoard);
+            activeBoard.Player[1].Callback(activeBoard);
 
             return AbstractStep.Result.Success;
         }
