@@ -15,7 +15,6 @@ namespace Client.Client
         Game.GameBase.AbstractGame CreateLocalGame(string gameName);
 
         IList<int> GetGamesInLobby(string lobby);
-        IList<string> GetAvailableAIAlgorithms();
         bool JoinGame(string opponentData);
         bool ConnectToServer(string ip, string port);
         
