@@ -68,7 +68,7 @@ namespace Client.MinMax
         private double MaxValue(IState state)
         {
             _ExpandedNodes++;
-            if (_Depth == _ExpandedNodes)
+            if (_Depth <= _ExpandedNodes)
             {
                 return _Game.GetHeuristicValue(state, _PlayerType);
             }
@@ -80,7 +80,7 @@ namespace Client.MinMax
         private double MinValue(IState state)
         {
             _ExpandedNodes++;
-            if (_Depth == _ExpandedNodes)
+            if (_Depth <= _ExpandedNodes)
             {
                 return -_Game.GetHeuristicValue(state,_PlayerType);
             }
