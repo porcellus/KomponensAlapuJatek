@@ -277,22 +277,21 @@ namespace ClientGUI.ViewModel
                 AvailablePlayerTypesList = new ObservableCollection<PlayerTypeViewModel>
                 {
                     new PlayerTypeViewModel(PlayerType.NoOne),
-                    new PlayerTypeViewModel(PlayerType.Observer),
                     new PlayerTypeViewModel(PlayerType.PlayerOne),
                     new PlayerTypeViewModel(PlayerType.PlayerTwo)
                 };
             }
             else
             {
-                AvailablePlayerTypesList[2].IsAvailable = true; // player one
-                AvailablePlayerTypesList[3].IsAvailable = true; // player two
+                AvailablePlayerTypesList[1].IsAvailable = true; // player one
+                AvailablePlayerTypesList[2].IsAvailable = true; // player two
             }
         }
 
         private void RemoveActualPlayersFromAvailable()
         {
-            AvailablePlayerTypesList[2].IsAvailable = false; // player one
-            AvailablePlayerTypesList[3].IsAvailable = false; // player two
+            AvailablePlayerTypesList[1].IsAvailable = false; // player one
+            AvailablePlayerTypesList[2].IsAvailable = false; // player two
         }
 
         private void UpdatePlayerTypes(PlayerTypeViewModel current, PlayerTypeViewModel selected)

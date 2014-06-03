@@ -1,13 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
 using Game.GameBase;
 
 namespace ClientGUI.ViewModel
 {
-    class PlayerTypeViewModel : ViewModelBase
+    internal class PlayerTypeViewModel : ViewModelBase
     {
-        private readonly PlayerType _playerType;
         private readonly string _description;
+        private readonly PlayerType _playerType;
         private bool _isAvailable;
 
         public PlayerTypeViewModel(PlayerType playerType)
@@ -26,7 +25,7 @@ namespace ClientGUI.ViewModel
                     _description = "Néző";
                     break;
                 case PlayerType.NoOne:
-                    _description = "Üres";
+                    _description = "MI";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("playerType");
