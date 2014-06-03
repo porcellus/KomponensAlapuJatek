@@ -15,32 +15,32 @@ namespace Game
         public int height
         {
             get { return Height; }
-           // set { Height = value; }
+         
         }
 
         public int color
         {
             get { return Color; }
-            //set { Color = value; }
+           
         }
 
 
         public int shape
         {
             get { return Shape; }
-            //set { Shape = value; }
+            
         }
 
 
         public int full
         {
             get { return Full; }
-            //set { Full = value; }
+          
         }
 
         public int getNumber(){
             return 8 * color + 4 * height + 2 * shape + full;
-            //return 8 * full + 4 * shape + 2 * color + height;
+            
         }
 
         public Piece()
@@ -66,10 +66,10 @@ namespace Game
         
         public void setPiece(int vHeight, int vColor, int vShape, int vFull)
         {
-            Height = vHeight; //1 magas 0 alacsony
-            Color = vColor;  //1 fehér 0 fekete
-            Shape = vShape;  //1 kerek 0 szögletes
-            Full = vFull;   //1 lyukas 0 sima
+            Height = vHeight; 
+            Color = vColor;  
+            Shape = vShape;  
+            Full = vFull;   
 
         }
         public bool Equals(Piece p1)

@@ -66,8 +66,8 @@ namespace Game
             ActivePieces[14] = new Piece(0, 0, 0, 1);
             ActivePieces[15] = new Piece(0, 0, 0, 0);
         }
-
-        public void setActivePieces(Piece[] list, Piece p)
+        // Az elérhető bábúk módosítása, kivesz egy elemet
+        public void UpdateActivePieces(Piece[] list, Piece p)
         {
             var nList = list.ToList();
             nList.RemoveAll(a => a.Equals(p));
@@ -160,8 +160,9 @@ namespace Game
         public void insertPiece(int x, int y, Piece iPiece)
         {
             bBoard[x, y] = iPiece;
-            //System.Diagnostics.Debug.WriteLine(this + "written value of "+x+":"+y+"="+iPiece);
+            
         }
+        //az adott mező üres-e
         public bool checkIsEmpty(int x, int y)
         {
             if (bBoard[x, y].color == 2)
@@ -174,6 +175,7 @@ namespace Game
                 return false;
             }
         }
+        //Minden mezőre került-e bábú
         public bool checkIsFull()
         {
             for (int i = 0; i < 4; i++)
@@ -189,6 +191,7 @@ namespace Game
             }
             return true;
         }
+        //Nyerő állapot keresésé a bBordon
         public void checkWinningState()
         {
             int hg = 0;

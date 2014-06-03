@@ -23,24 +23,13 @@ namespace Game
         static BackgroundWorker gameThread = new BackgroundWorker();
         public void initGame()
         {
-            // ezzel a függvénnyel inicializáljuk és indítjuk a játékot
-            try
-            {
-                //eldöntjük hogy ki kezd
-                Random random = new Random();
-                //activeBoard.ActivePlayerIndex = random.Next(0, 1000) % 2;
+            
                 activeBoard.ActivePlayerIndex = 0;
-            }
-            catch (Exception)
-            {
-                throw new Exception("A játék inicilaizálása sikertelen");
-            }
+           
 
         }
 
-
-        //az elenfél által választott bábut lerakjuk pálya x y korrdinátára 0 tól indexelve
-       
+        //A kiválasztott elemet lerakjuk a játéktérre
         public void updateGameState(int x, int y)
         {
             try
@@ -50,7 +39,6 @@ namespace Game
                     activeBoard.insertPiece(x, y, activeBoard.SelectedPiece);
 
                     activeBoard.SelectedPiece = null;
-                   //activePlayer = (activePlayer + 1) % 2;
                     activeBoard.checkWinningState();
                 }
 
@@ -60,36 +48,25 @@ namespace Game
                 throw new Exception("A Lépés nem sikerült");
             }
         }
-
+        //Kiválasztjuk a bábút
         public void selectPiece(PlayerType type, Piece select)
         {
             if (activeBoard.SelectedPiece == null)
             {
                 //kiválasztjuk a bábút amit az ellenfélnek le kell tenni majd kivesszük a bábúk tömbbjéből
-                if (type == PlayerType.PlayerOne && activeBoard.ActivePlayerIndex == 0)
+                if (activeBoard.ActivePieces.ToList().Contains(select))
                 {
-                   
+                    if (type == PlayerType.PlayerOne && activeBoard.ActivePlayerIndex == 0 || type == PlayerType.PlayerTwo && activeBoard.ActivePlayerIndex == 1)
+                    {
+
                         activeBoard.SelectedPiece = select;
-                       
-                        activeBoard.setActivePieces( activeBoard.ActivePieces, activeBoard.SelectedPiece);
+                        activeBoard.UpdateActivePieces(activeBoard.ActivePieces, activeBoard.SelectedPiece);
                         activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
                         activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
-                   
-                }
-                else if (type == PlayerType.PlayerTwo && activeBoard.ActivePlayerIndex == 1)
-                {
-                    try
-                    {
-                        activeBoard.SelectedPiece = select;
-                        activeBoard.setActivePieces(activeBoard.ActivePieces, activeBoard.SelectedPiece);
-                        activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
-                        activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception("Hiba történt");
+
                     }
                 }
+               
             }
 
         }
@@ -105,6 +82,7 @@ namespace Game
                 //Thread.Sleep(1000);
             }
         }
+        //kiértékeljük a játtékállapotot
         public override double GetHeuristicValue(IState state, PlayerType current )
         {
             if (state is Board)
@@ -132,7 +110,7 @@ namespace Game
         {
 
             try
-            { //ezzel indítjuk a háttérszálat automatikusan meghívásra kerül az initGame-ben
+            { //ezzel indítjuk a háttérszálat 
                 gameThread.WorkerSupportsCancellation = true;
 
                 gameThread.DoWork += new DoWorkEventHandler(startGameProcess);
@@ -144,20 +122,17 @@ namespace Game
 
         }
        
-
+        //game info
         public override string GetGameTypeInfo()
         {
             return "Quarto";
         }
 
-       
-
-       
-
+          
+        //játékosok regisztrációja
         public override void RegisterAsPlayer(ref AbstractGame.StepHandler onStep, PlayerType playerType)
 
-        {
-           
+        {          
            
                 int index = 1;
                 // Index in the players list 
@@ -165,20 +140,17 @@ namespace Game
                 {
                     index = 0;
                 }
-                //if (activeBoard.Player[index].PlayerType != PlayerType.PlayerOne && activeBoard.Player[index].PlayerType != PlayerType.PlayerTwo)
-                //{
                    activeBoard.Player[index] = new Player();
                     activeBoard.Player[index].PlayerType = playerType;
                
                     activeBoard.Player[index].Callback = onStep;
-                //}
-                if (activeBoard.Player[0] != null && activeBoard.Player[1] != null && activeBoard.Player[0].PlayerType != null && activeBoard.Player[0].PlayerType != null)
+                 if (activeBoard.Player[0] != null && activeBoard.Player[1] != null )
                 {
                     StartGame();
                 }
 
         }
-        
+        // egy lépés szimulálása
         public override IState SimulateStep(IState current, AbstractStep step)
         {
             if (!(step is QuartoStep))
@@ -190,27 +162,25 @@ namespace Game
             if (returnBoard.SelectedPiece == null)
             {
                 returnBoard.SelectedPiece= cStep.P;
-                returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
-               // returnBoard.ActivePieces = returnBoard.ActivePieces.Where(w => w != returnBoard.SelectedPiece).ToArray();
+                returnBoard.UpdateActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
+              
             }
             else
             {
                
-                    returnBoard.insertPiece(cStep.X, cStep.Y, returnBoard.SelectedPiece);
-                    //returnBoard.setActivePieces(returnBoard.ActivePieces, returnBoard.SelectedPiece);
-                    returnBoard.SelectedPiece = null;
-                    //activePlayer = (activePlayer + 1) % 2;
-                    returnBoard.checkWinningState();
+                   returnBoard.insertPiece(cStep.X, cStep.Y, returnBoard.SelectedPiece);
+                   returnBoard.SelectedPiece = null;
+                   returnBoard.checkWinningState();
                
             }
-            //returnBoard.insertPiece(((QuartoStep)step).X, ((QuartoStep)step).Y, ((QuartoStep)step).P);
+           
             if (returnBoard == (Board)current)
             {
                 return null;
             }
             return returnBoard;
         }
-        
+        //Segéd a konzolos kiiratáshoz
         private string pieceToString(Piece p)
         {
             if (p == null || p.color == 2) return "----";
@@ -225,7 +195,7 @@ namespace Game
             else ret += "K";
             return ret;
         }
-       
+        //Lépés
         public override AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
         {
             if (activeBoard.Winstate || activeBoard.checkIsFull())
@@ -270,6 +240,7 @@ namespace Game
 
             return AbstractStep.Result.Success;
         }
+        //A lehetséges lépések kiszámítása
         public override IEnumerable<AbstractStep> GetAvailableSteps(IState st)
         {
             try
