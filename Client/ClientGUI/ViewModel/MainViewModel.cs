@@ -113,6 +113,8 @@ namespace ClientGUI.ViewModel
         {
             SelectorViewModel = new SelectorViewModel(_client);
             SelectorViewModel.CreateGame += OnCreateGame;
+            SelectorViewModel.CreateNetworkGame += OnCreateNetworkGame;
+            SelectorViewModel.JoinNetworkGame += OnJoinNetworkGame;
             SelectorViewModel.ErrorOccured += OnErrorOccuredInSelector;
             ServerConnectorViewModel = new ServerConnectorViewModel(_client);
             ServerConnectorViewModel.ConnectionError += OnConnectionError;
@@ -140,6 +142,16 @@ namespace ClientGUI.ViewModel
         private void OnCreateGame(object sender, EventArgs e)
         {
             SelectedGameControl = GetControlForSelectedGame();
+        }
+
+        private void OnCreateNetworkGame(object sender, EventArgs e)
+        {
+            SelectedGameControl = GetControlForSelectedNetworkGame(PlayerType.PlayerOne);
+        }
+
+        private void OnJoinNetworkGame(object sender, EventArgs e)
+        {
+            SelectedGameControl = GetControlForSelectedNetworkGame(PlayerType.PlayerTwo);
         }
 
         private void SetupCommands()
@@ -178,6 +190,15 @@ namespace ClientGUI.ViewModel
                 default:
                     return null;
             }*/
+        }
+
+        private UserControl GetControlForSelectedNetworkGame(PlayerType pt)
+        {
+            var game = _client.StartNetworkGame(SelectorViewModel.SelectedGame, pt);
+
+            var gui = _client.getGameGUI(game);
+
+            return gui;
         }
     }
 }

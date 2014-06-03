@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Client;
+using System.Windows;
 
 namespace ClientGUI.ViewModel
 {
@@ -32,6 +33,20 @@ namespace ClientGUI.ViewModel
             HeuristicsList = _client.GetAvailableAIAlgorithms();
             SetupCommands();
             SelectedGameType = GameType.OFFLINE;
+
+            _client.LoadGame += OnLoadGame;
+        }
+
+
+        private void OnLoadGame(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(
+                new Action(() =>
+                {
+                    CreateNetworkGame(this, new EventArgs());
+                    CloseSelector();
+                }));
+
         }
 
         public RelayCommand PerformSelectionCommand { get; private set; }
@@ -191,6 +206,8 @@ namespace ClientGUI.ViewModel
         }
 
         public event EventHandler CreateGame;
+        public event EventHandler CreateNetworkGame;
+        public event EventHandler JoinNetworkGame;
         public event EventHandler ErrorOccured;
 
         private void SetupCommands()
@@ -208,7 +225,18 @@ namespace ClientGUI.ViewModel
 
         private void PerformSelection()
         {
-            CreateGame(this, new EventArgs());
+            if (SelectedGameType == GameType.ONLINE)
+            {
+                if (_client.JoinGame(SelectedLobby))
+                {
+                    JoinNetworkGame(this, new EventArgs());
+                }
+            }
+
+            else
+            {
+                CreateGame(this, new EventArgs());
+            }
             CloseSelector();
         }
 
