@@ -69,6 +69,7 @@
     <Compile Include="ViewModel\BooleanNegationVisibilityConverter.cs" />
     <Compile Include="ViewModel\BooleanToColorConverter.cs" />
     <Compile Include="ViewModel\BooleanToConnectionStateConverter.cs" />
+    <Compile Include="ViewModel\PlayerTypeViewModel.cs" />
     <Compile Include="ViewModel\SelectorViewModel.cs" />
     <Compile Include="ViewModel\ServerConnectorViewModel.cs" />
     <Compile Include="View\ChessGame.xaml.cs">

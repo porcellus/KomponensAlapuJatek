@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
+using System.Diagnostics;
 using System.Windows.Controls;
 using Client.Client;
 using ClientGUI.Model;
-using ClientGUI.View;
 using Game.GameBase;
 
 namespace ClientGUI.ViewModel
@@ -172,33 +171,21 @@ namespace ClientGUI.ViewModel
 
         private UserControl GetControlForSelectedGame()
         {
-            var game = _client.CreateLocalGame(SelectorViewModel.SelectedGame);
-            if(_client.GetAvailableAIAlgorithms().Count >0){
-                _client.GetAI(_client.GetAvailableAIAlgorithms()[0]).AddToGame(game,PlayerType.PlayerTwo);
-                System.Diagnostics.Debug.WriteLine(_client.GetAvailableAIAlgorithms()[0]);
-            }
-
-            return _client.getGameGUI(game);
-            
-            /*
-            switch (SelectorViewModel.SelectedGame)
+            AbstractGame game = _client.CreateLocalGame(SelectorViewModel.SelectedGame);
+            if (_client.GetAvailableAIAlgorithms().Count > 0)
             {
-                case "Chess":
-                    return new ChessGame();
-                case "Quatro":
-                    return new QuatroGame();
-                default:
-                    return null;
-            }*/
+                _client.GetAI(SelectorViewModel.SelectedHeuristic)
+                    .AddToGame(game, SelectorViewModel.HasHumanPlayer ? PlayerType.PlayerTwo : PlayerType.Observer);
+                Debug.WriteLine("AI: {0}, Player: {1}", SelectorViewModel.SelectedHeuristic,
+                    SelectorViewModel.HasHumanPlayer);
+            }
+            return _client.getGameGUI(game);
         }
 
         private UserControl GetControlForSelectedNetworkGame(PlayerType pt)
         {
-            var game = _client.StartNetworkGame(SelectorViewModel.SelectedGame, pt);
-
-            var gui = _client.getGameGUI(game);
-
-            return gui;
+            AbstractGame game = _client.StartNetworkGame(SelectorViewModel.SelectedGame, pt);
+            return _client.getGameGUI(game);
         }
     }
 }

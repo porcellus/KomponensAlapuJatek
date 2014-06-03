@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:ClientGUI.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" Height="450" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <viewModel:BooleanNegationVisibilityConverter x:Key="BooleanNegationVisibilityConverter"/>
@@ -28,27 +28,55 @@
                     <StackPanel Orientation="Horizontal" 
                                 Visibility="{Binding IsConnectedToServer, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Játék típusa"/>
-                        <ComboBox Height="20" Width="80" Margin="71 0 0 0"
+                        <ComboBox Height="20" Width="135" Margin="51 0 0 0"
                              ItemsSource="{Binding GameTypes}" 
                             SelectedItem="{Binding SelectedGameType}"  />
                     </StackPanel>                    
                     <StackPanel Orientation="Horizontal">
                         <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Játék"/>
-                        <ComboBox Height="20" Width="80" Margin="106 0 0 0"
+                        <ComboBox Height="20" Width="135" Margin="86 0 0 0"
                              ItemsSource="{Binding GamesList}" 
                             SelectedItem="{Binding SelectedGame}"  />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 Visibility="{Binding IsOnlineGame, Converter={StaticResource BooleanNegationVisibilityConverter}}">
-                        <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Heurisztika"/>
-                        <ComboBox Height="20" Width="80" Margin="75 0 0 0"
+                        <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="1. játékos"/>
+                        <ComboBox Height="20" Width="135" Margin="63 0 0 0"
+                                ItemsSource="{Binding AvailablePlayerTypesList}" 
+                                SelectedItem="{Binding FirstPlayerType}"
+                                DisplayMemberPath="Description">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ComboBoxItem}">
+                                    <Setter Property="IsEnabled" Value="{Binding IsAvailable}"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding IsOnlineGame, Converter={StaticResource BooleanNegationVisibilityConverter}}">
+                        <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="2. játékos"/>
+                        <ComboBox Height="20" Width="135" Margin="63 0 0 0"
+                                 ItemsSource="{Binding AvailablePlayerTypesList}" 
+                                 SelectedItem="{Binding SecondPlayerType}"
+                                 DisplayMemberPath="Description">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ComboBoxItem}">
+                                    <Setter Property="IsEnabled" Value="{Binding IsAvailable}"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding IsOnlineGame, Converter={StaticResource BooleanNegationVisibilityConverter}}">
+                        <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="MI"/>
+                        <ComboBox Height="20" Width="135" Margin="99 0 0 0"
                              ItemsSource="{Binding HeuristicsList}" 
                             SelectedItem="{Binding SelectedHeuristic}"  />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 Visibility="{Binding IsOnlineGame, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Label Margin="15 0 0 0" HorizontalAlignment="Left" Content="Lobby"/>
-                        <ComboBox Height="20" Width="80" Margin="100 0 0 0" HorizontalAlignment="Right"
+                        <ComboBox Height="20" Width="135" Margin="80 0 0 0" HorizontalAlignment="Right"
                               ItemsSource="{Binding AvailableLobbies}" 
                               SelectedItem="{Binding SelectedLobby}" 
                               IsEnabled="{Binding CanSelectLobby}"/>
