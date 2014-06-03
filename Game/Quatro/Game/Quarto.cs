@@ -230,13 +230,14 @@ namespace Game
                 System.Diagnostics.Debug.WriteLine("");
             }
 
+            activeBoard.Player[0].Callback(activeBoard);
+            activeBoard.Player[1].Callback(activeBoard);
             if (activeBoard.Winstate || activeBoard.checkIsFull())
             {
                 activeBoard.CurrentPlayer = PlayerType.NoOne;
             }
 
-            activeBoard.Player[0].Callback(activeBoard);
-            activeBoard.Player[1].Callback(activeBoard);
+            
 
             return AbstractStep.Result.Success;
         }
