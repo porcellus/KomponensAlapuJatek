@@ -14,7 +14,7 @@ namespace ClientGUI.ViewModel
         }
 
         private readonly IClient _client;
-        private IList<int> _availableLobbies;
+        private IList<string> _availableLobbies;
         private IList<string> _gamesList;
         private bool _isConnectedToServer;
         private bool _isSelectorVisible;
@@ -102,7 +102,7 @@ namespace ClientGUI.ViewModel
             }
         }
 
-        public IList<int> AvailableLobbies
+        public IList<string> AvailableLobbies
         {
             get { return _availableLobbies; }
             set
@@ -144,7 +144,7 @@ namespace ClientGUI.ViewModel
                 if (_selectedGame != value)
                 {
                     _selectedGame = value;
-                    Task<IList<int>>.Factory.StartNew(() => _client.GetGamesInLobby(SelectedGame))
+                    Task<IList<string>>.Factory.StartNew(() => _client.GetGamesInLobby(SelectedGame))
                         .ContinueWith(res =>
                         {
                             if (res.Exception == null)

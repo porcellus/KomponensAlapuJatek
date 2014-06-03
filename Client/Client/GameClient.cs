@@ -5,15 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameTypeManager;
+using System.Threading;
+using System.Windows;
 
 namespace Client.Client
 {
     public class GameClient : IClient
     {
-        private Server.Connector _Connector;
-        private List<Int32> lobbyList;
+        private Server.Connector clientConnector;
+        private Server.Server _Server;
         private IDictionary<string, GamePair> GameDict;
         private Dictionary<String, Type> AIAlgDict;
+
+        public event EventHandler LoadGame;
 
         public IList<string> GetAvailableGameTypes()
         {
@@ -53,26 +57,85 @@ namespace Client.Client
             return AIAlgDict.Keys.ToList();
         }
 
-  
+        public void StartServer()
+        {
+            _Server = new Server.Server();
+            _Server.stratServer("127.0.0.1", 8888);
+        }
 
         public bool ConnectToServer(string ip, string port)
         {
-            _Connector = new Server.Connector();
+            clientConnector = new Server.Connector();
+            clientConnector.connectionAcceptEventHandler += new Connector.ConnectionAcceptEventHandler(ConnectionAccept);
+            clientConnector.connectionRequestEventHandler += new Connector.ConnectionRequestEventHandler(ConnectionRequest);
+            clientConnector.stepEventHandler += new Connector.StepEventHandler(OnStep);
 
-            _Connector.connectoServer(ip, Int32.Parse(port), "name", "Chess");
+
+            Thread connectorThread = new Thread(() =>
+            {
+                clientConnector.connectoServer(ip, Int32.Parse(port), "name", "Quarto");
+            });
+
+            connectorThread.Start();
 
             return true;
         }
 
-        public IList<int> GetGamesInLobby(string gameType)
+        public bool ConnectToServer(string ip, string port, string playerName, string gameType)
         {
-            return new[] {1,2,3,4,5};
+            clientConnector = new Server.Connector();
+            clientConnector.connectionAcceptEventHandler += new Connector.ConnectionAcceptEventHandler(ConnectionAccept);
+            clientConnector.connectionRequestEventHandler += new Connector.ConnectionRequestEventHandler(ConnectionRequest);
+            clientConnector.stepEventHandler += new Connector.StepEventHandler(OnStep);
+
+
+            Thread connectorThread = new Thread(() =>
+            {
+                clientConnector.connectoServer(ip, Int32.Parse(port), playerName, gameType);
+            });
+
+            connectorThread.Start();
+
+            return true;
         }
 
-        public bool JoinGame(string opponentData)
+        private void ConnectionRequest(object sender, Connector.ConnectionRequestEventArgs e)
+        {
+            if (MessageBox.Show(Convert.ToString(clientConnector.playerid) + ": Elfogadja a kapcsolódást " + e.PlayerName + " játékostól?", "Hálózati játék?", MessageBoxButton.YesNo)
+                == MessageBoxResult.Yes)
+            {
+                clientConnector.setRequestreply("Accept");
+
+                LoadGame(this, new EventArgs());
+            }
+            else
+            {
+                clientConnector.setRequestreply("Decline");
+            }
+
+        }
+
+        private void ConnectionAccept(object sender, Connector.ConnectionAcceptEventArgs e)
+        {
+            MessageBox.Show(Convert.ToString(clientConnector.playerid) + ": A kapott válasz: " + e.Result);
+        }
+
+        public IList<string> GetGamesInLobby(string gameType)
+        {
+            try
+            {
+                return clientConnector.getLobby(gameType).ToList();
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
+        public bool JoinGame(String opponentData)
         {
             string[] data = opponentData.Split(',');
-            return _Connector.requestGame(data[1], Int32.Parse(data[2]), data[0]);
+            return clientConnector.requestGame(data[1], Int32.Parse(data[2]), data[0]);
         }
 
         public void CreateLocalGame(string gameName, string aiAlgorithm, object playerPosition)
@@ -88,9 +151,40 @@ namespace Client.Client
             aiAlg.AddToGame(game, PlayerType.PlayerTwo);*/
         }
 
-        public void StartNetworkGame(string gameType, object startPosition)
+        private void OnStep(object sender, Connector.StepEventArgs e)
         {
-            throw new NotImplementedException();
+            currentGame.DoStep((AbstractStep)e.Step, otherPlayerType);
+        }
+
+        public void StepHandler(IState state)
+        {
+            Console.WriteLine("Stephandler");
+        }
+
+        public void SendStep(AbstractStep step)
+        {
+            clientConnector.step(step);
+        }
+
+        public AbstractGame currentGame;
+        public UserControl currentGameGUI;
+        public PlayerType currentPlayerType;
+        public PlayerType otherPlayerType;
+
+        public AbstractGame StartNetworkGame(string gameType, PlayerType playerType)
+        {
+            currentGame = GameDict[gameType].GameFunc();
+            var gamegui = GameDict[currentGame.GetType().Name].GameGuiFunc();
+            currentGameGUI = gamegui.GetGameGUI();
+            gamegui.AddToGame(currentGame, playerType);
+
+            currentPlayerType = playerType;
+            otherPlayerType = (playerType == PlayerType.PlayerOne) ? PlayerType.PlayerTwo : PlayerType.PlayerOne;
+
+            AbstractGame.StepHandler stepHandler = StepHandler;
+            currentGame.RegisterAsPlayer(ref stepHandler, otherPlayerType);
+
+            return currentGame;
         }
     }
 }

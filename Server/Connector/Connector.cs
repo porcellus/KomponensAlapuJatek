@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Connector;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,8 +23,8 @@ namespace Server
 
         private Socket opponentsocket;
 
-        private Int32 playerid;
-        
+        public Int32 playerid;
+
         private IPAddress ipAddress;
         private TcpListener tcpListener;
         private Int32 port;
@@ -38,42 +39,84 @@ namespace Server
         public Object opponentstep;
 
 
-        public Connector() 
+        public event ConnectionAcceptEventHandler connectionAcceptEventHandler;
+        public event ConnectionRequestEventHandler connectionRequestEventHandler;
+        public event StepEventHandler stepEventHandler;
+
+        protected virtual void OnConnectionAccept(ConnectionAcceptEventArgs e)
+        {
+            ConnectionAcceptEventHandler handler = connectionAcceptEventHandler;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnConnectionRequest(ConnectionRequestEventArgs e)
+        {
+            ConnectionRequestEventHandler handler = connectionRequestEventHandler;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnStep(StepEventArgs e)
+        {
+            StepEventHandler handler = stepEventHandler;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+
+        public Connector()
         {
             tcpserver = new TcpClient();
             tcpopponent = new TcpClient();
             opponentsocket = null;
             port = 80;
-            requestreply = "";
+            requestreply = "Accept";
             opponentname = "";
             firstplayer = false;
         }
 
         public void connectoServer(String ip, Int32 port, String name, String gametype)
         {
-            tcpserver.Connect(ip,port);
+            Console.WriteLine("Connecting...");
+
+            tcpserver.Connect(ip, port);
+            Console.WriteLine("Connected...");
             serverstream = tcpserver.GetStream();
 
-            writeStream(serverstream,name);
-            writeStream(serverstream,gametype);
+            writeStream(serverstream, name);
+            writeStream(serverstream, gametype);
 
-            playerid = int.Parse(readStream(serverstream, 100));
+            string read = readStream(serverstream, 100);
+            string[] data = read.Split(';');
 
-            listenthread = new Thread(() => {
+            playerid = int.Parse(data[0]);
+            port = int.Parse(data[1]);
 
-                    int iplocation = playerid + 1;
-                    ipAddress = IPAddress.Parse("127.0.0." + iplocation.ToString());
-                    tcpListener = new TcpListener(ipAddress, this.port);
-                    tcpListener.Start();
-                    listenGame();
+            listenthread = new Thread(() =>
+            {
+
+                int iplocation = playerid + 1;
+                ipAddress = IPAddress.Parse("127.0.0.1");
+                tcpListener = new TcpListener(ipAddress, port);
+                tcpListener.Start();
+                listenGame();
             });
+            listenthread.Start();
+
         }
 
         public String[] getLobby(String gametype)
         {
             writeStream(serverstream, "getlobby;" + gametype);
 
-            return readStream(serverstream, 1024).Split(';');
+            return readStream(serverstream, 100).Split(';');
         }
 
         public bool requestGame(String opponentip, Int32 opponentport, String name)
@@ -82,12 +125,19 @@ namespace Server
             opponentstream = tcpopponent.GetStream();
 
             writeStream(opponentstream, name);
-            if (readStream(opponentstream, 100).Equals("Decline"))
+
+            string received = readStream(opponentstream, 100);
+
+            if (received.Equals("Decline"))
             {
+                ConnectionAcceptEventArgs e = new ConnectionAcceptEventArgs("Decline");
+                OnConnectionAccept(e);
                 return false;
             }
             else
             {
+                ConnectionAcceptEventArgs e = new ConnectionAcceptEventArgs(received);
+                OnConnectionAccept(e);
                 firstplayer = true;
                 return true;
             }
@@ -104,7 +154,7 @@ namespace Server
             byte[] sendobject = serializeObject(step);
             byte[] sendbuffer = (byte[])sendstring.Concat(sendobject);
 
-            if(firstplayer)
+            if (firstplayer)
             {
 
                 opponentstream.Write(sendbuffer, 0, sendbuffer.Length);
@@ -131,7 +181,7 @@ namespace Server
                 opponentname = "";
                 requestreply = "";
             }
-           
+
         }
 
         private void listenGame()
@@ -144,39 +194,39 @@ namespace Server
 
                     this.opponentname = readSocket(opponentsocket, 100);
 
+                    Console.WriteLine(Convert.ToString(this.playerid) + " connector received opponentname: " + this.opponentname);
+
+                    ConnectionRequestEventArgs e = new ConnectionRequestEventArgs(this.opponentname);
+                    OnConnectionRequest(e);
+
                     opponentsocket.Send(new ASCIIEncoding().GetBytes(requestreply));
                 }
 
-                if (!opponentsocket.ReceiveAsync(new SocketAsyncEventArgs()))
+                SocketAsyncEventArgs sArgs = new SocketAsyncEventArgs();
+                sArgs.UserToken = opponentsocket;
+                sArgs.Completed += receiveCompleted;
+                sArgs.SetBuffer(new byte[100], 0, 100);
+
+                if (opponentsocket != null && !opponentsocket.ReceiveAsync(sArgs))
                 {
-                    String output = readSocket(opponentsocket, 1024);
-
-                    if (output.Contains("step")) //step;object
-                    {
-                        String[] datas = output.Split(';');
-                        opponentstep = datas[1];
-
-                    }
-                    else if (output.Contains("finish"))
-                    {
-                        opponentsocket.Close();
-                        opponentname = "";
-                        requestreply = "";
-                    }
+                    receiveCompleted(this, sArgs);
                 }
+                sArgs.Dispose();
 
-                if(firstplayer)
+                if (firstplayer)
                 {
-                    byte[] readbuffer = new byte[1024];
-                    opponentstream.Read(readbuffer,0,readbuffer.Length);
+                    byte[] readbuffer = new byte[100];
+                    opponentstream.Read(readbuffer, 0, readbuffer.Length);
 
-                     String output = "";
-                     for (int i = 0; i < readbuffer.Length; i++) output += Convert.ToString(readbuffer[i]);
+                    String output = "";
+                    for (int i = 0; i < readbuffer.Length; i++) output += Convert.ToString(readbuffer[i]);
 
                     if (output.Contains("step"))
                     {
                         String[] datas = output.Split(';');
-                        opponentstep = datas[1];
+                        opponentstep = deserializeToObject(datas[1]);
+                        StepEventArgs e = new StepEventArgs(opponentstep);
+                        OnStep(e);
 
                     }
                     else if (output.Contains("finish"))
@@ -187,15 +237,41 @@ namespace Server
                     }
 
 
-                }    
+                }
 
+            }
+        }
+
+        private void receiveCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            String output = readSocket(opponentsocket, 100);
+
+            if (output.Contains("step")) //step;object
+            {
+                String[] datas = output.Split(';');
+                opponentstep = datas[1];
+                Console.WriteLine("Rec opponentStep: " + datas[1]);
+
+            }
+            else if (output.Contains("finish"))
+            {
+                opponentsocket.Close();
+                opponentname = "";
+                requestreply = "";
+                Console.WriteLine("Rec finish");
             }
         }
 
         private void writeStream(Stream stream, String message)
         {
             byte[] sendbuffer = new ASCIIEncoding().GetBytes(message);
-            stream.Write(sendbuffer, 0, sendbuffer.Length);
+            if (sendbuffer.Length < 100)
+            {
+                Array.Resize<byte>(ref sendbuffer, 100);
+            }
+            stream.Write(sendbuffer, 0, 100);
+
+            Console.WriteLine("Connector sent: " + message);
         }
 
         private String readStream(Stream stream, int readsize)
@@ -203,20 +279,17 @@ namespace Server
             byte[] recivebuffer = new byte[readsize];
             int numberofbytes = stream.Read(recivebuffer, 0, readsize);
 
-            String output = "";
-            for (int i = 0; i < numberofbytes; i++) output += Convert.ToString(recivebuffer[i]);
-
-            return output;
+            Console.WriteLine("Connector readStr");
+            return System.Text.Encoding.UTF8.GetString(recivebuffer).Replace("\0", "");
         }
 
         private String readSocket(Socket socket, int readsize)
         {
             byte[] recivebuffer = new byte[readsize];
             int bytes = socket.Receive(recivebuffer);
-            String output = "";
-            for (int i = 0; i < bytes; i++) output += Convert.ToString(recivebuffer[i]);
 
-            return output;
+            Console.WriteLine("Connector readSock");
+            return System.Text.Encoding.UTF8.GetString(recivebuffer).Replace("\0", "");
         }
 
         private byte[] serializeObject(Object obj)
@@ -230,6 +303,22 @@ namespace Server
                 byte[] binary = new byte[size];
                 stm.Read(binary, 0, (int)size);
                 return binary;
+            }
+        }
+
+        private object deserializeToObject(String str)
+        {
+            using (Stream stm = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                byte[] bytes = new byte[str.Length * sizeof(char)];
+                System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+
+                long size = bytes.Length;
+                stm.Write(bytes, 0, (int)size);
+
+                return formatter.Deserialize(stm);
             }
         }
 

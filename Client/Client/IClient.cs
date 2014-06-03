@@ -14,10 +14,14 @@ namespace Client.Client
         UserControl getGameGUI(AbstractGame game);
         Game.GameBase.AbstractGame CreateLocalGame(string gameName);
 
-        IList<int> GetGamesInLobby(string lobby);
+        event EventHandler LoadGame;
+
+        void StartServer();
+        IList<string> GetGamesInLobby(string lobby);
         bool JoinGame(string opponentData);
         bool ConnectToServer(string ip, string port);
-        
-        void StartNetworkGame(string gameType, object startPosition);
+        bool ConnectToServer(string ip, string port, string playerName, string gameType);
+
+        AbstractGame StartNetworkGame(string gameType, PlayerType playerType);
     }
 }

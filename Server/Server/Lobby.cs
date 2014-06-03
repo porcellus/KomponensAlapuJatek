@@ -8,7 +8,7 @@ namespace Server
 {
     public class Lobby
     {
-        private List<ServerClient> clients;
+        private List<ServerClient> clients = new List<ServerClient>();
 
         public Lobby() { }
 
