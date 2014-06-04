@@ -3,6 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Background="Red" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Label Foreground="White" FontSize="25">Chess game</Label>
-        <Button Height="50" Width="200">Some button</Button>
+        <!--<chessGameGui:UserControl1/>-->
     </Grid>
 </UserControl>
