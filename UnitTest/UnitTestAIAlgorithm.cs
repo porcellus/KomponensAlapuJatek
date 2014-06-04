@@ -17,7 +17,6 @@ namespace UnitTestAIAlgorithm
 
         public override void RegisterAsPlayer(ref StepHandler onStep, PlayerType playerType)
         {
-            throw new NotImplementedException();
         }
 
         public override AbstractStep.Result DoStep(AbstractStep step, PlayerType playerType)
@@ -46,12 +45,20 @@ namespace UnitTestAIAlgorithm
         public override IEnumerable<AbstractStep> GetAvailableSteps(IState state)
         {
             List<AbstractStep> steps = new List<AbstractStep>();
-            List<IState> list = new List<IState>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                steps.Add(new TestStep(list[i], i));
+            if (state is TestState) {
+                TestState ts = (TestState) state;
+                for (int i = 0; i < ts.GetChildCount(); i++)
+                {
+                    IState child = ts.getChildAt(i);
+                    if (child is TestState)
+                    {
+                        TestState ch = (TestState) child;
+                        steps.Add(new TestStep(child,i));
+                    }
+                }
             }
             return steps;
+
         }
     }
     class TestStep : AbstractStep
@@ -123,6 +130,7 @@ namespace UnitTestAIAlgorithm
         {
             AlphaBetaSearch abs = new AlphaBetaSearch();
             IState state = new TestState(0);
+            abs.AddToGame(new TestGame(), PlayerType.PlayerOne);
             AbstractStep step = abs.MakeDecision(state);
             Assert.AreEqual(null, step);
         }
@@ -134,13 +142,13 @@ namespace UnitTestAIAlgorithm
             TestState state = new TestState(1);
             TestState left = new TestState(4);
             TestState right = new TestState(3);
-
             state.AddChilds(left, right);
 
             abs.AddToGame(new TestGame(), PlayerType.PlayerOne);
             AbstractStep step = abs.MakeDecision(state);
-            Assert.AreEqual(1, ((TestStep)step).GetStep());
-            Assert.AreEqual(right, ((TestStep)step).GetState());
+            TestState result = (TestState)((TestStep) step).GetState();
+            Assert.AreEqual(4, result.GetHValue());
+            Assert.AreEqual(left, result);
 
         }
 
@@ -148,6 +156,7 @@ namespace UnitTestAIAlgorithm
         public void TestMethodLevel2()
         {
             AlphaBetaSearch abs = new AlphaBetaSearch(4);
+
             TestState state = new TestState(0);
             TestState level1_0 = new TestState(0);
             TestState level1_1 = new TestState(0);
@@ -161,7 +170,9 @@ namespace UnitTestAIAlgorithm
 
             abs.AddToGame(new TestGame(), PlayerType.PlayerOne);
             AbstractStep step = abs.MakeDecision(state);
-            Assert.AreEqual(level1_0, ((TestStep)step).GetState());
+            TestState result = (TestState)((TestStep)step).GetState();
+            Assert.AreEqual(level1_0, result);
+
         }
 
         [TestMethod]
