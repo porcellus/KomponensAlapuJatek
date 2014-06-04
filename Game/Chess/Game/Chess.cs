@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
+using System.Threading;
 using Game.GameBase;
 using Client.AIAlgorithmBase;
-using GameBase;
 
 namespace Game
 {
@@ -28,21 +29,30 @@ namespace Game
         private int                               changeTime;
         private bool                              alive;
         private ChessHeuristic                    heuristic;
+        private bool                              gameEnded;
 
+        static BackgroundWorker                   gameThread        = new BackgroundWorker();
 
         public Chess()
         {
-            cPlayer         = 0;
-            clicked         = false;
-            figureSelected  = false;
-            figurePos       = new int[] {0, 0};
-            lastPos         = new int[] {-1, -1}; 
-            changeTime      = 0;
-            board           = null;
+            cPlayer                 = 0;
+            clicked                 = false;
+            figureSelected          = false;
+            figurePos               = new int[] {0, 0};
+            lastPos                 = new int[] {-1, -1}; 
+            changeTime              = 0;
+            board                   = null;
         }
 
 	    ~Chess()
         {
+        }
+
+        private void startGameProcess(object sender, DoWorkEventArgs e)
+        {
+            while (alive)
+            {
+            }
         }
 
         /* GUI által használt függvények */
@@ -54,6 +64,47 @@ namespace Game
         public int GUI_Action_Step(int fromRow, int fromCol, int toRow, int toCol)
         {
             return 0;   
+        }
+
+        public override IEnumerable<AbstractStep> GetAvailableSteps(IState st)
+        {
+            try
+            {
+                Board state             = ((Board)st).Clone();
+                List<ChessStep> lista   = new List<ChessStep>();
+
+                ChessStep step;
+                
+                for (int i = 0; i < board.getDimension()[1]; ++i)
+                    for (int j = 0; j < board.getDimension()[0]; ++j)
+                    {
+                        Figure figure = board.getFigureAt(i,j);
+                        if (figure != null && (figure.isWhite() && cPlayer == 0 || !figure.isWhite() && cPlayer == 1))
+                        {
+                            LinkedList< int[] > legalSteps  = figure.getLegalSteps();
+
+                            for (int k = 0; k < legalSteps.Count; ++k)
+                            {
+                                Figure.StepType type;
+
+                                if (legalSteps.ElementAt(k)[2] == 1)
+                                    type = Figure.StepType.Success;
+                                else if (legalSteps.ElementAt(k)[2] == 2)
+                                    type = Figure.StepType.Capture;
+                                else
+                                    type = Figure.StepType.CaptureKing;
+
+                                step = new ChessStep(figure.getRow(), figure.getCol(), legalSteps.ElementAt(k)[0], legalSteps.ElementAt(k)[1], type);
+                            }
+                        }
+                    }
+
+                return lista;
+            }
+            catch (Exception)
+            {
+                return new List<ChessStep>();
+            }
         }
 
         /* Belső függvények */
@@ -71,6 +122,7 @@ namespace Game
             board               = new Board();
             board.setHeuristic(heuristic);
             board.setDimension(dimension);
+            board.setCurrentPlayer(PlayerType.PlayerOne);
             board.setContent("5432134566666666000000000000000000000000000000006666666654312345",
                              "2222222222222222000000000000000000000000000000001111111111111111");
             
@@ -82,6 +134,17 @@ namespace Game
                     Console.WriteLine(figure.getFigureType());
                     figure.calculateLegalSteps();
                 }
+
+            try
+            {
+                gameThread.WorkerSupportsCancellation = true;
+
+                gameThread.DoWork += new DoWorkEventHandler(startGameProcess);
+                gameThread.RunWorkerAsync();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public override bool IsTerminal(IState state)
@@ -89,28 +152,25 @@ namespace Game
             throw new NotImplementedException();
         }
 
-        public override double GetHeuristicValue(IState state)
+        public override double GetHeuristicValue(IState state, PlayerType current)
         {
-            throw new NotImplementedException();
+            if (state is Board)
+            {
+                Board b     = (Board)state;
+                int value   = b.getValue();
+
+                if (current != PlayerType.PlayerTwo)
+                    return -value;
+                return value;
+
+            }
+            return 0;
+
         }
 
         public override IState GetNextState(IState current, AbstractStep step)
         {
             throw new NotImplementedException();
-        }
-
-        /* Fő update függvény */ 
-        private void FrameUpdate()
-        {
-			// Annak vizsgálata, hogy MI-s játékos következik-e
-			if (waiting) // Ha emberi játékos, akkor egérkattintás eseményre várunk
-			{
-				
-			} else // Ha gépi játékos, akkor a hozzá tartozó algoritmus fut le
-			{
-
-            }
-
         }
 
         public void Reset()
@@ -130,19 +190,19 @@ namespace Game
         {
             Player winner = p;
 
-            // TODO: GUI értesítése a végéről
+            alive = false;
 
             Reset();
         }
 
-        public void AddHumanPlayer(GameBase.PlayerType playerType)
+        public void AddHumanPlayer(ref AbstractGame.StepHandler onStep, GameBase.PlayerType playerType)
         {
             if (players == null)
                 players     = new Player[2];
 
             // Index in the players list 
             int index       = playerType == PlayerType.PlayerOne ? 0 : 1;
-            Player player   = new Player(board, index == 0, EntityType.HumanPlayer);
+            Player player   = new Player(board, index == 0, EntityType.HumanPlayer, ref onStep);
             players[index]  = player;
         }
 
@@ -157,27 +217,26 @@ namespace Game
 
         public override string GetGameTypeInfo()
         {
-            return "";
+            return "Chess";
         }
 
         public override void RegisterAsHumanPlayer(ref StepHandler onStep, GameBase.PlayerType playerType)
         {
-            AddHumanPlayer(playerType);
+            AddHumanPlayer(ref onStep, playerType);
         }
 
-        public override void RegisterAsPlayer<TAlgorithm>(ref StepHandler onStep, GameBase.PlayerType playerType, TAlgorithm algorithm)
+        public override void RegisterAsPlayer(ref AbstractGame.StepHandler onStep, GameBase.PlayerType playerType)
         {
-            if (!(algorithm is IAIAlgorithm))
-                throw new Exception("Not valid algorithm type!");
-
             if (players == null)
                 players = new Player[2];
 
             // Index in the players list 
             int index       = playerType == PlayerType.PlayerOne ? 0 : 1;
-            Player player   = new Player(board, index == 0, EntityType.ComputerPlayer, (IAIAlgorithm)algorithm);
-
+            Player player   = new Player(board, index == 0, EntityType.ComputerPlayer, ref onStep);
             players[index]  = player;
+
+            if (players[0] != null && players[1] != null)
+                StartGame();
         }
 
         public override AbstractStep.Result DoStep(AbstractStep step, GameBase.PlayerType playerType)
@@ -191,15 +250,22 @@ namespace Game
 
             board.Step(from[0], from[1], to[0], to[1]);
 
+            players[0].Callback(board);
+            players[1].Callback(board);
+
+            if (board.checkmateTest(cPlayer != 0))
+            {
+                Win(players[cPlayer]);
+                return AbstractStep.Result.Success;
+            }
+
+            cPlayer         = (cPlayer + 1) % 2;
+            board.setCurrentPlayer(cPlayer == 0 ? PlayerType.PlayerOne : PlayerType.PlayerTwo);
+            
             return AbstractStep.Result.Success;
         }
 
-        public override IState SimulateStep(AbstractStep step)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int SimulateStep(AbstractStep step, int dummyInt)
+        public override IState SimulateStep(IState current, AbstractStep step)
         {
             if (!(step is ChessStep))
                 throw new Exception("Not proper step type!");
@@ -211,7 +277,13 @@ namespace Game
             int[] to            = cStep.GetToPosition();
 
             clone.Step(from[0], from[1], to[0], to[1]);
-            return clone.getValue();
+
+            if (clone == (Board)current)
+            {
+                return null;
+            }
+
+            return clone;
         }
     }
 }
