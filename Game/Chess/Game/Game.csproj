@@ -56,10 +56,6 @@
       <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
       <Name>GameBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GameGUI\GameGUI.csproj">
-      <Project>{e2795faa-e49c-45d1-b19b-ac5625a0bf1d}</Project>
-      <Name>GameGUI %28Game\Chess\GameGUI%29</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
