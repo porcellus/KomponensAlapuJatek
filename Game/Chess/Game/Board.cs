@@ -7,7 +7,7 @@ using Game.GameBase;
 
 namespace Game
 {
-    public class Board
+    public class Board : IState
     {
 	    static bool Equals(Board b1, Board b2)
         {
@@ -35,6 +35,7 @@ namespace Game
         protected ChessHeuristic    heuristic;
 
         protected Figure[,]         data;
+        private PlayerType          currentPlayer;
 
         public Board()
         {
@@ -45,6 +46,11 @@ namespace Game
         ~Board()
         {
             symIndex    = 0;
+        }
+
+        public void setCurrentPlayer(PlayerType cPlayer)
+        {
+            currentPlayer = cPlayer;
         }
 
         public void setHeuristic(ChessHeuristic heur)

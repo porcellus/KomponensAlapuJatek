@@ -66,8 +66,8 @@ namespace Game
             ActivePieces[14] = new Piece(0, 0, 0, 1);
             ActivePieces[15] = new Piece(0, 0, 0, 0);
         }
-
-        public void setActivePieces(Piece[] list, Piece p)
+        // Az elérhető bábúk módosítása, kivesz egy elemet
+        public void UpdateActivePieces(Piece[] list, Piece p)
         {
             var nList = list.ToList();
             nList.RemoveAll(a => a.Equals(p));
@@ -160,8 +160,9 @@ namespace Game
         public void insertPiece(int x, int y, Piece iPiece)
         {
             bBoard[x, y] = iPiece;
-            //System.Diagnostics.Debug.WriteLine(this + "written value of "+x+":"+y+"="+iPiece);
+            
         }
+        //az adott mező üres-e
         public bool checkIsEmpty(int x, int y)
         {
             if (bBoard[x, y].color == 2)
@@ -174,6 +175,7 @@ namespace Game
                 return false;
             }
         }
+        //Minden mezőre került-e bábú
         public bool checkIsFull()
         {
             for (int i = 0; i < 4; i++)
@@ -189,6 +191,7 @@ namespace Game
             }
             return true;
         }
+        //Nyerő állapot keresésé a bBordon
         public void checkWinningState()
         {
             int hg = 0;
@@ -319,7 +322,7 @@ namespace Game
                         hg += Convert.ToInt16(bBoard[row, col].height) + Convert.ToInt16(bBoard[row + 1, col].height) + Convert.ToInt16(bBoard[row, col + 1].height) + Convert.ToInt16(bBoard[row + 1, col + 1].height);
                         cl += Convert.ToInt16(bBoard[row, col].color) + Convert.ToInt16(bBoard[row + 1, col].color) + Convert.ToInt16(bBoard[row, col + 1].color) + Convert.ToInt16(bBoard[row + 1, col + 1].color);
                         sp += Convert.ToInt16(bBoard[row, col].shape) + Convert.ToInt16(bBoard[row + 1, col].shape) + Convert.ToInt16(bBoard[row, col + 1].shape) + Convert.ToInt16(bBoard[row + 1, col + 1].shape);
-                        cl += Convert.ToInt16(bBoard[row, col].full) + Convert.ToInt16(bBoard[row + 1, col].full) + Convert.ToInt16(bBoard[row, col + 1].full) + Convert.ToInt16(bBoard[row + 1, col + 1].full);
+                        fl += Convert.ToInt16(bBoard[row, col].full) + Convert.ToInt16(bBoard[row + 1, col].full) + Convert.ToInt16(bBoard[row, col + 1].full) + Convert.ToInt16(bBoard[row + 1, col + 1].full);
 
                     }
                     else
@@ -327,6 +330,7 @@ namespace Game
                         hg = cl = sp = fl = -1;
                         break;
                     }
+                   
                     winstate = (win(hg) || win(cl) || win(sp) || win(fl));
                     hg = 0;
                     cl = 0;

@@ -15,28 +15,25 @@ namespace Game
         protected bool              inCheck;
         protected Board             board;
         protected IAIAlgorithm      algorithm;
+        AbstractGame.StepHandler    callback;
 
-        public Player(Board b, bool w, EntityType ptype, IAIAlgorithm alg)
+        public Player(Board b, bool w, EntityType ptype, ref AbstractGame.StepHandler onStep)
         {
             type = ptype;
             white = w;
             board = b;
-            algorithm = alg;
-        }
-
-        public Player(Board b, bool w, EntityType ptype)
-        {
-            if (ptype != EntityType.HumanPlayer)
-                throw new Exception("Missing algorithm for computer player.");
-
-            type = ptype;
-            white = w;
-            board = b;
+            callback    = onStep;
         }
 
         ~Player()
         {
 	       
+        }
+
+        public GameBase.AbstractGame.StepHandler Callback
+        {
+            get { return callback; }
+            set { callback = value; }
         }
 
         public void Move()

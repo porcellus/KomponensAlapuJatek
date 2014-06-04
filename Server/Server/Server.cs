@@ -20,6 +20,8 @@ namespace Server
 
         Lobby lobby;
 
+        List<ServerClient> clList;
+
         public event EventHandler<ServerInfoEventArgs> needlog;
 
         public Server()
@@ -53,42 +55,45 @@ namespace Server
                     {
                         if (tcpListener.Pending())
                         {
+                            Console.WriteLine("Adding ID: " + Convert.ToString(idCounter));
                             Socket socket = tcpListener.AcceptSocket();
                             lobby.add(new ServerClient(
                                 idCounter,
                                 ((IPEndPoint)socket.RemoteEndPoint).Port.ToString(),
                                 ((IPEndPoint)socket.RemoteEndPoint).Address.ToString(),
-                                recieveData(socket,100),
-                                recieveData(socket,100),
+                                recieveData(socket, 100),
+                                recieveData(socket, 100),
                                 socket
                             ));
 
-                            socket.Send(new ASCIIEncoding().GetBytes(idCounter.ToString()));
                             idCounter++;
+                            string sendString = idCounter.ToString();
+                            sendString += ";" + ((IPEndPoint)socket.RemoteEndPoint).Port.ToString();
+
+                            socket.Send(new ASCIIEncoding().GetBytes(sendString));
                         }
 
-                        foreach (ServerClient client in lobby.getClientlist())
+                        clList = lobby.getClientlist();
+
+
+                        foreach (ServerClient client in clList)
                         {
-                            if(!client.clientsocket.ReceiveAsync(new SocketAsyncEventArgs()))
+                            SocketAsyncEventArgs sArgs = new SocketAsyncEventArgs();
+                            sArgs.UserToken = client;
+                            sArgs.Completed += receiveCompleted;
+                            sArgs.SetBuffer(new byte[100], 0, 100);
+                            if (!client.clientsocket.ReceiveAsync(sArgs))
                             {
-                                String recieveddata = recieveData(client.clientsocket,100);
-                                String[] datas;
-
-                                if(recieveddata.Contains("getlobby"))//getlobby;chess
-                                {
-                                    datas = recieveddata.Split(';');
-                                    String gametype = datas[1];
-                                    client.clientsocket.Send(new ASCIIEncoding().GetBytes(lobby.getClientsInfo(gametype)));
-                                }
-
+                                receiveCompleted(this, sArgs);
                             }
                         }
-                 
+
                     }
 
                 });
 
                 serverThread.Start();
+                Console.WriteLine("Server started ");
 
             }
             catch (Exception e)
@@ -96,6 +101,22 @@ namespace Server
                 Console.WriteLine("Error..... " + e.Message);
             }
 
+        }
+
+        private void receiveCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            ServerClient client = (e.UserToken as ServerClient);
+
+            String recieveddata = System.Text.Encoding.UTF8.GetString(e.Buffer).Replace("\0", "");
+
+            String[] datas;
+
+            if (recieveddata.Contains("getlobby"))//getlobby;chess
+            {
+                datas = recieveddata.Split(';');
+                String gametype = datas[1];
+                client.clientsocket.Send(new ASCIIEncoding().GetBytes(lobby.getClientsInfo(gametype)));
+            }
         }
 
         public void stopServer()
@@ -118,12 +139,8 @@ namespace Server
 
             byte[] buffer = new byte[inputsize];
             int bytes = socket.Receive(buffer);
-
-            String output = "";
-            for (int i = 0; i < bytes; i++)
-            {
-                output += Convert.ToString(buffer[i]);
-            }
+            String output = System.Text.Encoding.UTF8.GetString(buffer).Replace("\0", "");
+            Console.WriteLine("Server receive: " + output);
 
             return output;
 
@@ -131,6 +148,7 @@ namespace Server
 
         protected virtual void OnNeedLog(ServerInfoEventArgs e)
         {
+            Console.WriteLine("Server: " + e.consoleinfo);
             EventHandler<ServerInfoEventArgs> handler = needlog;
             if (handler != null)
             {

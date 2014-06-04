@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connector.cs" />
+    <Compile Include="ConnectorEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

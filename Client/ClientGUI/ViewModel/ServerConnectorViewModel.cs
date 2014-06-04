@@ -6,7 +6,8 @@ namespace ClientGUI.ViewModel
 {
     internal class ServerConnectorViewModel : ViewModelBase
     {
-        private const string DEFAULT_IP = "192.168.1.110";
+        //private const string DEFAULT_IP = "192.168.1.110";
+        private const string DEFAULT_IP = "127.0.0.1";
         private const string DEFAULT_PORT = "8888";
         private readonly IClient _client;
         private bool _isConnected;
@@ -28,6 +29,7 @@ namespace ClientGUI.ViewModel
 
         public RelayCommand ConnectCommand { get; private set; }
         public RelayCommand PlayOfflineCommand { get; private set; }
+        public RelayCommand StartServerCommand { get; private set; }
 
         public bool IsLoading
         {
@@ -100,6 +102,7 @@ namespace ClientGUI.ViewModel
         {
             ConnectCommand = new RelayCommand(x => ConnectToServer());
             PlayOfflineCommand = new RelayCommand(x => PlayOffline());
+            StartServerCommand = new RelayCommand(x => _client.StartServer());
         }
     }
 }

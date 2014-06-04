@@ -56,6 +56,10 @@
       <Project>{bed5d87b-8cac-41bc-9b44-5788b839ec6c}</Project>
       <Name>Connector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Server\Server\Server.csproj">
+      <Project>{3c4bda50-3ea0-4edb-b145-9f995721f50a}</Project>
+      <Name>Server %28Server\Server%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AIAlgorithmBase\AIAlgorithmBase.csproj">
       <Project>{27a307cf-d22f-4097-91f2-ee541604000f}</Project>
       <Name>AIAlgorithmBase</Name>

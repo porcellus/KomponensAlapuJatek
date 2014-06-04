@@ -219,7 +219,7 @@ namespace Game
 		        break;
 	        }
 
-            Console.WriteLine(figure.getFigureType() + " " + figure.getRow() + " " + fromCheckTest);
+           // Console.WriteLine(figure.getFigureType() + " " + figure.getRow() + " " + fromCheckTest);
 	        if (!fromCheckTest)
             {
                 Board tBoard = board.Clone();

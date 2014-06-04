@@ -17,6 +17,7 @@
                     <RowDefinition Height="40*"/>
                     <RowDefinition Height="100*"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -37,6 +38,7 @@
                 </StackPanel>
                 <Button Grid.Column="1"  Grid.Row="2" HorizontalAlignment="Right" Margin="0 0 15 0" Width="100" Height="30" Content="Csatlakozás" Command="{Binding ConnectCommand}"/>
                 <Button Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Left" Margin="15 0 0 0" Width="100" Height="30" Content="Offline játék" Command="{Binding PlayOfflineCommand}"/>
+                <Button Grid.Column="0"  Grid.Row="3" HorizontalAlignment="Left" Margin="15 0 0 0" Width="100" Height="30" Content="Szerver" Command="{Binding StartServerCommand}"/>
             </Grid>
         </Border>
         <Rectangle Fill="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
