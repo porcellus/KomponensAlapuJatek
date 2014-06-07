@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Linq;
 using Client.AIAlgorithmBase;
 using Game.GameBase;
-using System.Linq;
 
 namespace Client.AlfaBeta
 {
     public class AlphaBetaSearch : IAIAlgorithm
     {
-        private AbstractGame game;
-        private PlayerType playerType;
-        private int depth;
+        private readonly int _depth;
+        private AbstractGame _game;
+        private PlayerType _playerType;
 
         public AlphaBetaSearch(int depth)
         {
-            this.depth = depth;
+            _depth = depth;
         }
 
         public AlphaBetaSearch() : this(2)
@@ -25,23 +25,31 @@ namespace Client.AlfaBeta
             return "AlfaBeta AI Algorithm implementation.";
         }
 
+        public void AddToGame(AbstractGame game, PlayerType playerType)
+        {
+            _game = game;
+            _playerType = playerType;
+            AbstractGame.StepHandler stepHandler = AlfaBetaStepHandler;
+            game.RegisterAsPlayer(ref stepHandler, playerType);
+        }
+
         public void AlfaBetaStepHandler(IState state)
         {
             Console.WriteLine("AlfaBeta Stephandler has been called.");
-            if (playerType != state.CurrentPlayer) return;
+            if (_playerType != state.CurrentPlayer) return;
             AbstractStep aStep = MakeDecision(state);
-            game.DoStep(aStep, playerType);
+            _game.DoStep(aStep, _playerType);
         }
 
         public AbstractStep MakeDecision(IState state)
         {
-            int level = 0;
+            const int level = 0;
             AbstractStep result = default(AbstractStep);
             double resultValue = Double.NegativeInfinity;
-            foreach (AbstractStep step in game.GetAvailableSteps(state))
+            foreach (AbstractStep step in _game.GetAvailableSteps(state))
             {
-                Double value = MinValue(level, game.SimulateStep(state, step),
-                                Double.NegativeInfinity, Double.PositiveInfinity);
+                Double value = MinValue(level, _game.SimulateStep(state, step),
+                    Double.NegativeInfinity, Double.PositiveInfinity);
                 if (value > resultValue)
                 {
                     result = step;
@@ -51,16 +59,16 @@ namespace Client.AlfaBeta
             return result;
         }
 
-        protected double MinValue(int level, IState state, double alpha, double beta)
+        private double MinValue(int level, IState state, double alpha, double beta)
         {
             level++;
-            if (level == depth || game.GetAvailableSteps(state).ToList().Count == 0)
-                return game.GetHeuristicValue(state, playerType);
+            if (level == _depth || _game.GetAvailableSteps(state).ToList().Count == 0)
+                return _game.GetHeuristicValue(state, _playerType);
             double value = Double.PositiveInfinity;
-            foreach (AbstractStep step in game.GetAvailableSteps(state))
+            foreach (AbstractStep step in _game.GetAvailableSteps(state))
             {
                 value = Math.Min(value, MaxValue(level,
-                    game.SimulateStep(state, step), alpha, beta));
+                    _game.SimulateStep(state, step), alpha, beta));
                 if (value <= alpha)
                     return value;
                 beta = Math.Min(beta, value);
@@ -69,31 +77,21 @@ namespace Client.AlfaBeta
         }
 
 
-        protected double MaxValue(int level, IState state, double alpha, double beta)
+        private double MaxValue(int level, IState state, double alpha, double beta)
         {
             level++;
-            if (level == depth || game.GetAvailableSteps(state).ToList().Count == 0)
-                return game.GetHeuristicValue(state, playerType);
+            if (level == _depth || _game.GetAvailableSteps(state).ToList().Count == 0)
+                return _game.GetHeuristicValue(state, _playerType);
             double value = Double.NegativeInfinity;
-            foreach (AbstractStep step in game.GetAvailableSteps(state))
+            foreach (AbstractStep step in _game.GetAvailableSteps(state))
             {
                 value = Math.Max(value, MinValue(level,
-                      game.SimulateStep(state, step), alpha, beta));
+                    _game.SimulateStep(state, step), alpha, beta));
                 if (value >= beta)
                     return value;
                 alpha = Math.Max(alpha, value);
             }
             return value;
         }
-
-        public void AddToGame(AbstractGame game, PlayerType playerType)
-        {
-            this.game = game;
-            this.playerType = playerType;
-            AbstractGame.StepHandler stepHandler = AlfaBetaStepHandler;
-            game.RegisterAsPlayer(ref stepHandler, playerType);
-        }
-
     }
-  
 }
