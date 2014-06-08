@@ -108,7 +108,7 @@ namespace Game
         }
 
         /* Belső függvények */
-        public override void StartGame()
+        public void StartGame()
         {
             if (heuristic == null)
                 throw new Exception("Heuristic hasn't set yet.");
@@ -147,7 +147,7 @@ namespace Game
             }
         }
 
-        public override bool IsTerminal(IState state)
+        public bool IsTerminal(IState state)
         {
             throw new NotImplementedException();
         }
@@ -168,7 +168,7 @@ namespace Game
 
         }
 
-        public override IState GetNextState(IState current, AbstractStep step)
+        public IState GetNextState(IState current, AbstractStep step)
         {
             throw new NotImplementedException();
         }
@@ -207,7 +207,7 @@ namespace Game
         }
 
         /* Interface methods */
-        public override void SetHeuristic<Board>(IHeuristic<Board> heuristic)
+        public void SetHeuristic<Board>(IHeuristic<Board> heuristic)
         {
             if (!(heuristic is ChessHeuristic))
                 throw new ArgumentException("Not valid heuristic type for this game!");
@@ -220,7 +220,7 @@ namespace Game
             return "Chess";
         }
 
-        public override void RegisterAsHumanPlayer(ref StepHandler onStep, GameBase.PlayerType playerType)
+        public void RegisterAsHumanPlayer(ref StepHandler onStep, GameBase.PlayerType playerType)
         {
             AddHumanPlayer(ref onStep, playerType);
         }

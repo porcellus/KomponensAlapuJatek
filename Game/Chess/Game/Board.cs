@@ -226,5 +226,14 @@ namespace Game
             return (row - 1) * (int)dimension[0] + col;
         }
 
+
+        public PlayerType CurrentPlayer
+        {
+            get
+            {
+                return currentPlayer;
+            }
+            set { setCurrentPlayer(value); }
+        }
     }
 }
