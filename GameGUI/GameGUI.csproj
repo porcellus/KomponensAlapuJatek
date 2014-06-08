@@ -61,6 +61,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameGUI.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -107,6 +108,16 @@
     <Resource Include="PNG\WhitePawn.png" />
     <Resource Include="PNG\WhiteQueen.png" />
     <Resource Include="PNG\WhiteRook.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Game\Chess\Game\Game.csproj">
+      <Project>{b1621383-4b85-4fe0-b737-a4d295916748}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Game\GameBase\GameBase.csproj">
+      <Project>{faef5ad0-cadb-4419-a733-7dc39ed40d2a}</Project>
+      <Name>GameBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
