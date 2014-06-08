@@ -157,10 +157,12 @@ namespace Server
         {
             if (tcpListener != null && serverThread != null && lobby != null)
             {
+                serverThread.Abort();
+
                 foreach (ServerClient client in lobby.getClientlist()) lobby.remove(client);
+     
                 idCounter = 0;
                 tcpListener.Stop();
-                serverThread.Abort();
             }
 
             ServerInfoEventArgs args = new ServerInfoEventArgs();
