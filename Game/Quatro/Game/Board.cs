@@ -86,13 +86,7 @@ namespace Game
             get { return player; }
             set { player = value; }
         }
-        private  int activePlayerIndex = 0;
-
-        public  int ActivePlayerIndex
-        {
-            get { return activePlayerIndex; }
-            set { activePlayerIndex = value; }
-        }
+        
         private  Piece[] activePieces;
 
         public  Piece[] ActivePieces
@@ -125,7 +119,18 @@ namespace Game
        
 
         bool winstate = false;
-
+        public void UpdateCurrentPlayer()
+        {
+            if (Player[0].PlayerType == CurrentPlayer)
+            {
+                CurrentPlayer = Player[1].PlayerType;
+            }
+            else
+            {
+                CurrentPlayer = player[0].PlayerType;
+            }
+        
+        }
         public bool Winstate
         {
             get { return winstate; }

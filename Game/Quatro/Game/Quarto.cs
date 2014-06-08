@@ -24,7 +24,8 @@ namespace Game
         public void initGame()
         {
             
-                activeBoard.ActivePlayerIndex = 0;
+                activeBoard.CurrentPlayer = PlayerType.PlayerOne;
+                  
            
 
         }
@@ -56,13 +57,13 @@ namespace Game
                 //kiválasztjuk a bábút amit az ellenfélnek le kell tenni majd kivesszük a bábúk tömbbjéből
                 if (activeBoard.ActivePieces.ToList().Contains(select))
                 {
-                    if (type == PlayerType.PlayerOne && activeBoard.ActivePlayerIndex == 0 || type == PlayerType.PlayerTwo && activeBoard.ActivePlayerIndex == 1)
+                    if (activeBoard.CurrentPlayer == type)
                     {
 
                         activeBoard.SelectedPiece = select;
                         activeBoard.UpdateActivePieces(activeBoard.ActivePieces, activeBoard.SelectedPiece);
-                        activeBoard.ActivePlayerIndex = (activeBoard.ActivePlayerIndex + 1) % 2;
-                        activeBoard.CurrentPlayer = activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType;
+                        activeBoard.UpdateCurrentPlayer();
+                        
 
                     }
                 }
@@ -132,13 +133,13 @@ namespace Game
         //játékosok regisztrációja
         public override void RegisterAsPlayer(ref AbstractGame.StepHandler onStep, PlayerType playerType)
 
-        {          
+        {           
            
-                int index = 1;
+                int index = 0;
                 // Index in the players list 
-                if (playerType == PlayerType.PlayerOne)
+                if (activeBoard.Player[0] != null)
                 {
-                    index = 0;
+                    index = 1;
                 }
                    activeBoard.Player[index] = new Player();
                     activeBoard.Player[index].PlayerType = playerType;
@@ -206,7 +207,7 @@ namespace Game
             if (!(step is QuartoStep))
                 throw new Exception("Not proper step type!");
             QuartoStep cStep = (QuartoStep)step;
-            if (activeBoard.Player[activeBoard.ActivePlayerIndex].PlayerType == playerType)
+            if (activeBoard.CurrentPlayer == playerType)
             {
                 if (activeBoard.SelectedPiece == null)
                 {
