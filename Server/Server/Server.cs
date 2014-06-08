@@ -9,20 +9,30 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+
+    public class StateObject
+    {
+        public Socket workSocket = null;
+
+        public const int BufferSize = 100;
+
+        public byte[] buffer = new byte[BufferSize];
+    }
+
     public class Server
     {
-        IPAddress ipAddress;
-        TcpListener tcpListener;
-
-        Thread serverThread;
-
-        Int32 idCounter;
-
-        Lobby lobby;
-
-        List<ServerClient> clList;
-
         public event EventHandler<ServerInfoEventArgs> needlog;
+
+        private IPAddress ipAddress;
+        private TcpListener tcpListener;
+
+        private Thread serverThread;
+
+        private Int32 idCounter;
+
+        private Lobby lobby;
+
+        private static ManualResetEvent recieveDone = new ManualResetEvent(false);
 
         public Server()
         {
@@ -63,29 +73,44 @@ namespace Server
                                 ((IPEndPoint)socket.RemoteEndPoint).Address.ToString(),
                                 recieveData(socket, 100),
                                 recieveData(socket, 100),
-                                socket
+                                socket,
+                                false
                             ));
 
                             idCounter++;
-                            string sendString = idCounter.ToString();
+                            string sendString = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
                             sendString += ";" + ((IPEndPoint)socket.RemoteEndPoint).Port.ToString();
 
                             socket.Send(new ASCIIEncoding().GetBytes(sendString));
                         }
 
-                        clList = lobby.getClientlist();
+                        List<ServerClient>clList = lobby.getClientlist();
 
 
                         foreach (ServerClient client in clList)
                         {
-                            SocketAsyncEventArgs sArgs = new SocketAsyncEventArgs();
-                            sArgs.UserToken = client;
-                            sArgs.Completed += receiveCompleted;
-                            sArgs.SetBuffer(new byte[100], 0, 100);
-                            if (!client.clientsocket.ReceiveAsync(sArgs))
+                            if (!client.startedrecive)
                             {
-                                receiveCompleted(this, sArgs);
+                                client.startedrecive = true;
+
+                                Thread recieve = new Thread(() => 
+                                {
+                                    while (true)
+                                    {
+                                        recieveDone.Reset();
+                                        StateObject state = new StateObject();
+                                        state.workSocket = client.clientsocket;
+
+                                        client.clientsocket.BeginReceive(state.buffer, 0, StateObject.BufferSize,
+                                                                         0, new AsyncCallback(receiveCompleted), state);
+                                        recieveDone.WaitOne();
+                                    }
+
+                                });
+
+                                recieve.Start();
                             }
+
                         }
 
                     }
@@ -93,7 +118,6 @@ namespace Server
                 });
 
                 serverThread.Start();
-                Console.WriteLine("Server started ");
 
             }
             catch (Exception e)
@@ -103,19 +127,29 @@ namespace Server
 
         }
 
-        private void receiveCompleted(object sender, SocketAsyncEventArgs e)
+        private void receiveCompleted(IAsyncResult ar)
         {
-            ServerClient client = (e.UserToken as ServerClient);
 
-            String recieveddata = System.Text.Encoding.UTF8.GetString(e.Buffer).Replace("\0", "");
+            recieveDone.Set();
 
-            String[] datas;
+            StateObject state = (StateObject)ar.AsyncState;
 
-            if (recieveddata.Contains("getlobby"))//getlobby;chess
+            Socket handler = state.workSocket;
+
+            int bytesRead = handler.EndReceive(ar);
+
+            if (bytesRead > 0)
             {
-                datas = recieveddata.Split(';');
-                String gametype = datas[1];
-                client.clientsocket.Send(new ASCIIEncoding().GetBytes(lobby.getClientsInfo(gametype)));
+                String recieveddata = System.Text.Encoding.UTF8.GetString(state.buffer).Replace("\0", "");
+
+                String[] datas;
+
+                if (recieveddata.Contains("getlobby"))
+                {
+                    datas = recieveddata.Split(';');
+                    String gametype = datas[1];
+                    handler.Send(new ASCIIEncoding().GetBytes(lobby.getClientsInfo(gametype)));
+                }
             }
         }
 
@@ -140,15 +174,12 @@ namespace Server
             byte[] buffer = new byte[inputsize];
             int bytes = socket.Receive(buffer);
             String output = System.Text.Encoding.UTF8.GetString(buffer).Replace("\0", "");
-            Console.WriteLine("Server receive: " + output);
 
             return output;
-
         }
 
         protected virtual void OnNeedLog(ServerInfoEventArgs e)
         {
-            Console.WriteLine("Server: " + e.consoleinfo);
             EventHandler<ServerInfoEventArgs> handler = needlog;
             if (handler != null)
             {

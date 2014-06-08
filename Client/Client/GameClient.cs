@@ -101,23 +101,23 @@ namespace Client.Client
 
         private void ConnectionRequest(object sender, Connector.ConnectionRequestEventArgs e)
         {
-            if (MessageBox.Show(Convert.ToString(clientConnector.playerid) + ": Elfogadja a kapcsolódást " + e.PlayerName + " játékostól?", "Hálózati játék?", MessageBoxButton.YesNo)
+            if (MessageBox.Show(Convert.ToString(clientConnector.playerip) + ": Elfogadja a kapcsolódást " + e.PlayerName + " játékostól?", "Hálózati játék?", MessageBoxButton.YesNo)
                 == MessageBoxResult.Yes)
             {
-                clientConnector.setRequestreply("Accept");
+                clientConnector.sendRequestreply("Accept");
 
                 LoadGame(this, new EventArgs());
             }
             else
             {
-                clientConnector.setRequestreply("Decline");
+                clientConnector.sendRequestreply("Decline");
             }
 
         }
 
         private void ConnectionAccept(object sender, Connector.ConnectionAcceptEventArgs e)
         {
-            MessageBox.Show(Convert.ToString(clientConnector.playerid) + ": A kapott válasz: " + e.Result);
+            MessageBox.Show(Convert.ToString(clientConnector.playerip) + ": A kapott válasz: " + e.Result);
         }
 
         public IList<string> GetGamesInLobby(string gameType)
@@ -135,7 +135,10 @@ namespace Client.Client
         public bool JoinGame(String opponentData)
         {
             string[] data = opponentData.Split(',');
-            return clientConnector.requestGame(data[1], Int32.Parse(data[2]), data[0]);
+            clientConnector.requestGame(data[1], Int32.Parse(data[2]), data[0]);
+
+            return true;
+
         }
 
         public void CreateLocalGame(string gameName, string aiAlgorithm, object playerPosition)

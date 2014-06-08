@@ -15,8 +15,9 @@ namespace Server
         public String name;
         public String gametype;
         public Socket clientsocket;
+        public bool startedrecive;
 
-        public ServerClient(Int32 id, String port, String ip, String name, String gametype, Socket socket)
+        public ServerClient(Int32 id, String port, String ip, String name, String gametype, Socket socket, bool startedrevice)
         {
             this.id = id;
             this.port = port;
@@ -24,6 +25,7 @@ namespace Server
             this.name = name;
             this.gametype = gametype;
             this.clientsocket = socket;
+            this.startedrecive = startedrevice;
         }
     }
 }
